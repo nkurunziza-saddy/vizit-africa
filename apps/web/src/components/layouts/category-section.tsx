@@ -1,75 +1,58 @@
 import { Link } from "@tanstack/react-router";
-import { motion } from "framer-motion";
 import { Building2, Home, Car, Compass } from "lucide-react";
 
 const categories = [
   {
     name: "Hotels",
-    description: "Premium stays with world-class amenities",
+    description: "Premium stays",
     icon: Building2,
-    href: "/listings?category=hotels",
-    color: "from-primary to-safari-light",
+    href: "/listings",
+    search: { category: "hotel" }
   },
   {
     name: "BnBs",
-    description: "Authentic local homestay experiences",
+    description: "Local homestays",
     icon: Home,
-    href: "/listings?category=bnbs",
-    color: "from-accent to-gold",
+    href: "/listings",
+    search: { category: "bnb" }
   },
   {
-    name: "Car Rentals",
-    description: "Safari-ready vehicles for your adventure",
+    name: "Transport",
+    description: "Safari vehicles",
     icon: Car,
-    href: "/listings?category=cars",
-    color: "from-terracotta to-accent",
+    href: "/listings",
+    search: { category: "car" }
   },
   {
     name: "Tours",
-    description: "Expert-guided unforgettable experiences",
+    description: "Guided experiences",
     icon: Compass,
-    href: "/listings?category=tours",
-    color: "from-safari-dark to-primary",
+    href: "/listings",
+    search: { category: "tour" }
   },
 ];
 
 export const CategorySection = () => {
   return (
-    <section className="py-20 bg-background">
-      <div className="container mx-auto px-4">
-        <div
-
-          className="text-center mb-12"
-        >
-          <h2 className="text-3xl md:text-4xl font-display font-bold text-foreground mb-4">
-            Explore by Category
-          </h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
-            From luxurious hotels to authentic homestays, safari vehicles to guided tours – 
-            find everything you need for your perfect Rwandan adventure.
-          </p>
+    <section className="py-24 border-b border-border/40">
+      <div className="container mx-auto px-4 max-w-7xl">
+        <div className="mb-12">
+          <h2 className="text-2xl font-semibold tracking-tight mb-2">Categories</h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {categories.map((category, index) => (
-            <div
-              key={category.name}
-            >
-              <Link
-                to={category.href}
-                className="group block p-6 rounded-2xl bg-card border border-border hover:shadow-elevated transition-all duration-300 hover:-translate-y-1"
-              >
-                <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${category.color} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}>
-                  <category.icon className="h-7 w-7 text-primary-foreground" />
-                </div>
-                <h3 className="text-xl font-semibold text-foreground mb-2 group-hover:text-primary transition-colors">
-                  {category.name}
-                </h3>
-                <p className="text-sm text-muted-foreground">
-                  {category.description}
-                </p>
-              </Link>
-            </div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {categories.map((category) => (
+            <Link key={category.name} to={category.href} search={category.search} className="group block focus:outline-none">
+              <div className="flex flex-col items-start p-4 hover:bg-muted/30 rounded-lg transition-colors border border-transparent hover:border-border/50">
+                 <div className="mb-3 text-foreground group-hover:text-primary transition-colors">
+                    <category.icon className="h-5 w-5" strokeWidth={1.5} />
+                 </div>
+                 <div>
+                    <h3 className="font-medium text-sm">{category.name}</h3>
+                    <p className="text-xs text-muted-foreground mt-0.5">{category.description}</p>
+                 </div>
+              </div>
+            </Link>
           ))}
         </div>
       </div>

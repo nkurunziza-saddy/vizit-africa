@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import {
   HeadContent,
   Scripts,
@@ -5,13 +6,13 @@ import {
 } from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { TanStackDevtools } from '@tanstack/react-devtools'
-
+import { initializeMockDB } from '@/utils/mock-db'
 import TanStackQueryDevtools from '../integrations/tanstack-query/devtools'
 
 import appCss from '../styles.css?url'
 
 import type { QueryClient } from '@tanstack/react-query'
-import Navbar from '@/components/navbar'
+import { Header } from '@/curated/header'
 
 interface MyRouterContext {
   queryClient: QueryClient
@@ -47,13 +48,17 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 })
 
 function RootDocument({ children }: { children: React.ReactNode }) {
+  useEffect(() => {
+    initializeMockDB()
+  }, [])
+
   return (
     <html lang="en">
       <head>
         <HeadContent />
       </head>
       <body>
-        <Navbar/>
+        <Header/>
      
         {children}
         <TanStackDevtools

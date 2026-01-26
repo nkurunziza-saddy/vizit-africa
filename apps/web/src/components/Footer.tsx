@@ -43,32 +43,30 @@ const socialLinks = [
 
 export const Footer = () => {
   return (
-    <footer className="bg-safari-dark text-primary-foreground">
+    <footer className="border-t">
       <div className="container mx-auto px-4 py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
-          {/* Brand Column */}
           <div className="lg:col-span-2">
             <Link to="/" className="flex items-center gap-1 mb-4">
-              <span className="text-2xl font-display font-bold text-primary-foreground">
+              <span className="text-2xl font-bold">
                 Vizit
               </span>
-              <span className="text-2xl font-display font-bold text-accent">
+              <span className="text-2xl font-bold text-accent-foreground">
                 Africa
               </span>
             </Link>
-            <p className="text-primary-foreground/70 mb-6 max-w-sm">
+            <p className="mb-6 max-w-sm">
               Your gateway to authentic African adventures. Discover Rwanda's 
               beauty with trusted accommodations, transport, and unforgettable 
               experiences.
             </p>
             
-            {/* Contact Info */}
             <div className="space-y-3 mb-6">
-              <a href="mailto:hello@vizitafrica.com" className="flex items-center gap-3 text-primary-foreground/70 hover:text-accent transition-colors">
+              <a href="mailto:hello@vizitafrica.com" className="flex items-center gap-3 hover:text-accent transition-colors">
                 <Mail className="h-4 w-4" />
                 hello@vizitafrica.com
               </a>
-              <a href="tel:+250788123456" className="flex items-center gap-3 text-primary-foreground/70 hover:text-accent transition-colors">
+              <a href="tel:+250788123456" className="flex items-center gap-3 hover:text-accent transition-colors">
                 <Phone className="h-4 w-4" />
                 +250 788 123 456
               </a>
@@ -78,7 +76,6 @@ export const Footer = () => {
               </div>
             </div>
 
-            {/* Social Links */}
             <div className="flex gap-4">
               {socialLinks.map((social) => (
                 <a
@@ -93,7 +90,6 @@ export const Footer = () => {
             </div>
           </div>
 
-          {/* Links Columns */}
           <div>
             <h4 className="font-semibold mb-4">Company</h4>
             <ul className="space-y-3">
@@ -101,7 +97,7 @@ export const Footer = () => {
                 <li key={link.name}>
                   <Link
                     to={link.href}
-                    className="text-primary-foreground/70 hover:text-accent transition-colors"
+                    className="hover:text-accent transition-colors"
                   >
                     {link.name}
                   </Link>
@@ -117,7 +113,7 @@ export const Footer = () => {
                 <li key={link.name}>
                   <Link
                     to={link.href}
-                    className="text-primary-foreground/70 hover:text-accent transition-colors"
+                    className="hover:text-accent transition-colors"
                   >
                     {link.name}
                   </Link>
@@ -133,7 +129,7 @@ export const Footer = () => {
                 <li key={link.name}>
                   <Link
                     to={link.href}
-                    className="text-primary-foreground/70 hover:text-accent transition-colors"
+                    className=""
                   >
                     {link.name}
                   </Link>
@@ -143,9 +139,8 @@ export const Footer = () => {
           </div>
         </div>
 
-        {/* Bottom Bar */}
-        <div className="mt-12 pt-8 border-t border-primary-foreground/20 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-primary-foreground/60 text-sm">
+        <div className="mt-12 pt-8 border-t flex flex-col md:flex-row justify-between items-center gap-4">
+          <p className="text-sm">
             © {new Date().getFullYear()} Vizit Africa. All rights reserved.
           </p>
           <div className="flex gap-6">
@@ -153,7 +148,7 @@ export const Footer = () => {
               <Link
                 key={link.name}
                 to={link.href}
-                className="text-sm text-primary-foreground/60 hover:text-accent transition-colors"
+                className="text-sm"
               >
                 {link.name}
               </Link>

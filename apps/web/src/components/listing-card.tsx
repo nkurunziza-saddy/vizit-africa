@@ -1,6 +1,7 @@
-import { motion } from "framer-motion";
-import { Star, Heart, MapPin } from "lucide-react";
 import { Link } from "@tanstack/react-router";
+import { Star, MapPin } from "lucide-react";
+import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 
 export interface ListingCardProps {
   id: string;
@@ -12,102 +13,46 @@ export interface ListingCardProps {
   reviewCount: number;
   image: string;
   category: "hotel" | "bnb" | "car" | "tour";
-  isFavorite?: boolean;
   perUnit?: string;
 }
 
-const categoryLabels = {
-  hotel: "Hotel",
-  bnb: "BnB",
-  car: "Car Rental",
-  tour: "Tour",
-};
-
-const categoryColors = {
-  hotel: "bg-primary/10 text-primary",
-  bnb: "bg-accent/10 text-accent",
-  car: "bg-gold/20 text-gold-foreground",
-  tour: "bg-safari-light/10 text-safari-dark",
-};
-
-export const ListingCard = ({
+export default function ListingCard({
   id,
   title,
   location,
   price,
-  currency = "$",
+  currency = "USD",
   rating,
   reviewCount,
-  image,
   category,
-  isFavorite = false,
-  perUnit = "night",
-}: ListingCardProps) => {
+}: ListingCardProps) {
   return (
-    <div
-      className="listing-card group"
-    >
-      <Link to="/listings/$id" params={{ id }} >
-        {/* Image Container */}
-        <div className="relative aspect-[4/3] overflow-hidden">
-          <img
-            src={image}
-            alt={title}
-            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-          />
-          
-          {/* Favorite Button */}
-          <button
-            onClick={(e) => {
-              e.preventDefault();
-              // Handle favorite toggle
-            }}
-            className="absolute top-3 right-3 p-2 rounded-full bg-card/80 backdrop-blur-sm hover:bg-card transition-colors"
-          >
-            <Heart
-              className={`h-5 w-5 transition-colors ${
-                isFavorite ? "fill-destructive text-destructive" : "text-foreground"
-              }`}
-            />
-          </button>
-
-          {/* Category Badge */}
-          <div className="absolute top-3 left-3">
-            <span className={`px-3 py-1 rounded-full text-xs font-semibold ${categoryColors[category]}`}>
-              {categoryLabels[category]}
-            </span>
+    <Link to="/listings/$id" params={{ id }} className="block h-full group">
+      <div className="h-full border border-border shadow-sm hover:shadow-md transition-all rounded-lg bg-card text-card-foreground p-3 flex flex-col gap-3.5">
+        <div className="px-0">
+          <div className="flex justify-between items-start gap-3">
+             <h3 className="font-semibold text-sm leading-tight group-hover:underline decoration-1 underline-offset-4">{title}</h3>
+             <Badge variant="outline" className="text-[10px] px-1.5 py-0 h-5 font-normal bg-muted/50 text-muted-foreground border-border/50">
+               {category}
+             </Badge>
+          </div>
+          <div className="flex items-center text-xs text-muted-foreground gap-1 pt-0.5">
+            <span className="line-clamp-1">{location}</span>
           </div>
         </div>
-
-        {/* Content */}
-        <div className="p-4">
-          {/* Location & Rating */}
-          <div className="flex items-center justify-between mb-2">
-            <div className="flex items-center gap-1 text-sm text-muted-foreground">
-              <MapPin className="h-3.5 w-3.5" />
-              {location}
-            </div>
-            <div className="flex items-center gap-1">
-              <Star className="h-4 w-4 fill-gold text-gold" />
-              <span className="font-semibold text-sm">{rating.toFixed(1)}</span>
-              <span className="text-xs text-muted-foreground">({reviewCount})</span>
-            </div>
-          </div>
-
-          {/* Title */}
-          <h3 className="font-semibold text-foreground mb-3 line-clamp-2 group-hover:text-primary transition-colors">
-            {title}
-          </h3>
-
-          {/* Price */}
-          <div className="flex items-baseline gap-1">
-            <span className="text-lg font-bold text-accent">{currency}{price}</span>
-            <span className="text-sm text-muted-foreground">/ {perUnit}</span>
+        <div className="">
+          <div className="flex items-center gap-1 text-xs mt-1.5">
+            <Star className="h-3 w-3 fill-foreground text-foreground" />
+            <span className="font-medium">{rating}</span>
+            <span className="text-muted-foreground">({reviewCount})</span>
           </div>
         </div>
-      </Link>
-    </div>
+        <div className="">
+          <div className="text-sm font-medium">
+            {currency} {price} <span className="text-muted-foreground font-normal text-xs">/ night</span>
+          </div>
+        </div>
+      </div>
+    </Link>
   );
-};
-
-export default ListingCard;
+}
