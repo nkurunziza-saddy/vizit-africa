@@ -13,7 +13,7 @@ export function FaqsSection() {
 			<div className="container mx-auto px-4 max-w-7xl">
 				<div className="grid grid-cols-1 md:grid-cols-12 gap-12">
 					<div className="md:col-span-4">
-						<SectionTitle>Frequently Asked Question</SectionTitle>
+						<SectionTitle>Frequently Asked Questions</SectionTitle>
 						<SectionDescription>
 							Everything you need to know about booking with Vizit Africa.
 						</SectionDescription>

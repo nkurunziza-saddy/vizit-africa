@@ -56,7 +56,7 @@ export function Header() {
 					<div className="ml-2 flex items-center gap-2">
 						{isAuthenticated && user ? (
 							<DropdownMenu>
-							<DropdownMenuTrigger className="outline-none">
+							<DropdownMenuTrigger className="outline-none" asChild>
 								<Button variant="ghost" className="relative h-8 w-8 rounded-full">
 									<Avatar className="h-8 w-8">
 										<AvatarImage src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${user.email}`} alt={user.full_name} />

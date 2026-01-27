@@ -228,6 +228,7 @@ function Listings(){
                     reviewCount={12} // Mock
                     image={"https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=80"}
                     category={listing.listing_type.includes('hotel') ? 'hotel' : 'bnb'}
+                    listing={listing}
                   />
                 ))}
             </div>

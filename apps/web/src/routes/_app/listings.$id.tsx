@@ -15,8 +15,10 @@ import { useListing } from '@/hooks/use-listings';
 import { toast } from 'sonner';
 import { addDays, differenceInDays } from 'date-fns';
 import { useState } from 'react';
-import { useCreateBooking } from '@/hooks/use-bookings';
 import { useAuth } from '@/context/auth-context';
+import { useCart } from '@/context/cart-context';
+import { CartSheet } from '@/components/booking/cart-sheet';
+import { AddonSelector } from '@/components/booking/addon-selector';
 import type { DateRange } from 'react-day-picker';
 
 export const Route = createFileRoute('/_app/listings/$id')({
@@ -28,66 +30,48 @@ function ListingDetail() {
   const router = useRouter();
   const { data, isLoading: isListingLoading } = useListing(parseInt(id));
     const { user, isAuthenticated } = useAuth();
-  const { mutateAsync: createBooking, isPending: isBookingLoading } = useCreateBooking();
+  const { addToCart } = useCart();
 
   const [date, setDate] = useState<DateRange | undefined>({
     from: new Date(),
     to: addDays(new Date(), 3),
   });
 
+  // Let's implement local addons state to pass to cart
+  const [selectedAddons, setSelectedAddons] = useState<{addon: any, quantity: number}[]>([]);
+
   if (isListingLoading || !data) {
      return <div>Loading...</div>
   }
 
   const { listing } = data;
-  
-  const handleReserve = async () => {
-    if (!isAuthenticated || !user) {
-      toast.error("Please login to book a listing");
-      router.navigate({ to: '/login' });
-      return;
-    }
 
-    if (!date?.from || !date?.to) {
-      toast.error("Please select check-in and check-out dates");
-      return;
-    }
-
-    const nights = differenceInDays(date.to, date.from);
-    if (nights < 1) {
-        toast.error("Minimum stay is 1 night");
-        return;
-    }
-
-    const totalAmount = nights * listing.base_price;
-
-    try {
-      await createBooking({
-        booking: {
-          user_id: user.id,
-          total_amount: totalAmount,
-          currency: listing.currency,
-          status: 'confirmed', // Auto-confirm for mock
-        },
-        items: [
-          {
-            listing_id: listing.id,
-            start_date: date.from.toISOString(),
-            end_date: date.to.toISOString(),
-            quantity: 1,
-            unit_price: listing.base_price,
-            subtotal: totalAmount,
+  const handleAddonSelect = (addon: any, quantity: number) => {
+      setSelectedAddons(prev => {
+          const existing = prev.findIndex(p => p.addon.id === addon.id);
+          if (quantity <= 0) {
+              return prev.filter(p => p.addon.id !== addon.id);
           }
-        ]
+          if (existing > -1) {
+              const newArr = [...prev];
+              newArr[existing].quantity = quantity;
+              return newArr;
+          }
+          return [...prev, { addon, quantity }];
       });
+  };
 
-      toast.success("Booking confirmed! Check your email for the ticket.");
-      // In a real app, we might redirect to a success page or bookings list
-      // router.navigate({ to: '/bookings' }); 
-    } catch (error) {
-      toast.error("Failed to create booking");
-      console.error(error);
-    }
+  const handleBookClick = () => {
+      if (!date?.from || !date?.to) {
+          toast.error("Please select dates first");
+          return;
+      }
+       addToCart({
+        listing,
+        dateRange: date,
+        guests: 1, 
+        selectedAddons: selectedAddons
+    });
   };
 
 
@@ -144,6 +128,24 @@ function ListingDetail() {
                         ))}
                     </div>
                 </div>
+
+                <div className="w-full h-px bg-border/50" />
+
+                {/* Addons Section */}
+                {listing.addons && listing.addons.length > 0 && (
+                    <div>
+                        <h3 className="text-lg font-semibold mb-4 tracking-tight text-foreground">Enhance your trip</h3>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            {listing.addons.map(addon => (
+                                <AddonSelector 
+                                    key={addon.id} 
+                                    addon={addon} 
+                                    onSelect={(qty) => handleAddonSelect(addon, qty)} 
+                                />
+                            ))}
+                        </div>
+                    </div>
+                )}
              </div>
 
              <div className="lg:col-span-4">
@@ -197,8 +199,8 @@ function ListingDetail() {
                                 </PopoverContent>
                             </Popover>
                          </div>
-                         
-                         <Button className="w-full" size="lg" onClick={handleReserve} disabled={isBookingLoading}>Reserve</Button>
+                          
+                          <Button className="w-full" size="lg" onClick={handleBookClick}>Reserve</Button>
                          <div className="flex items-center justify-center gap-2 text-xs text-muted-foreground">
                             <span>You won't be charged yet</span>
                          </div>
@@ -207,9 +209,10 @@ function ListingDetail() {
                 </div>
              </div>
           </div>
-      </PageWrapper>
+       </PageWrapper>
 
+       <CartSheet />
  
-    </div>
+     </div>
   );
 };

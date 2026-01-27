@@ -4,7 +4,10 @@ import { Button } from "@/components/ui/button";
 import ListingCard, { type ListingCardProps } from "../listing-card";
 import { SectionContainer } from "../ui/section";
 
-const featuredListings: ListingCardProps[] = [
+// Helper to create mock listing for the card
+import { Listing } from "@/utils/mock-db";
+
+const featuredListings: (ListingCardProps & { listing: Listing })[] = [
 	{
 		id: "1",
 		title: "Luxury Safari Lodge",
@@ -12,8 +15,25 @@ const featuredListings: ListingCardProps[] = [
 		price: 350,
 		rating: 4.9,
 		reviewCount: 128,
-		image: "",
+		image: "", // ListingCard usually handles the default image if empty/mocked inside, but we pass one below
 		category: "hotel",
+        listing: {
+            id: 1,
+            title: "Luxury Safari Lodge",
+            description: "Experience the ultimate safari luxury.",
+            location_id: "Volcanoes National Park",
+            base_price: 350,
+            currency: "USD",
+            rating: 4.9,
+            reviews_count: 128,
+            image_url: "",
+            images: [],
+            amenities: ["Wifi", "Pool"],
+            listing_type: ["hotel"],
+            vendor_id: 1,
+            addons: [], 
+            availability: []
+        }
 	},
 	{
 		id: "2",
@@ -24,6 +44,23 @@ const featuredListings: ListingCardProps[] = [
 		reviewCount: 64,
 		image: "",
 		category: "bnb",
+        listing: {
+            id: 2,
+            title: "Cozy Mountain BnB",
+            description: "A cozy retreat in the mountains.",
+            location_id: "Musanze",
+            base_price: 85,
+            currency: "USD",
+            rating: 4.7,
+            reviews_count: 64,
+            image_url: "",
+            images: [],
+            amenities: ["Kitchen", "Wifi"],
+            listing_type: ["bnb"],
+            vendor_id: 2,
+            addons: [],
+            availability: []
+        }
 	},
 	{
 		id: "3",
@@ -34,6 +71,23 @@ const featuredListings: ListingCardProps[] = [
 		reviewCount: 92,
 		image: "",
 		category: "car",
+        listing: {
+            id: 3,
+            title: "Toyota Land Cruiser",
+            description: "Robust 4x4 for your adventures.",
+            location_id: "Kigali",
+            base_price: 120,
+            currency: "USD",
+            rating: 4.8,
+            reviews_count: 92,
+            image_url: "",
+            images: [],
+            amenities: ["AC"],
+            listing_type: ["car"],
+            vendor_id: 3,
+            addons: [],
+            availability: []
+        }
 	},
 	{
 		id: "4",
@@ -44,6 +98,23 @@ const featuredListings: ListingCardProps[] = [
 		reviewCount: 256,
 		image: "",
 		category: "tour",
+        listing: {
+            id: 4,
+            title: "Gorilla Trekking",
+            description: "Once in a lifetime experience.",
+            location_id: "Volcanoes National Park",
+            base_price: 1500,
+            currency: "USD",
+            rating: 5.0,
+            reviews_count: 256,
+            image_url: "",
+            images: [],
+            amenities: ["Guide"],
+            listing_type: ["tour"],
+            vendor_id: 4,
+            addons: [],
+            availability: []
+        }
 	},
 ];
 

@@ -44,6 +44,15 @@ export type Listing = {
   capacity: number;
   status: 'draft' | 'active' | 'paused';
   created_at: string;
+  addons: Addon[];
+};
+
+export type Addon = {
+  id: number;
+  name: string;
+  description: string;
+  price: number;
+  price_type: 'per_person' | 'per_stay' | 'per_night';
 };
 
 export type ListingMedia = {
@@ -83,6 +92,11 @@ export type BookingItem = {
   quantity: number;
   unit_price: number;
   subtotal: number;
+  selected_addons: {
+    addon_id: number;
+    quantity: number;
+    subtotal: number;
+  }[];
 };
 
 export type Ticket = {
@@ -207,6 +221,18 @@ const generateListings = (count: number, vendors: Vendor[]): Listing[] => {
     if (listingType === 'hotel_room') title = `${faker.word.adjective()} Suite at ${vendor.business_name}`;
     if (listingType === 'car') title = `${faker.vehicle.manufacturer()} ${faker.vehicle.model()}`;
 
+    const addonCount = faker.number.int({ min: 0, max: 4 });
+    const addons: Addon[] = [];
+    for (let k = 0; k < addonCount; k++) {
+        addons.push({
+            id: k + 1,
+            name: faker.commerce.productName(),
+            description: faker.commerce.productDescription(),
+            price: parseFloat(faker.commerce.price({ min: 10, max: 100 })),
+            price_type: faker.helpers.arrayElement(['per_person', 'per_stay', 'per_night']),
+        });
+    }
+
     listings.push({
       id: i,
       vendor_id: vendor.id,
@@ -219,6 +245,7 @@ const generateListings = (count: number, vendors: Vendor[]): Listing[] => {
       capacity: faker.number.int({ min: 1, max: 10 }),
       status: 'active',
       created_at: faker.date.past().toISOString(),
+      addons: addons,
     });
   }
   return listings;

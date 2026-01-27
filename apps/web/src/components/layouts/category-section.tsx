@@ -35,7 +35,11 @@ const categories = [
 
 export const CategorySection = () => {
 	return (
-		<SectionContainer title="Categories" align="start">
+		<SectionContainer
+			title="Categories"
+			description="Browse listings by your preferred travel style."
+			align="start"
+		>
 			<div className="grid grid-cols-2 md:grid-cols-4 gap-4">
 				{categories.map((category) => (
 					<Link

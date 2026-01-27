@@ -1,5 +1,11 @@
-import { Link } from "@tanstack/react-router";
-import { Star } from "lucide-react";
+import { Link, useNavigate } from "@tanstack/react-router";
+import { Star, Plus, ShoppingCart } from "lucide-react";
+import { toast } from "sonner";
+import { useCart } from "@/context/cart-context";
+import { Listing } from "@/utils/mock-db";
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { addDays } from "date-fns";
 
 import { Badge } from "@/components/ui/badge";
 
@@ -14,6 +20,7 @@ export interface ListingCardProps {
   image: string;
   category: "hotel" | "bnb" | "car" | "tour";
   perUnit?: string;
+  listing: Listing;
 }
 
 export default function ListingCard({
@@ -25,7 +32,59 @@ export default function ListingCard({
   rating,
   reviewCount,
   category,
+  listing,
 }: ListingCardProps) {
+  const { addToCart, cart } = useCart();
+  const [pendingConfirm, setPendingConfirm] = useState(false);
+
+  const handleQuickAdd = (e: React.MouseEvent) => {
+    e.preventDefault(); // Prevent navigation
+    e.stopPropagation();
+
+    // Default booking details
+    const defaultDateRange = {
+      from: new Date(),
+      to: addDays(new Date(), 1)
+    };
+
+    const newItem = {
+      listing,
+      dateRange: defaultDateRange,
+      guests: 1,
+      selectedAddons: []
+    };
+
+    if (!cart) {
+      addToCart(newItem);
+      toast.success("Added to cart!");
+      return;
+    }
+
+    if (cart.listing.id === listing.id) {
+       toast.info("This item is already in your cart.");
+       return;
+    }
+
+    // Conflict detection
+    if (pendingConfirm) {
+        // Confirmed replacement
+        addToCart(newItem);
+        toast.success("Replaced existing item in cart!");
+        setPendingConfirm(false);
+    } else {
+        // First click - Warn
+        toast.warning("You have an item in cart. Click (+) again within 30s to replace it.", {
+            duration: 5000,
+        });
+        setPendingConfirm(true);
+        
+        // Reset pending state after 30 seconds
+        setTimeout(() => {
+            setPendingConfirm(false);
+        }, 30000);
+    }
+  };
+
   return (
     <Link to="/listings/$id" params={{ id }} className="block h-full group">
       <div className="h-full border border-border shadow-sm hover:shadow-md transition-all rounded-lg bg-card text-card-foreground p-3 flex flex-col gap-3.5">
@@ -47,10 +106,19 @@ export default function ListingCard({
             <span className="text-muted-foreground">({reviewCount})</span>
           </div>
         </div>
-        <div className="">
+        <div className="flex items-center justify-between mt-1">
           <div className="text-sm font-medium">
             {currency} {price} <span className="text-muted-foreground font-normal text-xs">/ night</span>
           </div>
+          <Button 
+            size="icon" 
+            variant={pendingConfirm ? "destructive" : "secondary"} 
+            className="h-8 w-8 rounded-full shrink-0 transition-all hover:bg-primary hover:text-primary-foreground"
+            onClick={handleQuickAdd}
+            title="Quick Add to Cart"
+          >
+             {pendingConfirm ? <ShoppingCart className="h-4 w-4" /> : <Plus className="h-4 w-4" />}
+          </Button>
         </div>
       </div>
     </Link>

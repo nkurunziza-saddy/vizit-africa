@@ -26,7 +26,11 @@ const features = [
 
 export const TrustSection = () => {
 	return (
-		<SectionContainer title="Why Vizit Africa" align="start">
+		<SectionContainer 
+			title="Why Vizit Africa" 
+			description="Experience safety, reliability, and best prices."
+			align="start"
+		>
 			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
 				{features.map((feature) => (
 					<div key={feature.title} className="flex flex-col gap-3">

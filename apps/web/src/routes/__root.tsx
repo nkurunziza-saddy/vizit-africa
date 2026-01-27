@@ -8,6 +8,8 @@ import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { TanStackDevtools } from '@tanstack/react-devtools'
 import { initializeMockDB } from '@/utils/mock-db'
 import TanStackQueryDevtools from '../integrations/tanstack-query/devtools'
+import { CartProvider } from '@/context/cart-context'
+import { Toaster } from '@/components/ui/sonner'
 
 import appCss from '../styles.css?url'
 
@@ -60,7 +62,10 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       <body>
    
      
-        {children}
+        <CartProvider>
+          {children}
+          <Toaster />
+        </CartProvider>
         <TanStackDevtools
           config={{
             position: 'bottom-right',
