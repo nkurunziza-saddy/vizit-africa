@@ -12,7 +12,7 @@ import TanStackQueryDevtools from '../integrations/tanstack-query/devtools'
 import appCss from '../styles.css?url'
 
 import type { QueryClient } from '@tanstack/react-query'
-import { Header } from '@/curated/header'
+import { Header } from '@/components/header'
 
 interface MyRouterContext {
   queryClient: QueryClient
@@ -47,35 +47,39 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
   shellComponent: RootDocument,
 })
 
+import { AuthProvider } from '@/context/auth-context'
+
 function RootDocument({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     initializeMockDB()
   }, [])
 
   return (
-    <html lang="en">
-      <head>
-        <HeadContent />
-      </head>
-      <body>
-        <Header/>
-     
-        {children}
-        <TanStackDevtools
-          config={{
-            position: 'bottom-right',
-          }}
-          plugins={[
-            {
-              name: 'Tanstack Router',
-              render: <TanStackRouterDevtoolsPanel />,
-            },
+    <AuthProvider>
+      <html lang="en">
+        <head>
+          <HeadContent />
+        </head>
+        <body>
+          <Header/>
        
-            TanStackQueryDevtools,
-          ]}
-        />
-        <Scripts />
-      </body>
-    </html>
+          {children}
+          <TanStackDevtools
+            config={{
+              position: 'bottom-right',
+            }}
+            plugins={[
+              {
+                name: 'Tanstack Router',
+                render: <TanStackRouterDevtoolsPanel />,
+              },
+         
+              TanStackQueryDevtools,
+            ]}
+          />
+          <Scripts />
+        </body>
+      </html>
+    </AuthProvider>
   )
 }

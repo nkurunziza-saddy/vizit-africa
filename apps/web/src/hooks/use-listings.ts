@@ -1,10 +1,17 @@
 import { useQuery } from '@tanstack/react-query';
-import { getListingById, getListings, searchListings } from '@/actions/listing.actions';
+import { getListingById, getListings, searchListings, filterListings, FilterOptions, getLocations } from '@/actions/listing.actions';
 
-export const useListings = () => {
+export const useListings = (options?: FilterOptions) => {
   return useQuery({
-    queryKey: ['listings'],
-    queryFn: getListings,
+    queryKey: ['listings', options],
+    queryFn: () => options ? filterListings(options) : getListings(),
+  });
+};
+
+export const useLocations = () => {
+  return useQuery({
+    queryKey: ['locations'],
+    queryFn: getLocations,
   });
 };
 

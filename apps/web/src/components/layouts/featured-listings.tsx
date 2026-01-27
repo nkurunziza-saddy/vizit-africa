@@ -62,7 +62,7 @@ export const FeaturedListings = () => {
               Handpicked selections from our verified partners.
             </p>
           </div>
-          <Link to="/listings">
+          <Link to="/listings" search={{ category: undefined, search: undefined }}>
             <Button variant="ghost" size="sm" className="gap-2 text-muted-foreground hover:text-foreground">
               View All <ArrowRight className="h-4 w-4" />
             </Button>

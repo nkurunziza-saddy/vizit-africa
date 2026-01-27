@@ -1,15 +1,29 @@
-import { createFileRoute, Link, useParams } from '@tanstack/react-router'
+import { createFileRoute, Link, useParams, useRouter } from '@tanstack/react-router'
 import {
   Star,
   MapPin,
   ArrowLeft,
+  CalendarIcon,
+  Loader2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
 import { PageWrapper } from '@/components/layouts/page-wrapper';
 import { useListing } from '@/hooks/use-listings';
+import { useAuth } from '@/context/auth-context';
+import { useCreateBooking } from '@/hooks/use-bookings';
+import { useState } from 'react';
+import { DateRange } from "react-day-picker";
+import { addDays, format, differenceInDays } from "date-fns";
+import { cn } from "@/lib/utils";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { toast } from "sonner";
 
 export const Route = createFileRoute('/listings/$id')({
   component: ListingDetail,
@@ -17,13 +31,74 @@ export const Route = createFileRoute('/listings/$id')({
 
 function ListingDetail() {
   const { id } = useParams({ from: '/listings/$id' });
-  const { data, isLoading } = useListing(parseInt(id));
+  const router = useRouter();
+  const { data, isLoading: isListingLoading } = useListing(parseInt(id));
+  const { user, isAuthenticated } = useAuth();
+  const { mutateAsync: createBooking, isPending: isBookingLoading } = useCreateBooking();
 
-  if (isLoading || !data) {
-     return <div>Loading...</div>
+  const [date, setDate] = useState<DateRange | undefined>({
+    from: new Date(),
+    to: addDays(new Date(), 3),
+  });
+
+  if (isListingLoading || !data) {
+     return (
+        <PageWrapper>
+           <div className="h-96 flex items-center justify-center">Loading...</div>
+        </PageWrapper>
+     )
   }
 
-  const { listing, media } = data;
+  const { listing } = data;
+
+  const handleReserve = async () => {
+    if (!isAuthenticated || !user) {
+      toast.error("Please login to book a listing");
+      router.navigate({ to: '/login' });
+      return;
+    }
+
+    if (!date?.from || !date?.to) {
+      toast.error("Please select check-in and check-out dates");
+      return;
+    }
+
+    const nights = differenceInDays(date.to, date.from);
+    if (nights < 1) {
+        toast.error("Minimum stay is 1 night");
+        return;
+    }
+
+    const totalAmount = nights * listing.base_price;
+
+    try {
+      await createBooking({
+        booking: {
+          user_id: user.id,
+          total_amount: totalAmount,
+          currency: listing.currency,
+          status: 'confirmed', // Auto-confirm for mock
+        },
+        items: [
+          {
+            listing_id: listing.id,
+            start_date: date.from.toISOString(),
+            end_date: date.to.toISOString(),
+            quantity: 1,
+            unit_price: listing.base_price,
+            subtotal: totalAmount,
+          }
+        ]
+      });
+
+      toast.success("Booking confirmed! Check your email for the ticket.");
+      // In a real app, we might redirect to a success page or bookings list
+      // router.navigate({ to: '/bookings' }); 
+    } catch (error) {
+      toast.error("Failed to create booking");
+      console.error(error);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
@@ -31,6 +106,7 @@ function ListingDetail() {
       <PageWrapper className="flex-1">
           <Link
             to="/listings"
+            search={{ category: undefined, search: undefined }}
             className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-8 transition-colors"
           >
             <ArrowLeft className="h-4 w-4" />
@@ -86,29 +162,74 @@ function ListingDetail() {
                          </CardTitle>
                      </CardHeader>
                      <CardContent className="space-y-4 px-6 pb-6">
-                         <div className="grid grid-cols-2 gap-2">
-                            <div className="border border-border/50 rounded p-2 hover:border-border transition-colors cursor-pointer">
-                               <div className="text-[10px] uppercase font-medium text-muted-foreground mb-1">Check-in</div>
-                               <div className="text-sm">Select date</div>
-                            </div>
-                            <div className="border border-border/50 rounded p-2 hover:border-border transition-colors cursor-pointer">
-                               <div className="text-[10px] uppercase font-medium text-muted-foreground mb-1">Check-out</div>
-                               <div className="text-sm">Select date</div>
-                            </div>
+                         <div className="grid gap-2">
+                            <Popover>
+                              <PopoverTrigger className={cn(
+                                    "w-full justify-start text-left font-normal flex items-center px-3 py-2 rounded-md border border-input bg-transparent hover:bg-accent hover:text-accent-foreground",
+                                    !date && "text-muted-foreground"
+                                  )}>
+                                  <CalendarIcon className="mr-2 h-4 w-4" />
+                                  {date?.from ? (
+                                    date.to ? (
+                                      <>
+                                        {format(date.from, "LLL dd, y")} -{" "}
+                                        {format(date.to, "LLL dd, y")}
+                                      </>
+                                    ) : (
+                                      format(date.from, "LLL dd, y")
+                                    )
+                                  ) : (
+                                    <span>Pick a date</span>
+                                  )}
+                              </PopoverTrigger>
+                              <PopoverContent className="w-auto p-0" align="start">
+                                <Calendar
+                                  initialFocus
+                                  mode="range"
+                                  defaultMonth={date?.from}
+                                  selected={date}
+                                  onSelect={setDate}
+                                  numberOfMonths={2}
+                                />
+                              </PopoverContent>
+                            </Popover>
                          </div>
                          
-                         <Button className="w-full" size="lg">Reserve</Button>
+                         <Button 
+                            className="w-full" 
+                            size="lg" 
+                            onClick={handleReserve}
+                            disabled={isBookingLoading}
+                         >
+                            {isBookingLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                            Reserve
+                         </Button>
                          <div className="flex items-center justify-center gap-2 text-xs text-muted-foreground">
                             <span>You won't be charged yet</span>
                          </div>
+                         
+                         {date?.from && date?.to && (
+                            <div className="pt-4 border-t border-border/50 space-y-2">
+                                <div className="flex justify-between text-sm">
+                                    <span className="underline">${listing.base_price} x {differenceInDays(date.to, date.from)} nights</span>
+                                    <span>${listing.base_price * differenceInDays(date.to, date.from)}</span>
+                                </div>
+                                <div className="flex justify-between text-sm">
+                                    <span className="underline">Service fee</span>
+                                    <span>$0</span>
+                                </div>
+                                <div className="flex justify-between font-semibold pt-2 border-t border-border/50">
+                                    <span>Total</span>
+                                    <span>${listing.base_price * differenceInDays(date.to, date.from)}</span>
+                                </div>
+                            </div>
+                         )}
                      </CardContent>
                   </Card>
                 </div>
              </div>
           </div>
       </PageWrapper>
-
- 
     </div>
   );
 };

@@ -1,19 +1,81 @@
-import { createFileRoute, Link } from '@tanstack/react-router'
+import { createFileRoute, Link, useRouter } from '@tanstack/react-router'
 import { Button } from "@/components/ui/button";
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
 } from "@/components/ui/input-group";
-import { AtSignIcon, ChevronLeftIcon } from "lucide-react";
-import { FloatingPaths } from "@/curated/floating-paths";
-import { Logo } from "@/curated/logo";
+import { AtSignIcon, ChevronLeftIcon, Loader2, Lock, User } from "lucide-react";
+import { FloatingPaths } from "@/components/ui/floating-paths";
+import { Logo } from "@/components/logo";
+import { useAuth } from "@/context/auth-context";
+import { useState } from "react";
+import { toast } from "sonner";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export const Route = createFileRoute('/login')({
   component: LoginPage,
 })
 
 function LoginPage() {
+  const { login, register, isLoading } = useAuth();
+  const router = useRouter();
+  const [mode, setMode] = useState<'login' | 'register'>('login');
+  
+  // Login State
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  // Register State
+  const [regName, setRegName] = useState("");
+  const [regEmail, setRegEmail] = useState("");
+  const [regPassword, setRegPassword] = useState("");
+  const [regRole, setRegRole] = useState<'tourist' | 'vendor'>('tourist');
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email || !password) {
+      toast.error("Please fill in all fields");
+      return;
+    }
+
+    try {
+      await login(email, password);
+      toast.success("Welcome back!");
+      router.navigate({ to: '/' });
+    } catch (error: any) {
+      toast.error(error.message || "Failed to login");
+    }
+  };
+
+  const handleRegister = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!regName || !regEmail || !regPassword) {
+      toast.error("Please fill in all fields");
+      return;
+    }
+
+    try {
+      await register({
+        full_name: regName,
+        email: regEmail,
+        password_hash: regPassword, // In real app, hash this
+        role: regRole,
+        phone: '', // Optional for now
+        preferred_currency: 'USD'
+      });
+      toast.success("Account created successfully!");
+      
+      if (regRole === 'vendor') {
+          router.navigate({ to: '/dashboard' });
+      } else {
+          router.navigate({ to: '/' });
+      }
+    } catch (error: any) {
+      toast.error(error.message || "Failed to register");
+    }
+  }
+
   return (
     <main className="relative md:h-screen md:overflow-hidden lg:grid lg:grid-cols-2">
       <div className="relative hidden h-full flex-col border-r bg-secondary p-10 lg:flex dark:bg-secondary/20">
@@ -66,20 +128,21 @@ function LoginPage() {
            </div>
           <div className="flex flex-col space-y-1">
             <h1 className="font-bold text-2xl tracking-wide">
-              Sign In or Join Now!
+              {mode === 'login' ? 'Sign In' : 'Create Account'}
             </h1>
             <p className="text-base text-muted-foreground">
-              Login or create your Vizit Africa account.
+              {mode === 'login' ? 'Login to your Vizit Africa account.' : 'Join us to explore or list on Vizit Africa.'}
             </p>
+            {mode === 'login' && (
+                <p className="text-xs text-muted-foreground mt-2 bg-muted/50 p-2 rounded">
+                Try: <b>admin@vizit.rw</b> (admin123) or <b>tourist@vizit.rw</b> (tourist123)
+                </p>
+            )}
           </div>
           <div className="space-y-2">
             <Button className="w-full" size="lg" type="button" variant="outline">
               <GoogleIcon className="mr-2 h-4 w-4" />
               Continue with Google
-            </Button>
-            <Button className="w-full" size="lg" type="button" variant="outline">
-              <AppleIcon className="mr-2 h-4 w-4" />
-              Continue with Apple
             </Button>
           </div>
 
@@ -89,24 +152,111 @@ function LoginPage() {
             <div className="h-px w-full bg-border" />
           </div>
 
-          <form className="space-y-2">
-            <p className="text-start text-muted-foreground text-xs">
-              Enter your email address to sign in or create an account
-            </p>
-            <InputGroup>
-              <InputGroupInput
-                placeholder="your.email@example.com"
-                type="email"
-              />
-              <InputGroupAddon>
-                <AtSignIcon className="h-4 w-4" />
-              </InputGroupAddon>
-            </InputGroup>
+          {mode === 'login' ? (
+              <form className="space-y-4" onSubmit={handleLogin}>
+                <div className="space-y-2">
+                    <InputGroup>
+                      <InputGroupInput
+                        placeholder="your.email@example.com"
+                        type="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                      />
+                      <InputGroupAddon>
+                        <AtSignIcon className="h-4 w-4" />
+                      </InputGroupAddon>
+                    </InputGroup>
+                    <InputGroup>
+                      <InputGroupInput
+                        placeholder="Password"
+                        type="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                      />
+                      <InputGroupAddon>
+                        <Lock className="h-4 w-4" />
+                      </InputGroupAddon>
+                    </InputGroup>
+                </div>
 
-            <Button className="w-full" type="button" size="lg">
-              Continue With Email
-            </Button>
-          </form>
+                <Button className="w-full" type="submit" size="lg" disabled={isLoading}>
+                  {isLoading ? <Loader2 className="animate-spin mr-2 h-4 w-4" /> : null}
+                  Sign In
+                </Button>
+                
+                <p className="text-center text-sm text-muted-foreground">
+                    Don't have an account?{" "}
+                    <button type="button" onClick={() => setMode('register')} className="underline hover:text-primary">Sign up</button>
+                </p>
+              </form>
+          ) : (
+              <form className="space-y-4" onSubmit={handleRegister}>
+                <div className="space-y-4">
+                    <div className="flex justify-center">
+                        <Tabs value={regRole} onValueChange={(v) => setRegRole(v as any)} className="w-full">
+                            <TabsList className="grid w-full grid-cols-2">
+                                <TabsTrigger value="tourist">Tourist</TabsTrigger>
+                                <TabsTrigger value="vendor">Vendor</TabsTrigger>
+                            </TabsList>
+                        </Tabs>
+                    </div>
+
+                    <div className="space-y-2">
+                        <InputGroup>
+                        <InputGroupInput
+                            placeholder="Full Name"
+                            type="text"
+                            value={regName}
+                            onChange={(e) => setRegName(e.target.value)}
+                            required
+                        />
+                        <InputGroupAddon>
+                            <User className="h-4 w-4" />
+                        </InputGroupAddon>
+                        </InputGroup>
+                        
+                        <InputGroup>
+                        <InputGroupInput
+                            placeholder="Email Address"
+                            type="email"
+                            value={regEmail}
+                            onChange={(e) => setRegEmail(e.target.value)}
+                            required
+                        />
+                        <InputGroupAddon>
+                            <AtSignIcon className="h-4 w-4" />
+                        </InputGroupAddon>
+                        </InputGroup>
+
+                        <InputGroup>
+                        <InputGroupInput
+                            placeholder="Create Password"
+                            type="password"
+                            value={regPassword}
+                            onChange={(e) => setRegPassword(e.target.value)}
+                            required
+                        />
+                        <InputGroupAddon>
+                            <Lock className="h-4 w-4" />
+                        </InputGroupAddon>
+                        </InputGroup>
+                    </div>
+                </div>
+
+                <Button className="w-full" type="submit" size="lg" disabled={isLoading}>
+                  {isLoading ? <Loader2 className="animate-spin mr-2 h-4 w-4" /> : null}
+                  Create Account
+                </Button>
+
+                <p className="text-center text-sm text-muted-foreground">
+                    Already have an account?{" "}
+                    <button type="button" onClick={() => setMode('login')} className="underline hover:text-primary">Sign in</button>
+                </p>
+              </form>
+          )}
+
           <p className="mt-8 text-muted-foreground text-sm text-center">
             By clicking continue, you agree to our{" "}
             <a
@@ -142,25 +292,3 @@ const GoogleIcon = (props: React.ComponentProps<"svg">) => (
     </g>
   </svg>
 );
-
-function AppleIcon({
-  fill = "currentColor",
-  ...props
-}: React.ComponentProps<"svg">) {
-  return (
-    <svg fill={fill} viewBox="0 0 24 24" {...props}>
-      <g id="_Group_2">
-        <g id="_Group_3">
-          <path
-            d="M18.546,12.763c0.024-1.87,1.004-3.597,2.597-4.576c-1.009-1.442-2.64-2.323-4.399-2.378    c-1.851-0.194-3.645,1.107-4.588,1.107c-0.961,0-2.413-1.088-3.977-1.056C6.122,5.927,4.25,7.068,3.249,8.867    c-2.131,3.69-0.542,9.114,1.5,12.097c1.022,1.461,2.215,3.092,3.778,3.035c1.529-0.063,2.1-0.975,3.945-0.975    c1.828,0,2.364,0.975,3.958,0.938c1.64-0.027,2.674-1.467,3.66-2.942c0.734-1.041,1.299-2.191,1.673-3.408    C19.815,16.788,18.548,14.879,18.546,12.763z"
-            id="_Path_"
-          />
-          <path
-            d="M15.535,3.847C16.429,2.773,16.87,1.393,16.763,0c-1.366,0.144-2.629,0.797-3.535,1.829    c-0.895,1.019-1.349,2.351-1.261,3.705C13.352,5.548,14.667,4.926,15.535,3.847z"
-            id="_Path_2"
-          />
-        </g>
-      </g>
-    </svg>
-  );
-}

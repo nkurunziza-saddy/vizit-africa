@@ -9,14 +9,33 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as TermsRouteImport } from './routes/terms'
+import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as GalleryRouteImport } from './routes/gallery'
+import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ListingsIndexRouteImport } from './routes/listings.index'
+import { Route as DashboardIndexRouteImport } from './routes/dashboard.index'
 import { Route as ListingsIdRouteImport } from './routes/listings.$id'
+import { Route as DashboardVendorBookingsRouteImport } from './routes/dashboard.vendor-bookings'
+import { Route as DashboardUsersRouteImport } from './routes/dashboard.users'
+import { Route as DashboardSettingsRouteImport } from './routes/dashboard.settings'
+import { Route as DashboardListingsRouteImport } from './routes/dashboard.listings'
+import { Route as DashboardApprovalsRouteImport } from './routes/dashboard.approvals'
 
+const TermsRoute = TermsRouteImport.update({
+  id: '/terms',
+  path: '/terms',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
@@ -25,6 +44,11 @@ const LoginRoute = LoginRouteImport.update({
 const GalleryRoute = GalleryRouteImport.update({
   id: '/gallery',
   path: '/gallery',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardRoute = DashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContactRoute = ContactRouteImport.update({
@@ -47,19 +71,58 @@ const ListingsIndexRoute = ListingsIndexRouteImport.update({
   path: '/listings/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DashboardIndexRoute = DashboardIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => DashboardRoute,
+} as any)
 const ListingsIdRoute = ListingsIdRouteImport.update({
   id: '/listings/$id',
   path: '/listings/$id',
   getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardVendorBookingsRoute = DashboardVendorBookingsRouteImport.update({
+  id: '/vendor-bookings',
+  path: '/vendor-bookings',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardUsersRoute = DashboardUsersRouteImport.update({
+  id: '/users',
+  path: '/users',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardSettingsRoute = DashboardSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardListingsRoute = DashboardListingsRouteImport.update({
+  id: '/listings',
+  path: '/listings',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardApprovalsRoute = DashboardApprovalsRouteImport.update({
+  id: '/approvals',
+  path: '/approvals',
+  getParentRoute: () => DashboardRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/contact': typeof ContactRoute
+  '/dashboard': typeof DashboardRouteWithChildren
   '/gallery': typeof GalleryRoute
   '/login': typeof LoginRoute
+  '/privacy': typeof PrivacyRoute
+  '/terms': typeof TermsRoute
+  '/dashboard/approvals': typeof DashboardApprovalsRoute
+  '/dashboard/listings': typeof DashboardListingsRoute
+  '/dashboard/settings': typeof DashboardSettingsRoute
+  '/dashboard/users': typeof DashboardUsersRoute
+  '/dashboard/vendor-bookings': typeof DashboardVendorBookingsRoute
   '/listings/$id': typeof ListingsIdRoute
+  '/dashboard/': typeof DashboardIndexRoute
   '/listings/': typeof ListingsIndexRoute
 }
 export interface FileRoutesByTo {
@@ -68,7 +131,15 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/gallery': typeof GalleryRoute
   '/login': typeof LoginRoute
+  '/privacy': typeof PrivacyRoute
+  '/terms': typeof TermsRoute
+  '/dashboard/approvals': typeof DashboardApprovalsRoute
+  '/dashboard/listings': typeof DashboardListingsRoute
+  '/dashboard/settings': typeof DashboardSettingsRoute
+  '/dashboard/users': typeof DashboardUsersRoute
+  '/dashboard/vendor-bookings': typeof DashboardVendorBookingsRoute
   '/listings/$id': typeof ListingsIdRoute
+  '/dashboard': typeof DashboardIndexRoute
   '/listings': typeof ListingsIndexRoute
 }
 export interface FileRoutesById {
@@ -76,9 +147,18 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/contact': typeof ContactRoute
+  '/dashboard': typeof DashboardRouteWithChildren
   '/gallery': typeof GalleryRoute
   '/login': typeof LoginRoute
+  '/privacy': typeof PrivacyRoute
+  '/terms': typeof TermsRoute
+  '/dashboard/approvals': typeof DashboardApprovalsRoute
+  '/dashboard/listings': typeof DashboardListingsRoute
+  '/dashboard/settings': typeof DashboardSettingsRoute
+  '/dashboard/users': typeof DashboardUsersRoute
+  '/dashboard/vendor-bookings': typeof DashboardVendorBookingsRoute
   '/listings/$id': typeof ListingsIdRoute
+  '/dashboard/': typeof DashboardIndexRoute
   '/listings/': typeof ListingsIndexRoute
 }
 export interface FileRouteTypes {
@@ -87,9 +167,18 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/contact'
+    | '/dashboard'
     | '/gallery'
     | '/login'
+    | '/privacy'
+    | '/terms'
+    | '/dashboard/approvals'
+    | '/dashboard/listings'
+    | '/dashboard/settings'
+    | '/dashboard/users'
+    | '/dashboard/vendor-bookings'
     | '/listings/$id'
+    | '/dashboard/'
     | '/listings/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -98,16 +187,33 @@ export interface FileRouteTypes {
     | '/contact'
     | '/gallery'
     | '/login'
+    | '/privacy'
+    | '/terms'
+    | '/dashboard/approvals'
+    | '/dashboard/listings'
+    | '/dashboard/settings'
+    | '/dashboard/users'
+    | '/dashboard/vendor-bookings'
     | '/listings/$id'
+    | '/dashboard'
     | '/listings'
   id:
     | '__root__'
     | '/'
     | '/about'
     | '/contact'
+    | '/dashboard'
     | '/gallery'
     | '/login'
+    | '/privacy'
+    | '/terms'
+    | '/dashboard/approvals'
+    | '/dashboard/listings'
+    | '/dashboard/settings'
+    | '/dashboard/users'
+    | '/dashboard/vendor-bookings'
     | '/listings/$id'
+    | '/dashboard/'
     | '/listings/'
   fileRoutesById: FileRoutesById
 }
@@ -115,14 +221,31 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
   ContactRoute: typeof ContactRoute
+  DashboardRoute: typeof DashboardRouteWithChildren
   GalleryRoute: typeof GalleryRoute
   LoginRoute: typeof LoginRoute
+  PrivacyRoute: typeof PrivacyRoute
+  TermsRoute: typeof TermsRoute
   ListingsIdRoute: typeof ListingsIdRoute
   ListingsIndexRoute: typeof ListingsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/terms': {
+      id: '/terms'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof TermsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/login': {
       id: '/login'
       path: '/login'
@@ -135,6 +258,13 @@ declare module '@tanstack/react-router' {
       path: '/gallery'
       fullPath: '/gallery'
       preLoaderRoute: typeof GalleryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contact': {
@@ -165,6 +295,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ListingsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dashboard/': {
+      id: '/dashboard/'
+      path: '/'
+      fullPath: '/dashboard/'
+      preLoaderRoute: typeof DashboardIndexRouteImport
+      parentRoute: typeof DashboardRoute
+    }
     '/listings/$id': {
       id: '/listings/$id'
       path: '/listings/$id'
@@ -172,15 +309,75 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ListingsIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dashboard/vendor-bookings': {
+      id: '/dashboard/vendor-bookings'
+      path: '/vendor-bookings'
+      fullPath: '/dashboard/vendor-bookings'
+      preLoaderRoute: typeof DashboardVendorBookingsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/users': {
+      id: '/dashboard/users'
+      path: '/users'
+      fullPath: '/dashboard/users'
+      preLoaderRoute: typeof DashboardUsersRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/settings': {
+      id: '/dashboard/settings'
+      path: '/settings'
+      fullPath: '/dashboard/settings'
+      preLoaderRoute: typeof DashboardSettingsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/listings': {
+      id: '/dashboard/listings'
+      path: '/listings'
+      fullPath: '/dashboard/listings'
+      preLoaderRoute: typeof DashboardListingsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/approvals': {
+      id: '/dashboard/approvals'
+      path: '/approvals'
+      fullPath: '/dashboard/approvals'
+      preLoaderRoute: typeof DashboardApprovalsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
   }
 }
+
+interface DashboardRouteChildren {
+  DashboardApprovalsRoute: typeof DashboardApprovalsRoute
+  DashboardListingsRoute: typeof DashboardListingsRoute
+  DashboardSettingsRoute: typeof DashboardSettingsRoute
+  DashboardUsersRoute: typeof DashboardUsersRoute
+  DashboardVendorBookingsRoute: typeof DashboardVendorBookingsRoute
+  DashboardIndexRoute: typeof DashboardIndexRoute
+}
+
+const DashboardRouteChildren: DashboardRouteChildren = {
+  DashboardApprovalsRoute: DashboardApprovalsRoute,
+  DashboardListingsRoute: DashboardListingsRoute,
+  DashboardSettingsRoute: DashboardSettingsRoute,
+  DashboardUsersRoute: DashboardUsersRoute,
+  DashboardVendorBookingsRoute: DashboardVendorBookingsRoute,
+  DashboardIndexRoute: DashboardIndexRoute,
+}
+
+const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
+  DashboardRouteChildren,
+)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   ContactRoute: ContactRoute,
+  DashboardRoute: DashboardRouteWithChildren,
   GalleryRoute: GalleryRoute,
   LoginRoute: LoginRoute,
+  PrivacyRoute: PrivacyRoute,
+  TermsRoute: TermsRoute,
   ListingsIdRoute: ListingsIdRoute,
   ListingsIndexRoute: ListingsIndexRoute,
 }

@@ -1,4 +1,5 @@
 import { Booking, BookingItem, DB_KEYS, delay } from '../utils/mock-db';
+import { isDateRangeAvailable } from '../utils/date';
 
 export const createBooking = async (bookingData: Omit<Booking, 'id' | 'created_at' | 'updated_at'>, items: Omit<BookingItem, 'id' | 'booking_id'>[]): Promise<Booking> => {
   await delay(1000);
@@ -8,6 +9,20 @@ export const createBooking = async (bookingData: Omit<Booking, 'id' | 'created_a
   
   const bookingItemsStr = localStorage.getItem(DB_KEYS.BOOKING_ITEMS);
   const bookingItems: BookingItem[] = bookingItemsStr ? JSON.parse(bookingItemsStr) : [];
+
+  // Check availability for all items
+  for (const item of items) {
+      const isAvailable = isDateRangeAvailable(
+          item.listing_id, 
+          new Date(item.start_date), 
+          new Date(item.end_date), 
+          bookingItems
+      );
+
+      if (!isAvailable) {
+          throw new Error(`One or more items are not available for the selected dates.`);
+      }
+  }
 
   const newBookingId = bookings.length > 0 ? Math.max(...bookings.map(b => b.id)) + 1 : 1;
   

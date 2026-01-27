@@ -128,9 +128,9 @@ export function DisclosureTrigger({
               },
               className: cn(
                 className,
-                (child as React.ReactElement).props.className
+                (child as any).props.className
               ),
-              ...(child as React.ReactElement).props,
+              ...(child as any).props,
             })
           : child;
       })}

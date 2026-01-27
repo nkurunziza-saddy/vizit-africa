@@ -1,9 +1,14 @@
-import { DB_KEYS, Listing, ListingMedia, delay } from '../utils/mock-db';
+import { DB_KEYS, Listing, ListingMedia, Location, delay } from '../utils/mock-db';
 
 export const getListings = async (): Promise<Listing[]> => {
   await delay(500); // Simulate network latency
   const listingsStr = localStorage.getItem(DB_KEYS.LISTINGS);
   return listingsStr ? JSON.parse(listingsStr) : [];
+};
+
+export const getLocations = async (): Promise<Location[]> => {
+  const locationsStr = localStorage.getItem(DB_KEYS.LOCATIONS);
+  return locationsStr ? JSON.parse(locationsStr) : [];
 };
 
 export const getListingById = async (id: number): Promise<{ listing: Listing; media: ListingMedia[] } | null> => {
@@ -25,13 +30,45 @@ export const getListingById = async (id: number): Promise<{ listing: Listing; me
 };
 
 export const searchListings = async (query: string): Promise<Listing[]> => {
-  await delay(500);
-  const allListings = await getListings();
-  const lowerQuery = query.toLowerCase();
+  return filterListings({ search: query });
+};
+
+export interface FilterOptions {
+  category?: string;
+  search?: string;
+  priceRange?: [number, number];
+  minRating?: number;
+}
+
+export const filterListings = async (options: FilterOptions): Promise<Listing[]> => {
+  await delay(400);
+  let listings = await getListings();
+  const locations = await getLocations();
+
+  if (options.category && options.category !== 'all') {
+    listings = listings.filter(l => l.listing_type.includes(options.category === 'hotel' ? 'hotel' : options.category!));
+  }
+
+  if (options.search) {
+    const lowerQuery = options.search.toLowerCase();
+    
+    // Find matching location IDs
+    const matchingLocations = locations.filter(loc => 
+        loc.name.toLowerCase().includes(lowerQuery) || 
+        loc.country.toLowerCase().includes(lowerQuery)
+    ).map(loc => loc.id);
+
+    listings = listings.filter(l => 
+      l.title.toLowerCase().includes(lowerQuery) || 
+      l.description.toLowerCase().includes(lowerQuery) ||
+      matchingLocations.includes(l.location_id)
+    );
+  }
+
+  if (options.priceRange) {
+    const [min, max] = options.priceRange;
+    listings = listings.filter(l => l.base_price >= min && l.base_price <= max);
+  }
   
-  return allListings.filter(l => 
-    l.title.toLowerCase().includes(lowerQuery) || 
-    l.description.toLowerCase().includes(lowerQuery) ||
-    l.listing_type.toLowerCase().includes(lowerQuery)
-  );
+  return listings;
 };

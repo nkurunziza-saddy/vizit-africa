@@ -52,7 +52,7 @@ export default function Hero() {
                 </div>
 
                  <div className="w-full md:w-auto p-1">
-                    <Link to="/listings" search={{ category: 'all' }}>
+                    <Link to="/listings" search={{ category: 'all', search: undefined }}>
                         <Button size="lg" className="w-full md:w-auto rounded-full h-12 px-8 gap-2 shadow-md">
                             <Search className="h-4 w-4" />
                             <span>Explore</span>
@@ -64,9 +64,9 @@ export default function Hero() {
 
          <div className="mt-8 flex flex-wrap items-center justify-center gap-4 text-sm text-muted-foreground">
              <span className="hidden md:inline">Popular:</span>
-             <Link to="/listings" search={{ category: 'hotel' }} className="hover:text-primary transition-colors cursor-pointer px-3 py-1 rounded-full border border-transparent hover:border-border hover:bg-secondary/30">Hotels</Link>
-             <Link to="/listings" search={{ category: 'car' }} className="hover:text-primary transition-colors cursor-pointer px-3 py-1 rounded-full border border-transparent hover:border-border hover:bg-secondary/30">Car Rentals</Link>
-             <Link to="/listings" search={{ category: 'tour' }} className="hover:text-primary transition-colors cursor-pointer px-3 py-1 rounded-full border border-transparent hover:border-border hover:bg-secondary/30">Tours</Link>
+             <Link to="/listings" search={{ category: 'hotel', search: undefined }} className="hover:text-primary transition-colors cursor-pointer px-3 py-1 rounded-full border border-transparent hover:border-border hover:bg-secondary/30">Hotels</Link>
+             <Link to="/listings" search={{ category: 'car', search: undefined }} className="hover:text-primary transition-colors cursor-pointer px-3 py-1 rounded-full border border-transparent hover:border-border hover:bg-secondary/30">Car Rentals</Link>
+             <Link to="/listings" search={{ category: 'tour', search: undefined }} className="hover:text-primary transition-colors cursor-pointer px-3 py-1 rounded-full border border-transparent hover:border-border hover:bg-secondary/30">Tours</Link>
          </div>
       </div>
     </div>

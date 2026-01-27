@@ -18,8 +18,7 @@ export const DestinationsSection = () => {
                  Explore Rwanda's most sought-after locations.
               </p>
             </div>
-            <Link to="/listings">
-               <span className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors flex items-center gap-2">
+                         <Link to="/listings" search={{ category: undefined, search: undefined }}>               <span className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors flex items-center gap-2">
                   View map <ArrowRight className="h-4 w-4" />
                </span>
             </Link>

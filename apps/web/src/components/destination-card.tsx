@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { MapPin } from "lucide-react";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 
 interface DestinationCardProps {
   name: string;
