@@ -10,115 +10,224 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as LoginRouteImport } from './routes/login'
-import { Route as GalleryRouteImport } from './routes/gallery'
-import { Route as ContactRouteImport } from './routes/contact'
-import { Route as AboutRouteImport } from './routes/about'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as ListingsIndexRouteImport } from './routes/listings.index'
-import { Route as ListingsIdRouteImport } from './routes/listings.$id'
+import { Route as AppRouteImport } from './routes/_app'
+import { Route as AppIndexRouteImport } from './routes/_app/index'
+import { Route as AppTermsRouteImport } from './routes/_app/terms'
+import { Route as AppPrivacyRouteImport } from './routes/_app/privacy'
+import { Route as AppGalleryRouteImport } from './routes/_app/gallery'
+import { Route as AppDashboardRouteImport } from './routes/_app/dashboard'
+import { Route as AppContactRouteImport } from './routes/_app/contact'
+import { Route as AppAboutRouteImport } from './routes/_app/about'
+import { Route as AppListingsIndexRouteImport } from './routes/_app/listings.index'
+import { Route as AppDashboardIndexRouteImport } from './routes/_app/dashboard/index'
+import { Route as AppListingsIdRouteImport } from './routes/_app/listings.$id'
+import { Route as AppDashboardVendorBookingsRouteImport } from './routes/_app/dashboard/vendor-bookings'
+import { Route as AppDashboardUsersRouteImport } from './routes/_app/dashboard/users'
+import { Route as AppDashboardSettingsRouteImport } from './routes/_app/dashboard/settings'
+import { Route as AppDashboardListingsRouteImport } from './routes/_app/dashboard/listings'
+import { Route as AppDashboardApprovalsRouteImport } from './routes/_app/dashboard/approvals'
 
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
-const GalleryRoute = GalleryRouteImport.update({
-  id: '/gallery',
-  path: '/gallery',
+const AppRoute = AppRouteImport.update({
+  id: '/_app',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ContactRoute = ContactRouteImport.update({
-  id: '/contact',
-  path: '/contact',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AboutRoute = AboutRouteImport.update({
-  id: '/about',
-  path: '/about',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const IndexRoute = IndexRouteImport.update({
+const AppIndexRoute = AppIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AppRoute,
 } as any)
-const ListingsIndexRoute = ListingsIndexRouteImport.update({
+const AppTermsRoute = AppTermsRouteImport.update({
+  id: '/terms',
+  path: '/terms',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppPrivacyRoute = AppPrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppGalleryRoute = AppGalleryRouteImport.update({
+  id: '/gallery',
+  path: '/gallery',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppDashboardRoute = AppDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppContactRoute = AppContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppAboutRoute = AppAboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppListingsIndexRoute = AppListingsIndexRouteImport.update({
   id: '/listings/',
   path: '/listings/',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AppRoute,
 } as any)
-const ListingsIdRoute = ListingsIdRouteImport.update({
+const AppDashboardIndexRoute = AppDashboardIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AppDashboardRoute,
+} as any)
+const AppListingsIdRoute = AppListingsIdRouteImport.update({
   id: '/listings/$id',
   path: '/listings/$id',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AppRoute,
+} as any)
+const AppDashboardVendorBookingsRoute =
+  AppDashboardVendorBookingsRouteImport.update({
+    id: '/vendor-bookings',
+    path: '/vendor-bookings',
+    getParentRoute: () => AppDashboardRoute,
+  } as any)
+const AppDashboardUsersRoute = AppDashboardUsersRouteImport.update({
+  id: '/users',
+  path: '/users',
+  getParentRoute: () => AppDashboardRoute,
+} as any)
+const AppDashboardSettingsRoute = AppDashboardSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AppDashboardRoute,
+} as any)
+const AppDashboardListingsRoute = AppDashboardListingsRouteImport.update({
+  id: '/listings',
+  path: '/listings',
+  getParentRoute: () => AppDashboardRoute,
+} as any)
+const AppDashboardApprovalsRoute = AppDashboardApprovalsRouteImport.update({
+  id: '/approvals',
+  path: '/approvals',
+  getParentRoute: () => AppDashboardRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/about': typeof AboutRoute
-  '/contact': typeof ContactRoute
-  '/gallery': typeof GalleryRoute
+  '/': typeof AppIndexRoute
   '/login': typeof LoginRoute
-  '/listings/$id': typeof ListingsIdRoute
-  '/listings/': typeof ListingsIndexRoute
+  '/about': typeof AppAboutRoute
+  '/contact': typeof AppContactRoute
+  '/dashboard': typeof AppDashboardRouteWithChildren
+  '/gallery': typeof AppGalleryRoute
+  '/privacy': typeof AppPrivacyRoute
+  '/terms': typeof AppTermsRoute
+  '/dashboard/approvals': typeof AppDashboardApprovalsRoute
+  '/dashboard/listings': typeof AppDashboardListingsRoute
+  '/dashboard/settings': typeof AppDashboardSettingsRoute
+  '/dashboard/users': typeof AppDashboardUsersRoute
+  '/dashboard/vendor-bookings': typeof AppDashboardVendorBookingsRoute
+  '/listings/$id': typeof AppListingsIdRoute
+  '/dashboard/': typeof AppDashboardIndexRoute
+  '/listings/': typeof AppListingsIndexRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/about': typeof AboutRoute
-  '/contact': typeof ContactRoute
-  '/gallery': typeof GalleryRoute
   '/login': typeof LoginRoute
-  '/listings/$id': typeof ListingsIdRoute
-  '/listings': typeof ListingsIndexRoute
+  '/about': typeof AppAboutRoute
+  '/contact': typeof AppContactRoute
+  '/gallery': typeof AppGalleryRoute
+  '/privacy': typeof AppPrivacyRoute
+  '/terms': typeof AppTermsRoute
+  '/': typeof AppIndexRoute
+  '/dashboard/approvals': typeof AppDashboardApprovalsRoute
+  '/dashboard/listings': typeof AppDashboardListingsRoute
+  '/dashboard/settings': typeof AppDashboardSettingsRoute
+  '/dashboard/users': typeof AppDashboardUsersRoute
+  '/dashboard/vendor-bookings': typeof AppDashboardVendorBookingsRoute
+  '/listings/$id': typeof AppListingsIdRoute
+  '/dashboard': typeof AppDashboardIndexRoute
+  '/listings': typeof AppListingsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
-  '/about': typeof AboutRoute
-  '/contact': typeof ContactRoute
-  '/gallery': typeof GalleryRoute
+  '/_app': typeof AppRouteWithChildren
   '/login': typeof LoginRoute
-  '/listings/$id': typeof ListingsIdRoute
-  '/listings/': typeof ListingsIndexRoute
+  '/_app/about': typeof AppAboutRoute
+  '/_app/contact': typeof AppContactRoute
+  '/_app/dashboard': typeof AppDashboardRouteWithChildren
+  '/_app/gallery': typeof AppGalleryRoute
+  '/_app/privacy': typeof AppPrivacyRoute
+  '/_app/terms': typeof AppTermsRoute
+  '/_app/': typeof AppIndexRoute
+  '/_app/dashboard/approvals': typeof AppDashboardApprovalsRoute
+  '/_app/dashboard/listings': typeof AppDashboardListingsRoute
+  '/_app/dashboard/settings': typeof AppDashboardSettingsRoute
+  '/_app/dashboard/users': typeof AppDashboardUsersRoute
+  '/_app/dashboard/vendor-bookings': typeof AppDashboardVendorBookingsRoute
+  '/_app/listings/$id': typeof AppListingsIdRoute
+  '/_app/dashboard/': typeof AppDashboardIndexRoute
+  '/_app/listings/': typeof AppListingsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/login'
     | '/about'
     | '/contact'
+    | '/dashboard'
     | '/gallery'
-    | '/login'
+    | '/privacy'
+    | '/terms'
+    | '/dashboard/approvals'
+    | '/dashboard/listings'
+    | '/dashboard/settings'
+    | '/dashboard/users'
+    | '/dashboard/vendor-bookings'
     | '/listings/$id'
+    | '/dashboard/'
     | '/listings/'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/'
+    | '/login'
     | '/about'
     | '/contact'
     | '/gallery'
-    | '/login'
+    | '/privacy'
+    | '/terms'
+    | '/'
+    | '/dashboard/approvals'
+    | '/dashboard/listings'
+    | '/dashboard/settings'
+    | '/dashboard/users'
+    | '/dashboard/vendor-bookings'
     | '/listings/$id'
+    | '/dashboard'
     | '/listings'
   id:
     | '__root__'
-    | '/'
-    | '/about'
-    | '/contact'
-    | '/gallery'
+    | '/_app'
     | '/login'
-    | '/listings/$id'
-    | '/listings/'
+    | '/_app/about'
+    | '/_app/contact'
+    | '/_app/dashboard'
+    | '/_app/gallery'
+    | '/_app/privacy'
+    | '/_app/terms'
+    | '/_app/'
+    | '/_app/dashboard/approvals'
+    | '/_app/dashboard/listings'
+    | '/_app/dashboard/settings'
+    | '/_app/dashboard/users'
+    | '/_app/dashboard/vendor-bookings'
+    | '/_app/listings/$id'
+    | '/_app/dashboard/'
+    | '/_app/listings/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  AboutRoute: typeof AboutRoute
-  ContactRoute: typeof ContactRoute
-  GalleryRoute: typeof GalleryRoute
+  AppRoute: typeof AppRouteWithChildren
   LoginRoute: typeof LoginRoute
-  ListingsIdRoute: typeof ListingsIdRoute
-  ListingsIndexRoute: typeof ListingsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -130,59 +239,172 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/gallery': {
-      id: '/gallery'
-      path: '/gallery'
-      fullPath: '/gallery'
-      preLoaderRoute: typeof GalleryRouteImport
+    '/_app': {
+      id: '/_app'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AppRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/contact': {
-      id: '/contact'
-      path: '/contact'
-      fullPath: '/contact'
-      preLoaderRoute: typeof ContactRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/about': {
-      id: '/about'
-      path: '/about'
-      fullPath: '/about'
-      preLoaderRoute: typeof AboutRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/': {
-      id: '/'
+    '/_app/': {
+      id: '/_app/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AppIndexRouteImport
+      parentRoute: typeof AppRoute
     }
-    '/listings/': {
-      id: '/listings/'
+    '/_app/terms': {
+      id: '/_app/terms'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof AppTermsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/privacy': {
+      id: '/_app/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof AppPrivacyRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/gallery': {
+      id: '/_app/gallery'
+      path: '/gallery'
+      fullPath: '/gallery'
+      preLoaderRoute: typeof AppGalleryRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/dashboard': {
+      id: '/_app/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof AppDashboardRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/contact': {
+      id: '/_app/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof AppContactRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/about': {
+      id: '/_app/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AppAboutRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/listings/': {
+      id: '/_app/listings/'
       path: '/listings'
       fullPath: '/listings/'
-      preLoaderRoute: typeof ListingsIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AppListingsIndexRouteImport
+      parentRoute: typeof AppRoute
     }
-    '/listings/$id': {
-      id: '/listings/$id'
+    '/_app/dashboard/': {
+      id: '/_app/dashboard/'
+      path: '/'
+      fullPath: '/dashboard/'
+      preLoaderRoute: typeof AppDashboardIndexRouteImport
+      parentRoute: typeof AppDashboardRoute
+    }
+    '/_app/listings/$id': {
+      id: '/_app/listings/$id'
       path: '/listings/$id'
       fullPath: '/listings/$id'
-      preLoaderRoute: typeof ListingsIdRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AppListingsIdRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/dashboard/vendor-bookings': {
+      id: '/_app/dashboard/vendor-bookings'
+      path: '/vendor-bookings'
+      fullPath: '/dashboard/vendor-bookings'
+      preLoaderRoute: typeof AppDashboardVendorBookingsRouteImport
+      parentRoute: typeof AppDashboardRoute
+    }
+    '/_app/dashboard/users': {
+      id: '/_app/dashboard/users'
+      path: '/users'
+      fullPath: '/dashboard/users'
+      preLoaderRoute: typeof AppDashboardUsersRouteImport
+      parentRoute: typeof AppDashboardRoute
+    }
+    '/_app/dashboard/settings': {
+      id: '/_app/dashboard/settings'
+      path: '/settings'
+      fullPath: '/dashboard/settings'
+      preLoaderRoute: typeof AppDashboardSettingsRouteImport
+      parentRoute: typeof AppDashboardRoute
+    }
+    '/_app/dashboard/listings': {
+      id: '/_app/dashboard/listings'
+      path: '/listings'
+      fullPath: '/dashboard/listings'
+      preLoaderRoute: typeof AppDashboardListingsRouteImport
+      parentRoute: typeof AppDashboardRoute
+    }
+    '/_app/dashboard/approvals': {
+      id: '/_app/dashboard/approvals'
+      path: '/approvals'
+      fullPath: '/dashboard/approvals'
+      preLoaderRoute: typeof AppDashboardApprovalsRouteImport
+      parentRoute: typeof AppDashboardRoute
     }
   }
 }
 
+interface AppDashboardRouteChildren {
+  AppDashboardApprovalsRoute: typeof AppDashboardApprovalsRoute
+  AppDashboardListingsRoute: typeof AppDashboardListingsRoute
+  AppDashboardSettingsRoute: typeof AppDashboardSettingsRoute
+  AppDashboardUsersRoute: typeof AppDashboardUsersRoute
+  AppDashboardVendorBookingsRoute: typeof AppDashboardVendorBookingsRoute
+  AppDashboardIndexRoute: typeof AppDashboardIndexRoute
+}
+
+const AppDashboardRouteChildren: AppDashboardRouteChildren = {
+  AppDashboardApprovalsRoute: AppDashboardApprovalsRoute,
+  AppDashboardListingsRoute: AppDashboardListingsRoute,
+  AppDashboardSettingsRoute: AppDashboardSettingsRoute,
+  AppDashboardUsersRoute: AppDashboardUsersRoute,
+  AppDashboardVendorBookingsRoute: AppDashboardVendorBookingsRoute,
+  AppDashboardIndexRoute: AppDashboardIndexRoute,
+}
+
+const AppDashboardRouteWithChildren = AppDashboardRoute._addFileChildren(
+  AppDashboardRouteChildren,
+)
+
+interface AppRouteChildren {
+  AppAboutRoute: typeof AppAboutRoute
+  AppContactRoute: typeof AppContactRoute
+  AppDashboardRoute: typeof AppDashboardRouteWithChildren
+  AppGalleryRoute: typeof AppGalleryRoute
+  AppPrivacyRoute: typeof AppPrivacyRoute
+  AppTermsRoute: typeof AppTermsRoute
+  AppIndexRoute: typeof AppIndexRoute
+  AppListingsIdRoute: typeof AppListingsIdRoute
+  AppListingsIndexRoute: typeof AppListingsIndexRoute
+}
+
+const AppRouteChildren: AppRouteChildren = {
+  AppAboutRoute: AppAboutRoute,
+  AppContactRoute: AppContactRoute,
+  AppDashboardRoute: AppDashboardRouteWithChildren,
+  AppGalleryRoute: AppGalleryRoute,
+  AppPrivacyRoute: AppPrivacyRoute,
+  AppTermsRoute: AppTermsRoute,
+  AppIndexRoute: AppIndexRoute,
+  AppListingsIdRoute: AppListingsIdRoute,
+  AppListingsIndexRoute: AppListingsIndexRoute,
+}
+
+const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  AboutRoute: AboutRoute,
-  ContactRoute: ContactRoute,
-  GalleryRoute: GalleryRoute,
+  AppRoute: AppRouteWithChildren,
   LoginRoute: LoginRoute,
-  ListingsIdRoute: ListingsIdRoute,
-  ListingsIndexRoute: ListingsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

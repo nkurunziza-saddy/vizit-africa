@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { PageWrapper } from '@/components/layouts/page-wrapper'
 
-export const Route = createFileRoute('/about')({
+export const Route = createFileRoute('/_app/about')({
   component: AboutPage,
 })
 

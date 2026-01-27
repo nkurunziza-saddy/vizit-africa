@@ -5,8 +5,7 @@ import { useState } from "react";
 import { addDays, format } from "date-fns";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { DateRange } from "react-day-picker";
-import { FloatingPaths } from "@/curated/floating-paths";
+import type { DateRange } from "react-day-picker";
 
 export default function Hero() {
   const navigate = useNavigate();
@@ -22,11 +21,15 @@ export default function Hero() {
       to: "/listings",
       search: {
         category: "all",
-        search: "Rwanda", // Default destination
+        search: "Rwanda",
+        sortBy: undefined,
+        priceRange: undefined,
+        amenities: undefined,
         from: locationFrom,
         checkIn: date?.from?.toISOString(),
         checkOut: date?.to?.toISOString(),
         guests: guests,
+        page: undefined,
       },
     });
   };
@@ -34,17 +37,16 @@ export default function Hero() {
   return (
     <div className="relative min-h-[600px] flex items-center justify-center overflow-hidden py-24 md:py-32">
       <div className="container relative z-10 mx-auto px-4 text-center max-w-5xl">
-        <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-foreground mb-6">
+        <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-foreground mb-6">
           Discover <span className="text-primary">Rwanda</span>
         </h1>
-        <p className="mt-4 text-lg md:text-xl text-muted-foreground mb-12 max-w-2xl mx-auto">
+        <p className="mt-4 text-lg md:text-xl text-muted-foreground mb-12 max-w-lg mx-auto">
           Experience the land of a thousand hills. Find unique stays, premium cars, and expert guides for your journey.
         </p>
         
         <div className="max-w-5xl mx-auto bg-background/80 backdrop-blur-md border border-border/50 rounded-full shadow-lg p-2 animate-in fade-in slide-in-from-bottom-4 duration-700">
              <div className="flex flex-col md:flex-row items-center gap-2">
                 
-                {/* Location From */}
                 <div className="relative w-full md:w-[28%] group">
                      <div className="flex items-center gap-3 px-6 h-14 rounded-full bg-transparent hover:bg-secondary/50 border border-transparent transition-colors">
                         <MapPin className="h-5 w-5 text-muted-foreground shrink-0" />
@@ -63,7 +65,6 @@ export default function Hero() {
 
                 <div className="hidden md:block w-px h-10 bg-border/50" />
 
-                {/* Destination (Static for now) */}
                 <div className="relative w-full md:w-[22%] group">
                      <div className="flex items-center gap-3 px-6 h-14 rounded-full bg-secondary/50 border border-transparent group-hover:border-border/50 transition-colors cursor-default">
                         <MapPin className="h-5 w-5 text-muted-foreground shrink-0" />
@@ -76,7 +77,6 @@ export default function Hero() {
 
                 <div className="hidden md:block w-px h-10 bg-border/50" />
 
-                {/* Dates Popover */}
                 <div className="relative w-full md:w-[25%] group">
                     <Popover>
                         <PopoverTrigger className="flex items-center gap-3 px-6 h-14 rounded-full bg-transparent hover:bg-secondary/50 border border-transparent transition-colors cursor-pointer w-full text-left">
@@ -113,7 +113,6 @@ export default function Hero() {
 
                 <div className="hidden md:block w-px h-10 bg-border/50" />
 
-                {/* Guests Popover */}
                 <div className="relative w-full md:w-[20%] group">
                     <Popover>
                         <PopoverTrigger className="flex items-center gap-3 px-6 h-14 rounded-full bg-transparent hover:bg-secondary/50 border border-transparent transition-colors cursor-pointer w-full text-left">
@@ -168,9 +167,9 @@ export default function Hero() {
 
          <div className="mt-8 flex flex-wrap items-center justify-center gap-4 text-sm text-muted-foreground">
              <span className="hidden md:inline">Popular:</span>
-             <Link to="/listings" search={{ category: 'hotel' }} className="hover:text-primary transition-colors cursor-pointer px-3 py-1 rounded-full border border-transparent hover:border-border hover:bg-secondary/30">Hotels</Link>
-             <Link to="/listings" search={{ category: 'car' }} className="hover:text-primary transition-colors cursor-pointer px-3 py-1 rounded-full border border-transparent hover:border-border hover:bg-secondary/30">Car Rentals</Link>
-             <Link to="/listings" search={{ category: 'tour' }} className="hover:text-primary transition-colors cursor-pointer px-3 py-1 rounded-full border border-transparent hover:border-border hover:bg-secondary/30">Tours</Link>
+             <Link to="/listings" search={{ category: 'hotel', search: undefined, sortBy: undefined, priceRange: undefined, amenities: undefined, from: undefined, checkIn: undefined, checkOut: undefined, guests: undefined, page: undefined }} className="hover:text-primary transition-colors cursor-pointer px-3 py-1 rounded-full border border-transparent hover:border-border hover:bg-secondary/30">Hotels</Link>
+             <Link to="/listings" search={{ category: 'car', search: undefined, sortBy: undefined, priceRange: undefined, amenities: undefined, from: undefined, checkIn: undefined, checkOut: undefined, guests: undefined, page: undefined }} className="hover:text-primary transition-colors cursor-pointer px-3 py-1 rounded-full border border-transparent hover:border-border hover:bg-secondary/30">Car Rentals</Link>
+             <Link to="/listings" search={{ category: 'tour', search: undefined, sortBy: undefined, priceRange: undefined, amenities: undefined, from: undefined, checkIn: undefined, checkOut: undefined, guests: undefined, page: undefined }} className="hover:text-primary transition-colors cursor-pointer px-3 py-1 rounded-full border border-transparent hover:border-border hover:bg-secondary/30">Tours</Link>
          </div>
       </div>
     </div>

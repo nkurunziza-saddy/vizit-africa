@@ -6,11 +6,11 @@ import {
   useSpring,
   useTransform,
   motionValue,
+  type SpringOptions,
 } from 'motion/react';
 import useMeasure from 'react-use-measure';
 
-const TRANSITION = {
-  type: 'spring',
+const TRANSITION: SpringOptions = {
   stiffness: 280,
   damping: 18,
   mass: 0.3,
@@ -29,13 +29,20 @@ function Digit({ value, place }: { value: number; place: number }) {
     <div className='relative inline-block w-[1ch] overflow-x-visible overflow-y-clip leading-none tabular-nums'>
       <div className='invisible'>0</div>
       {Array.from({ length: 10 }, (_, i) => (
-        <Number key={i} mv={animatedValue} number={i} />
+        <AnimatedNumber key={i} mv={animatedValue} number={i} />
       ))}
     </div>
   );
 }
 
-function Number({ mv, number }: { mv: MotionValue<number>; number: number }) {
+
+function AnimatedNumber({
+  mv,
+  number,
+}: {
+  mv: MotionValue<number>;
+  number: number;
+}) {
   const uniqueId = useId();
   const [ref, bounds] = useMeasure();
 

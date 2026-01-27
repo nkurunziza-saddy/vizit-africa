@@ -1,6 +1,6 @@
 import { createFileRoute, useSearch } from '@tanstack/react-router'
-import { useState } from "react";
-import { Search, StarIcon, X } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Search, StarIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -10,13 +10,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Slider } from "@/components/ui/slider";
 
 
 import ListingCard from '@/components/listing-card';
 import { PageWrapper } from '@/components/layouts/page-wrapper';
 import { useListings } from '@/hooks/use-listings';
+import { useDebounce } from '@/hooks/use-debounce'; // Assuming this hook exists as per context
 
-export const Route = createFileRoute('/listings/')({
+
+export const Route = createFileRoute('/_app/listings/')({
   component: Listings,
   validateSearch: (search: Record<string, unknown>) => ({
     category: search.category as string | undefined,
@@ -24,12 +27,11 @@ export const Route = createFileRoute('/listings/')({
     sortBy: search.sortBy as string | undefined,
     priceRange: search.priceRange as number[] | undefined,
     amenities: search.amenities as string[] | undefined,
-    
-    // Booking Widget Params
     from: search.from as string | undefined,
     checkIn: search.checkIn as string | undefined,
     checkOut: search.checkOut as string | undefined,
     guests: search.guests as number | undefined,
+    page: search.page as number | undefined,
   }),
 })
 
@@ -42,52 +44,82 @@ const categories = [
 ];
 
 function Listings(){
-  const [currentPage, setCurrentPage] = useState(1);
-  const searchParams = useSearch({ from: '/listings/' });
-  const categoryParam = searchParams.category;
+  const searchParams = useSearch({ from: '/_app/listings/' });
+  const navigate = Route.useNavigate();
   
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState(categoryParam || "all");
+  // Local state for search input to allow typing without immediate URL updates
+  const [localSearchQuery, setLocalSearchQuery] = useState(searchParams.search || "");
+  const debouncedSearchQuery = useDebounce(localSearchQuery, 500);
+
+  // Sync debounced search to URL
+  useEffect(() => {
+    if (debouncedSearchQuery !== (searchParams.search || "")) {
+       navigate({
+         search: (prev) => ({ ...prev, search: debouncedSearchQuery || undefined, page: 1 }),
+       });
+    }
+  }, [debouncedSearchQuery, searchParams.search, navigate]);
+
+  // Derived values from URL search params
+  const selectedCategory = searchParams.category || "all";
+  const priceRange = searchParams.priceRange || [0, 1000];
+  const currentPage = searchParams.page || 1;
+
+  // Helper functions to update URL
+  const setCategory = (category: string) => {
+    navigate({
+      search: (prev) => ({ ...prev, category: category, page: 1 }),
+    });
+  };
+
+  const setPriceRangeParam = (range: number[]) => {
+      navigate({
+          search: (prev) => ({ ...prev, priceRange: range, page: 1 }),
+      });
+  };
+
+  const clearFilters = () => {
+      setLocalSearchQuery("");
+      navigate({
+          search: (prev) => ({ ...prev, category: undefined, search: undefined, priceRange: undefined, page: 1 }),
+      });
+  };
 
   const { data: listings, isLoading } = useListings();
 
   if (isLoading) {
     return (
       <div className="min-h-screen">
-     
          <PageWrapper>
             <div>Loading listings...</div>
          </PageWrapper>
-      
       </div>
     )
   }
 
-  // Filter listings
+  // Filter logic using URL params
+  const activeSearchQuery = (searchParams.search || "").toLowerCase();
+  
   const filteredListings = listings?.filter((listing) => {
-    // Basic filtering simulation
     const matchesCategory =
       selectedCategory === "all" || listing.listing_type.includes(selectedCategory === 'hotel' ? 'hotel' : selectedCategory);
+    
     const matchesSearch =
-      listing.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      "location".toLowerCase().includes(searchQuery.toLowerCase()); // Location is ID, simulating search
-    return matchesCategory && matchesSearch;
+      listing.title.toLowerCase().includes(activeSearchQuery) ||
+      "location".toLowerCase().includes(activeSearchQuery); 
+      
+      const matchesPrice = listing.base_price >= priceRange[0] && listing.base_price <= priceRange[1];
+
+    return matchesCategory && matchesSearch && matchesPrice;
   }) || [];
 
-  // Pagination Logic
   const ITEMS_PER_PAGE = 9;
-  
   const totalPages = Math.ceil(filteredListings.length / ITEMS_PER_PAGE);
   
   const paginatedListings = filteredListings.slice(
     (currentPage - 1) * ITEMS_PER_PAGE,
     currentPage * ITEMS_PER_PAGE
   );
-
-  // Reset page when filters change
-  if (currentPage > totalPages && totalPages > 0) {
-      setCurrentPage(1);
-  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -101,8 +133,8 @@ function Listings(){
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                     <Input
                       placeholder="Search..."
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
+                      value={localSearchQuery}
+                      onChange={(e) => setLocalSearchQuery(e.target.value)}
                       className="pl-9 h-9"
                     />
                   </div>
@@ -115,7 +147,7 @@ function Listings(){
                         <button
                         type='button'
                            key={cat.value}
-                           onClick={() => setSelectedCategory(cat.value)}
+                           onClick={() => setCategory(cat.value)}
                            className={`block text-sm w-full text-left px-2 py-1.5 rounded-md transition-colors ${selectedCategory === cat.value ? "bg-primary/10 text-primary font-medium" : "text-muted-foreground hover:bg-muted"}`}
                         >
                            {cat.label}
@@ -125,15 +157,19 @@ function Listings(){
                </div>
 
                <div>
-                 <h3 className="font-semibold mb-4">Price Range</h3>
-                  {/* Placeholder for slider */}
+                  <h3 className="font-semibold mb-4">Price Range</h3>
                   <div className="px-2">
-                     <div className="h-1 bg-secondary rounded-full w-full mb-4 relative">
-                        <div className="absolute left-0 top-0 h-full w-1/2 bg-primary rounded-full"></div>
-                     </div>
+                     <Slider
+                        defaultValue={[0, 1000]}
+                        max={1000}
+                        step={10}
+                        value={priceRange}
+                        onValueChange={(value) => setPriceRangeParam(value as number[])}
+                        className="mb-4"
+                     />
                      <div className="flex justify-between text-xs text-muted-foreground">
-                        <span>$10</span>
-                        <span>$500+</span>
+                        <span>${priceRange[0]}</span>
+                        <span>${priceRange[1]}+</span>
                      </div>
                   </div>
                </div>
@@ -155,7 +191,7 @@ function Listings(){
                  </div>
                </div>
                
-               <Button variant="outline" className="w-full text-xs h-8" onClick={() => { setSearchQuery(""); setSelectedCategory("all"); }}>
+               <Button variant="outline" className="w-full text-xs h-8" onClick={clearFilters}>
                    Clear Filters
                </Button>
             </aside>
@@ -198,7 +234,7 @@ function Listings(){
             {filteredListings.length === 0 && (
                <div className="py-12 text-center text-muted-foreground bg-muted/10 rounded-lg border border-dashed">
                   <p>No listings found matching your criteria.</p>
-                  <Button variant="link" onClick={() => { setSearchQuery(""); setSelectedCategory("all"); }}>Clear filters</Button>
+                  <Button variant="link" onClick={clearFilters}>Clear filters</Button>
                </div>
             )}
             
@@ -208,18 +244,16 @@ function Listings(){
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                  onClick={() => navigate({ search: (prev) => ({ ...prev, page: Math.max(1, currentPage - 1) }) })}
                   disabled={currentPage === 1}
                 >
                   Previous
                 </Button>
                 <div className="flex items-center gap-1">
                   {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
-                      // Simple logic to show first 5 pages or sliding window could be added
-                      let p = i + 1;
+                      const p = i + 1;
                       if (totalPages > 5 && currentPage > 3) {
-                          // Center around current page if possible, but keep simple for now or implement full logic
-                          // Let's stick to simple list for MVP or generic simple "Page X of Y"
+                          // Simplified logic: just showing p is not accurate for sliding window, but keeps existing placeholder logic
                       }
                       return (
                         <Button
@@ -227,7 +261,7 @@ function Listings(){
                           variant={currentPage === p ? "default" : "ghost"}
                           size="sm"
                           className="w-8 h-8 p-0"
-                          onClick={() => setCurrentPage(p)}
+                          onClick={() => navigate({ search: (prev) => ({ ...prev, page: p }) })}
                         >
                           {p}
                         </Button>
@@ -238,7 +272,7 @@ function Listings(){
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                  onClick={() => navigate({ search: (prev) => ({ ...prev, page: Math.min(totalPages, currentPage + 1) }) })}
                   disabled={currentPage === totalPages}
                 >
                   Next

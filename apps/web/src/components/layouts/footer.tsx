@@ -1,5 +1,5 @@
 "use client";
-import { Button } from "@/components/ui/button";
+
 import {
 	FacebookIcon,
 	InstagramIcon,
@@ -7,7 +7,7 @@ import {
     YoutubeIcon,
 } from "lucide-react";
 import { motion, useReducedMotion } from "framer-motion";
-import { Logo } from "@/curated/logo";
+import { Logo } from "@/components/logo";
 import { Link } from "@tanstack/react-router";
 
 type FooterLink = {
@@ -20,7 +20,7 @@ type FooterLinkGroup = {
 	links: FooterLink[];
 };
 
-export function StickyFooter() {
+export function Footer() {
 	return (
 		<footer
 			className="relative h-[560px] w-full border-t"

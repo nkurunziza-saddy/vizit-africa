@@ -1,4 +1,4 @@
-import { LazyImage } from "@/curated/lazy-image";
+import { LazyImage } from "@/components/lazy-image";
 
 export function ImageGallery() {
 	return (
@@ -6,7 +6,6 @@ export function ImageGallery() {
 			<div className="mx-auto grid w-full max-w-5xl grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4 md:gap-6">
 				{Array.from({ length: 4 }).map((_, col) => (
 					<div className="grid gap-4" key={col}>
-						{/* biome-ignore lint/nursery/noShadow: false positive */}
 						{Array.from({ length: 8 }).map((_, index) => {
 							const isPortrait = Math.random() > 0.5;
 							const width = isPortrait ? 1080 : 1920;

@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
-import { Star, MapPin } from "lucide-react";
-import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
+import { Star } from "lucide-react";
+
 import { Badge } from "@/components/ui/badge";
 
 export interface ListingCardProps {

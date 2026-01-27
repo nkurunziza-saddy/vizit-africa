@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils';
 import { useId } from 'react';
 import { createPortal } from 'react-dom';
 import { X } from 'lucide-react';
-import { usePreventScroll } from '@/hooks/usePreventScroll';
+import { usePreventScroll } from '@/hooks/use-prevent-scroll';
 
 const DialogContext = createContext<{
   isOpen: boolean;
@@ -97,7 +97,7 @@ function Dialog({
       dialog.removeEventListener('cancel', handleCancel);
       document.body.classList.remove('overflow-hidden');
     };
-  }, [dialogRef, isOpen, setIsOpen]);
+  }, [isOpen, setIsOpen]);
 
   useEffect(() => {
     if (isOpen && dialogRef.current) {
@@ -151,6 +151,7 @@ function DialogTrigger({ children, className }: DialogTriggerProps) {
 
   return (
     <button
+    type='button'
       onClick={context.handleTrigger}
       className={cn(
         'inline-flex items-center justify-center rounded-md text-sm font-medium',

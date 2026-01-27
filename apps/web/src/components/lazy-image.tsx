@@ -68,7 +68,6 @@ export function LazyImage({
 			ref={ref}
 		>
 			{imgSrc && (
-				// biome-ignore lint/nursery/useImageSize: dynamic image size
 				<img
 					alt={alt}
 					className={cn(

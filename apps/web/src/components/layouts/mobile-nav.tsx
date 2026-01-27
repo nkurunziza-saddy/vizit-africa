@@ -4,20 +4,18 @@ import { cn } from "@/lib/utils";
 import { MenuIcon, XIcon } from "lucide-react";
 import React from "react";
 import { createPortal } from "react-dom";
-import { navLinks } from "@/curated/nav-links";
+import { navLinks } from "@/lib/nav-links";
 
 export function MobileNav() {
 	const [open, setOpen] = React.useState(false);
 	const { isMobile } = useMediaQuery();
 
-	// 🚫 Disable body scroll when open
 	React.useEffect(() => {
 		if (open && isMobile) {
 			document.body.style.overflow = "hidden";
 		} else {
 			document.body.style.overflow = "";
 		}
-		// Cleanup on unmount too
 		return () => {
 			document.body.style.overflow = "";
 		};

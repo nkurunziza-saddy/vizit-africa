@@ -10,6 +10,7 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
+  DialogClose,
 } from "@/components/ui/dialog"
 import {
   InputGroup,
@@ -59,9 +60,9 @@ function CommandDialog({
           "rounded-xl! top-1/3 translate-y-0 overflow-hidden p-0",
           className
         )}
-        showCloseButton={showCloseButton}
       >
         {children}
+        {showCloseButton && <DialogClose />}
       </DialogContent>
     </Dialog>
   )
