@@ -1,165 +1,358 @@
 "use client";
 
+import React, { useState } from "react";
 import { cn } from "@/lib/utils";
 import { type LucideIcon, Mail, MapPin, Phone } from "lucide-react";
-import type React from "react";
 
-const APP_EMAIL = "mail@example.com";
+const APP_EMAIL = "muhimpunduan@gmail.com";
 const APP_PHONE = "+92 300 1234567";
 const APP_PHONE_2 = "+92 321 9876543";
 
 export function Contact() {
-	const socialLinks = [
-		{
-			icon: GithubIcon,
-			href: "#",
-			label: "GitHub",
-		},
-		{
-			icon: XIcon,
-			href: "#",
-			label: "Twitter",
-		},
-	];
+  const socialLinks = [
+    { icon: GithubIcon, href: "#", label: "GitHub" },
+    { icon: XIcon, href: "#", label: "Twitter" },
+  ];
 
-	return (
-		<div className="mx-auto h-full min-h-screen max-w-5xl lg:border-x">
-			<div className="flex grow flex-col justify-center px-4 py-18 md:items-center">
-				<h1 className="font-bold text-4xl md:text-5xl">Contact Us</h1>
-				<p className="mb-5 text-base text-muted-foreground">
-					Contact the support team at efferd.
-				</p>
-			</div>
-			<BorderSeparator />
-			<div className="grid md:grid-cols-3">
-				<Box
-					description="We respond to all emails within 24 hours."
-					icon={Mail}
-					title="Email"
-				>
-					<a
-						className="font-medium font-mono text-sm tracking-wide hover:underline"
-						href={`mailto:${APP_EMAIL}`}
-					>
-						{APP_EMAIL}
-					</a>
-				</Box>
-				<Box
-					description="Drop by our office for a chat."
-					icon={MapPin}
-					title="Office"
-				>
-					<span className="font-medium font-mono text-sm tracking-wide">
-						Office # 100, 101 Second Floor Kohinoor 1, Faisalabad, Pakistan
-					</span>
-				</Box>
-				<Box
-					className="border-b-0 md:border-r-0"
-					description="We're available Mon-Fri, 9am-5pm."
-					icon={Phone}
-					title="Phone"
-				>
-					<div>
-						<a
-							className="block font-medium font-mono text-sm tracking-wide hover:underline"
-							href={`tel:${APP_PHONE}`}
-						>
-							{APP_PHONE}
-						</a>
-						<a
-							className="block font-medium font-mono text-sm tracking-wide hover:underline"
-							href={`tel:${APP_PHONE_2}`}
-						>
-							{APP_PHONE_2}
-						</a>
-					</div>
-				</Box>
-			</div>
-			<BorderSeparator />
-			<div className="z-1 flex h-full flex-col items-center justify-center gap-4 py-24">
-				<h2 className="text-center font-medium text-2xl text-muted-foreground tracking-tight md:text-3xl">
-					Find us <span className="text-foreground">online</span>
-				</h2>
-				<div className="flex flex-wrap items-center gap-2">
-					{socialLinks.map((link) => (
-						<a
-							className="flex items-center gap-x-2 rounded-full border bg-card px-3 py-1.5 shadow hover:bg-accent"
-							href={link.href}
-							key={link.label}
-							rel="noopener noreferrer"
-							target="_blank"
-						>
-							<link.icon className="size-3.5 text-muted-foreground" />
-							<span className="font-medium font-mono text-xs tracking-wide">
-								{link.label}
-							</span>
-						</a>
-					))}
-				</div>
-			</div>
-		</div>
-	);
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    subject: "",
+    message: "",
+  });
+
+  const [touched, setTouched] = useState<Record<string, boolean>>({});
+  const [info, setInfo] = useState<{
+    type: "success" | "error";
+    text: string;
+  } | null>(null);
+
+  function update<K extends keyof typeof form>(
+    key: K,
+    value: (typeof form)[K]
+  ) {
+    setForm((s) => ({ ...s, [key]: value }));
+  }
+
+  function validate() {
+    const errors: string[] = [];
+    if (!form.name.trim()) errors.push("Please enter your name.");
+    if (!form.message.trim()) errors.push("Please enter a message.");
+    if (
+      form.email &&
+      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)
+    ) {
+      errors.push("Please enter a valid email address.");
+    }
+    return errors;
+  }
+
+  function openMailClient() {
+    const subject =
+      form.subject.trim() ||
+      "New message from Vizit Africa website";
+
+    const body = [
+      `Name: ${form.name}`,
+      `Email: ${form.email || "Not provided"}`,
+      "",
+      "Message:",
+      form.message,
+      "",
+      "—",
+      "Sent from Vizit Africa contact form",
+    ].join("\r\n");
+
+    const mailto = `mailto:${APP_EMAIL}?subject=${encodeURIComponent(
+      subject
+    )}&body=${encodeURIComponent(body)}`;
+
+    window.location.href = mailto;
+  }
+
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+
+    setTouched({
+      name: true,
+      email: true,
+      subject: true,
+      message: true,
+    });
+
+    setInfo(null);
+
+    const errors = validate();
+    if (errors.length) {
+      setInfo({ type: "error", text: errors.join(" ") });
+      return;
+    }
+
+    openMailClient();
+
+    setInfo({
+      type: "success",
+      text:
+        "Your email app has opened. Please review the message and click Send.",
+    });
+  }
+
+  return (
+    <div className="mx-auto min-h-screen max-w-5xl bg-background lg:border-x">
+      {/* Header */}
+      <div className="px-6 py-16 md:flex md:items-center md:justify-between">
+        <div className="max-w-2xl">
+          <h1 className="text-4xl font-extrabold leading-tight">
+            Contact Us
+          </h1>
+          <p className="mt-3 text-lg text-muted-foreground">
+            Have a question, partnership inquiry, or vendor request?
+            Send us a message and we’ll respond within 24–48 hours.
+          </p>
+        </div>
+      </div>
+
+      <div className="border-t" />
+
+      {/* Contact cards */}
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+        <ContactCard
+          icon={Mail}
+          title="Email"
+          description="We respond to all emails within 24 hours."
+        >
+          <a
+            className="font-mono text-sm font-medium tracking-wide hover:underline"
+            href={`mailto:${APP_EMAIL}`}
+          >
+            {APP_EMAIL}
+          </a>
+        </ContactCard>
+
+        <ContactCard
+          icon={MapPin}
+          title="Office"
+          description="Drop by our office for a chat."
+        >
+          <address className="not-italic font-mono text-sm font-medium tracking-wide">
+            Office #100, 2nd Floor, Kohinoor 1, Faisalabad, Pakistan
+          </address>
+        </ContactCard>
+
+        <ContactCard
+          icon={Phone}
+          title="Phone"
+          description="We’re available Mon–Fri, 9am–5pm."
+        >
+          <div>
+            <a
+              className="block font-mono text-sm font-medium tracking-wide hover:underline"
+              href={`tel:${APP_PHONE}`}
+            >
+              {APP_PHONE}
+            </a>
+            <a
+              className="block font-mono text-sm font-medium tracking-wide hover:underline"
+              href={`tel:${APP_PHONE_2}`}
+            >
+              {APP_PHONE_2}
+            </a>
+          </div>
+        </ContactCard>
+      </div>
+
+      <div className="border-t" />
+
+      {/* Form */}
+      <section className="mx-auto max-w-4xl px-6 py-12">
+        <h2 className="text-2xl font-semibold">
+          Send us a message
+        </h2>
+        <p className="mt-2 text-sm text-muted-foreground">
+          This form will open your email app so you can review and
+          send your message.
+        </p>
+
+        <form
+          onSubmit={handleSubmit}
+          className="mt-6 space-y-4 rounded-lg bg-card p-6 shadow"
+        >
+          <div className="grid gap-3 sm:grid-cols-2">
+            <label className="flex flex-col">
+              <span className="text-sm font-medium text-muted-foreground">
+                Your name
+              </span>
+              <input
+                className="mt-1 w-full rounded border bg-input px-3 py-2 text-sm"
+                value={form.name}
+                onChange={(e) =>
+                  update("name", e.target.value)
+                }
+                onBlur={() =>
+                  setTouched((t) => ({ ...t, name: true }))
+                }
+                required
+              />
+              {touched.name && !form.name.trim() && (
+                <span className="mt-1 text-xs text-red-600">
+                  Name is required.
+                </span>
+              )}
+            </label>
+
+            <label className="flex flex-col">
+              <span className="text-sm font-medium text-muted-foreground">
+                Your email (optional)
+              </span>
+              <input
+                type="email"
+                className="mt-1 w-full rounded border bg-input px-3 py-2 text-sm"
+                value={form.email}
+                onChange={(e) =>
+                  update("email", e.target.value)
+                }
+                onBlur={() =>
+                  setTouched((t) => ({ ...t, email: true }))
+                }
+              />
+              {touched.email &&
+                form.email &&
+                !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
+                  form.email
+                ) && (
+                  <span className="mt-1 text-xs text-red-600">
+                    Invalid email address.
+                  </span>
+                )}
+            </label>
+          </div>
+
+          <label className="flex flex-col">
+            <span className="text-sm font-medium text-muted-foreground">
+              Subject
+            </span>
+            <input
+              className="mt-1 w-full rounded border bg-input px-3 py-2 text-sm"
+              value={form.subject}
+              onChange={(e) =>
+                update("subject", e.target.value)
+              }
+            />
+          </label>
+
+          <label className="flex flex-col">
+            <span className="text-sm font-medium text-muted-foreground">
+              Message
+            </span>
+            <textarea
+              className="mt-1 min-h-[120px] w-full rounded border bg-input px-3 py-2 text-sm"
+              value={form.message}
+              onChange={(e) =>
+                update("message", e.target.value)
+              }
+              onBlur={() =>
+                setTouched((t) => ({ ...t, message: true }))
+              }
+              required
+            />
+            {touched.message &&
+              !form.message.trim() && (
+                <span className="mt-1 text-xs text-red-600">
+                  Message is required.
+                </span>
+              )}
+          </label>
+
+          <div className="flex items-center justify-between">
+            <button
+              type="submit"
+              className="inline-flex items-center gap-2 rounded bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700"
+            >
+              <Mail className="h-4 w-4" />
+              Open email & send
+            </button>
+
+            {info && (
+              <span
+                className={cn(
+                  "text-sm",
+                  info.type === "success"
+                    ? "text-green-600"
+                    : "text-red-600"
+                )}
+              >
+                {info.text}
+              </span>
+            )}
+          </div>
+        </form>
+      </section>
+
+      <div className="border-t" />
+
+      {/* Footer */}
+      <footer className="flex flex-col items-center gap-4 py-12">
+        <h3 className="text-lg font-medium text-muted-foreground">
+          Find us online
+        </h3>
+        <div className="flex flex-wrap gap-2">
+          {socialLinks.map((link) => (
+            <a
+              key={link.label}
+              href={link.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 rounded-full border bg-card px-3 py-1.5 shadow hover:bg-accent"
+            >
+              <link.icon className="h-4 w-4 text-muted-foreground" />
+              <span className="font-mono text-xs font-medium tracking-wide">
+                {link.label}
+              </span>
+            </a>
+          ))}
+        </div>
+      </footer>
+    </div>
+  );
 }
 
-function BorderSeparator({ className }: React.ComponentProps<"div">) {
-	return (
-		<div className={cn("absolute inset-x-0 h-px w-full border-b", className)} />
-	);
+/* Contact Card */
+function ContactCard({
+  icon: Icon,
+  title,
+  description,
+  children,
+}: {
+  icon: LucideIcon;
+  title: string;
+  description?: string;
+  children?: React.ReactNode;
+}) {
+  return (
+    <div className="flex flex-col justify-between border-b bg-card p-6 md:border-r">
+      <div className="flex items-center gap-3 pb-4">
+        <Icon className="h-6 w-6 text-muted-foreground" />
+        <h4 className="text-lg font-medium">{title}</h4>
+      </div>
+      <div className="mb-4">{children}</div>
+      {description && (
+        <div className="text-sm text-muted-foreground">
+          {description}
+        </div>
+      )}
+    </div>
+  );
 }
 
-type ContactBox = React.ComponentProps<"div"> & {
-	icon: LucideIcon;
-	title: string;
-	description: string;
-};
-
-function Box({
-	title,
-	description,
-	className,
-	children,
-	...props
-}: ContactBox) {
-	return (
-		<div
-			className={cn(
-				"flex flex-col justify-between border-b md:border-r md:border-b-0",
-				className
-			)}
-		>
-			<div className="flex items-center gap-x-3 border-b bg-secondary/50 p-4 dark:bg-secondary/20">
-				<props.icon className="size-5 text-muted-foreground" strokeWidth={1} />
-				<h2 className="font-heading font-medium text-lg tracking-wider">
-					{title}
-				</h2>
-			</div>
-			<div className="flex items-center gap-x-2 p-4 py-12">{children}</div>
-			<div className="border-t p-4">
-				<p className="text-muted-foreground text-sm">{description}</p>
-			</div>
-		</div>
-	);
-}
-
+/* Icons */
 const GithubIcon = (props: React.ComponentProps<"svg">) => (
-	<svg fill="currentColor" viewBox="0 0 1024 1024" {...props}>
-		<path
-			clipRule="evenodd"
-			d="M8 0C3.58 0 0 3.58 0 8C0 11.54 2.29 14.53 5.47 15.59C5.87 15.66 6.02 15.42 6.02 15.21C6.02 15.02 6.01 14.39 6.01 13.72C4 14.09 3.48 13.23 3.32 12.78C3.23 12.55 2.84 11.84 2.5 11.65C2.22 11.5 1.82 11.13 2.49 11.12C3.12 11.11 3.57 11.7 3.72 11.94C4.44 13.15 5.59 12.81 6.05 12.6C6.12 12.08 6.33 11.73 6.56 11.53C4.78 11.33 2.92 10.64 2.92 7.58C2.92 6.71 3.23 5.99 3.74 5.43C3.66 5.23 3.38 4.41 3.82 3.31C3.82 3.31 4.49 3.1 6.02 4.13C6.66 3.95 7.34 3.86 8.02 3.86C8.7 3.86 9.38 3.95 10.02 4.13C11.55 3.09 12.22 3.31 12.22 3.31C12.66 4.41 12.38 5.23 12.3 5.43C12.81 5.99 13.12 6.7 13.12 7.58C13.12 10.65 11.25 11.33 9.47 11.53C9.76 11.78 10.01 12.26 10.01 13.01C10.01 14.08 10 14.94 10 15.21C10 15.42 10.15 15.67 10.55 15.59C13.71 14.53 16 11.53 16 8C16 3.58 12.42 0 8 0Z"
-			fill="currentColor"
-			fillRule="evenodd"
-			transform="scale(64)"
-		/>
-	</svg>
+  <svg fill="currentColor" viewBox="0 0 24 24" {...props}>
+    <path d="M12 .5a12 12 0 00-3.79 23.4c.6.1.82-.26.82-.58v-2.17c-3.34.73-4.04-1.61-4.04-1.61a3.18 3.18 0 00-1.34-1.76c-1.1-.75.09-.73.09-.73a2.52 2.52 0 011.84 1.24 2.56 2.56 0 003.5 1 2.57 2.57 0 01.76-1.6c-2.66-.3-5.46-1.33-5.46-5.93a4.64 4.64 0 011.24-3.22 4.3 4.3 0 01.12-3.18s1-.32 3.3 1.23a11.4 11.4 0 016 0c2.28-1.55 3.3-1.23 3.3-1.23a4.3 4.3 0 01.12 3.18 4.64 4.64 0 011.24 3.22c0 4.61-2.8 5.63-5.47 5.93a2.87 2.87 0 01.82 2.23v3.3c0 .32.22.69.82.58A12 12 0 0012 .5z" />
+  </svg>
 );
 
 const XIcon = (props: React.ComponentProps<"svg">) => (
-	<svg
-		fill="currentColor"
-		viewBox="0 0 24 24"
-		xmlns="http://www.w3.org/2000/svg"
-		{...props}
-	>
-		<path d="m18.9,1.153h3.682l-8.042,9.189,9.46,12.506h-7.405l-5.804-7.583-6.634,7.583H.469l8.6-9.831L0,1.153h7.593l5.241,6.931,6.065-6.931Zm-1.293,19.494h2.039L6.482,3.239h-2.19l13.314,17.408Z" />
-	</svg>
+  <svg fill="currentColor" viewBox="0 0 24 24" {...props}>
+    <path d="M18.9 1.15h3.68l-8.04 9.19 9.46 12.5h-7.4l-5.8-7.58-6.63 7.58H.47l8.6-9.83L0 1.15h7.59l5.24 6.93 6.07-6.93z" />
+  </svg>
 );
