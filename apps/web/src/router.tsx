@@ -4,6 +4,7 @@ import * as TanstackQuery from './integrations/tanstack-query/root-provider'
 
 import { routeTree } from './routeTree.gen'
 import { AuthProvider } from './context/auth-context'
+import { WishlistProvider } from './context/wishlist-context'
 
 export const getRouter = () => {
   const rqContext = TanstackQuery.getContext()
@@ -15,9 +16,11 @@ export const getRouter = () => {
     Wrap: (props: { children: React.ReactNode }) => {
       return (
        <AuthProvider>
-         <TanstackQuery.Provider {...rqContext}>
-          {props.children}
-        </TanstackQuery.Provider>
+         <WishlistProvider>
+            <TanstackQuery.Provider {...rqContext}>
+                {props.children}
+            </TanstackQuery.Provider>
+         </WishlistProvider>
        </AuthProvider>
       )
     },

@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useParams, useRouter } from '@tanstack/react-router'
+import { createFileRoute, Link, useParams } from '@tanstack/react-router'
 import {
   Star,
   MapPin,
@@ -15,9 +15,7 @@ import { useListing } from '@/hooks/use-listings';
 import { toast } from 'sonner';
 import { addDays, differenceInDays } from 'date-fns';
 import { useState } from 'react';
-import { useAuth } from '@/context/auth-context';
 import { useCart } from '@/context/cart-context';
-import { CartSheet } from '@/components/booking/cart-sheet';
 import { AddonSelector } from '@/components/booking/addon-selector';
 import type { DateRange } from 'react-day-picker';
 
@@ -27,9 +25,7 @@ export const Route = createFileRoute('/_app/listings/$id')({
 
 function ListingDetail() {
   const { id } = useParams({ from: '/_app/listings/$id' });
-  const router = useRouter();
   const { data, isLoading: isListingLoading } = useListing(parseInt(id));
-    const { user, isAuthenticated } = useAuth();
   const { addToCart } = useCart();
 
   const [date, setDate] = useState<DateRange | undefined>({
@@ -45,6 +41,18 @@ function ListingDetail() {
   }
 
   const { listing } = data;
+
+  const nights = date?.from && date?.to ? differenceInDays(date.to, date.from) : 0;
+  
+  const estimatedTotal = (() => {
+      if (nights < 1) return 0;
+      const baseTotal = listing.base_price * nights;
+      const addonsTotal = selectedAddons.reduce((acc, curr) => {
+          const multiplier = curr.addon.price_type === 'per_night' ? nights : 1;
+          return acc + (curr.addon.price * curr.quantity * multiplier);
+      }, 0);
+      return baseTotal + addonsTotal;
+  })();
 
   const handleAddonSelect = (addon: any, quantity: number) => {
       setSelectedAddons(prev => {
@@ -200,7 +208,38 @@ function ListingDetail() {
                             </Popover>
                          </div>
                           
-                          <Button className="w-full" size="lg" onClick={handleBookClick}>Reserve</Button>
+                          {nights > 0 && (
+                             <div className="space-y-3 py-2">
+                                <div className="flex justify-between text-sm">
+                                    <span className="text-muted-foreground underline decoration-dashed">
+                                        ${listing.base_price} x {nights} nights
+                                    </span>
+                                    <span>${listing.base_price * nights}</span>
+                                </div>
+                                {selectedAddons.length > 0 && (
+                                     <div className="flex justify-between text-sm">
+                                        <span className="text-muted-foreground underline decoration-dashed">
+                                            Add-ons
+                                        </span>
+                                        <span>
+                                            +${selectedAddons.reduce((acc, curr) => {
+                                                const multiplier = curr.addon.price_type === 'per_night' ? nights : 1;
+                                                return acc + (curr.addon.price * curr.quantity * multiplier);
+                                            }, 0)}
+                                        </span>
+                                    </div>
+                                )}
+                                <div className="w-full h-px bg-border/50" />
+                                <div className="flex justify-between font-semibold text-base">
+                                    <span>Total</span>
+                                    <span>${estimatedTotal}</span>
+                                </div>
+                             </div>
+                          )}
+
+                          <Button className="w-full" size="lg" onClick={handleBookClick}>
+                            {nights > 0 ? "Reserve" : "Check Availability"}
+                          </Button>
                          <div className="flex items-center justify-center gap-2 text-xs text-muted-foreground">
                             <span>You won't be charged yet</span>
                          </div>
@@ -210,8 +249,6 @@ function ListingDetail() {
              </div>
           </div>
        </PageWrapper>
-
-       <CartSheet />
  
      </div>
   );

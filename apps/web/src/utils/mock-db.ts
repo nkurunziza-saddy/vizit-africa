@@ -43,6 +43,7 @@ export type Listing = {
   currency: string;
   capacity: number;
   status: 'draft' | 'active' | 'paused';
+  image_url?: string;
   created_at: string;
   addons: Addon[];
 };

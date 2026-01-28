@@ -13,10 +13,13 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as AppRouteImport } from './routes/_app'
 import { Route as AppIndexRouteImport } from './routes/_app/index'
 import { Route as AppTermsRouteImport } from './routes/_app/terms'
+import { Route as AppSavedRouteImport } from './routes/_app/saved'
 import { Route as AppPrivacyRouteImport } from './routes/_app/privacy'
 import { Route as AppGalleryRouteImport } from './routes/_app/gallery'
 import { Route as AppDashboardRouteImport } from './routes/_app/dashboard'
 import { Route as AppContactRouteImport } from './routes/_app/contact'
+import { Route as AppCheckoutRouteImport } from './routes/_app/checkout'
+import { Route as AppCartRouteImport } from './routes/_app/cart'
 import { Route as AppAboutRouteImport } from './routes/_app/about'
 import { Route as AppListingsIndexRouteImport } from './routes/_app/listings.index'
 import { Route as AppDashboardIndexRouteImport } from './routes/_app/dashboard/index'
@@ -26,6 +29,7 @@ import { Route as AppDashboardUsersRouteImport } from './routes/_app/dashboard/u
 import { Route as AppDashboardSettingsRouteImport } from './routes/_app/dashboard/settings'
 import { Route as AppDashboardListingsRouteImport } from './routes/_app/dashboard/listings'
 import { Route as AppDashboardApprovalsRouteImport } from './routes/_app/dashboard/approvals'
+import { Route as AppCheckoutSuccessRouteImport } from './routes/_app/checkout.success'
 
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
@@ -46,6 +50,11 @@ const AppTermsRoute = AppTermsRouteImport.update({
   path: '/terms',
   getParentRoute: () => AppRoute,
 } as any)
+const AppSavedRoute = AppSavedRouteImport.update({
+  id: '/saved',
+  path: '/saved',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppPrivacyRoute = AppPrivacyRouteImport.update({
   id: '/privacy',
   path: '/privacy',
@@ -64,6 +73,16 @@ const AppDashboardRoute = AppDashboardRouteImport.update({
 const AppContactRoute = AppContactRouteImport.update({
   id: '/contact',
   path: '/contact',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppCheckoutRoute = AppCheckoutRouteImport.update({
+  id: '/checkout',
+  path: '/checkout',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppCartRoute = AppCartRouteImport.update({
+  id: '/cart',
+  path: '/cart',
   getParentRoute: () => AppRoute,
 } as any)
 const AppAboutRoute = AppAboutRouteImport.update({
@@ -112,16 +131,25 @@ const AppDashboardApprovalsRoute = AppDashboardApprovalsRouteImport.update({
   path: '/approvals',
   getParentRoute: () => AppDashboardRoute,
 } as any)
+const AppCheckoutSuccessRoute = AppCheckoutSuccessRouteImport.update({
+  id: '/success',
+  path: '/success',
+  getParentRoute: () => AppCheckoutRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof AppIndexRoute
   '/login': typeof LoginRoute
   '/about': typeof AppAboutRoute
+  '/cart': typeof AppCartRoute
+  '/checkout': typeof AppCheckoutRouteWithChildren
   '/contact': typeof AppContactRoute
   '/dashboard': typeof AppDashboardRouteWithChildren
   '/gallery': typeof AppGalleryRoute
   '/privacy': typeof AppPrivacyRoute
+  '/saved': typeof AppSavedRoute
   '/terms': typeof AppTermsRoute
+  '/checkout/success': typeof AppCheckoutSuccessRoute
   '/dashboard/approvals': typeof AppDashboardApprovalsRoute
   '/dashboard/listings': typeof AppDashboardListingsRoute
   '/dashboard/settings': typeof AppDashboardSettingsRoute
@@ -134,11 +162,15 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/about': typeof AppAboutRoute
+  '/cart': typeof AppCartRoute
+  '/checkout': typeof AppCheckoutRouteWithChildren
   '/contact': typeof AppContactRoute
   '/gallery': typeof AppGalleryRoute
   '/privacy': typeof AppPrivacyRoute
+  '/saved': typeof AppSavedRoute
   '/terms': typeof AppTermsRoute
   '/': typeof AppIndexRoute
+  '/checkout/success': typeof AppCheckoutSuccessRoute
   '/dashboard/approvals': typeof AppDashboardApprovalsRoute
   '/dashboard/listings': typeof AppDashboardListingsRoute
   '/dashboard/settings': typeof AppDashboardSettingsRoute
@@ -153,12 +185,16 @@ export interface FileRoutesById {
   '/_app': typeof AppRouteWithChildren
   '/login': typeof LoginRoute
   '/_app/about': typeof AppAboutRoute
+  '/_app/cart': typeof AppCartRoute
+  '/_app/checkout': typeof AppCheckoutRouteWithChildren
   '/_app/contact': typeof AppContactRoute
   '/_app/dashboard': typeof AppDashboardRouteWithChildren
   '/_app/gallery': typeof AppGalleryRoute
   '/_app/privacy': typeof AppPrivacyRoute
+  '/_app/saved': typeof AppSavedRoute
   '/_app/terms': typeof AppTermsRoute
   '/_app/': typeof AppIndexRoute
+  '/_app/checkout/success': typeof AppCheckoutSuccessRoute
   '/_app/dashboard/approvals': typeof AppDashboardApprovalsRoute
   '/_app/dashboard/listings': typeof AppDashboardListingsRoute
   '/_app/dashboard/settings': typeof AppDashboardSettingsRoute
@@ -174,11 +210,15 @@ export interface FileRouteTypes {
     | '/'
     | '/login'
     | '/about'
+    | '/cart'
+    | '/checkout'
     | '/contact'
     | '/dashboard'
     | '/gallery'
     | '/privacy'
+    | '/saved'
     | '/terms'
+    | '/checkout/success'
     | '/dashboard/approvals'
     | '/dashboard/listings'
     | '/dashboard/settings'
@@ -191,11 +231,15 @@ export interface FileRouteTypes {
   to:
     | '/login'
     | '/about'
+    | '/cart'
+    | '/checkout'
     | '/contact'
     | '/gallery'
     | '/privacy'
+    | '/saved'
     | '/terms'
     | '/'
+    | '/checkout/success'
     | '/dashboard/approvals'
     | '/dashboard/listings'
     | '/dashboard/settings'
@@ -209,12 +253,16 @@ export interface FileRouteTypes {
     | '/_app'
     | '/login'
     | '/_app/about'
+    | '/_app/cart'
+    | '/_app/checkout'
     | '/_app/contact'
     | '/_app/dashboard'
     | '/_app/gallery'
     | '/_app/privacy'
+    | '/_app/saved'
     | '/_app/terms'
     | '/_app/'
+    | '/_app/checkout/success'
     | '/_app/dashboard/approvals'
     | '/_app/dashboard/listings'
     | '/_app/dashboard/settings'
@@ -260,6 +308,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppTermsRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/saved': {
+      id: '/_app/saved'
+      path: '/saved'
+      fullPath: '/saved'
+      preLoaderRoute: typeof AppSavedRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/privacy': {
       id: '/_app/privacy'
       path: '/privacy'
@@ -286,6 +341,20 @@ declare module '@tanstack/react-router' {
       path: '/contact'
       fullPath: '/contact'
       preLoaderRoute: typeof AppContactRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/checkout': {
+      id: '/_app/checkout'
+      path: '/checkout'
+      fullPath: '/checkout'
+      preLoaderRoute: typeof AppCheckoutRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/cart': {
+      id: '/_app/cart'
+      path: '/cart'
+      fullPath: '/cart'
+      preLoaderRoute: typeof AppCartRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/about': {
@@ -351,8 +420,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppDashboardApprovalsRouteImport
       parentRoute: typeof AppDashboardRoute
     }
+    '/_app/checkout/success': {
+      id: '/_app/checkout/success'
+      path: '/success'
+      fullPath: '/checkout/success'
+      preLoaderRoute: typeof AppCheckoutSuccessRouteImport
+      parentRoute: typeof AppCheckoutRoute
+    }
   }
 }
+
+interface AppCheckoutRouteChildren {
+  AppCheckoutSuccessRoute: typeof AppCheckoutSuccessRoute
+}
+
+const AppCheckoutRouteChildren: AppCheckoutRouteChildren = {
+  AppCheckoutSuccessRoute: AppCheckoutSuccessRoute,
+}
+
+const AppCheckoutRouteWithChildren = AppCheckoutRoute._addFileChildren(
+  AppCheckoutRouteChildren,
+)
 
 interface AppDashboardRouteChildren {
   AppDashboardApprovalsRoute: typeof AppDashboardApprovalsRoute
@@ -378,10 +466,13 @@ const AppDashboardRouteWithChildren = AppDashboardRoute._addFileChildren(
 
 interface AppRouteChildren {
   AppAboutRoute: typeof AppAboutRoute
+  AppCartRoute: typeof AppCartRoute
+  AppCheckoutRoute: typeof AppCheckoutRouteWithChildren
   AppContactRoute: typeof AppContactRoute
   AppDashboardRoute: typeof AppDashboardRouteWithChildren
   AppGalleryRoute: typeof AppGalleryRoute
   AppPrivacyRoute: typeof AppPrivacyRoute
+  AppSavedRoute: typeof AppSavedRoute
   AppTermsRoute: typeof AppTermsRoute
   AppIndexRoute: typeof AppIndexRoute
   AppListingsIdRoute: typeof AppListingsIdRoute
@@ -390,10 +481,13 @@ interface AppRouteChildren {
 
 const AppRouteChildren: AppRouteChildren = {
   AppAboutRoute: AppAboutRoute,
+  AppCartRoute: AppCartRoute,
+  AppCheckoutRoute: AppCheckoutRouteWithChildren,
   AppContactRoute: AppContactRoute,
   AppDashboardRoute: AppDashboardRouteWithChildren,
   AppGalleryRoute: AppGalleryRoute,
   AppPrivacyRoute: AppPrivacyRoute,
+  AppSavedRoute: AppSavedRoute,
   AppTermsRoute: AppTermsRoute,
   AppIndexRoute: AppIndexRoute,
   AppListingsIdRoute: AppListingsIdRoute,

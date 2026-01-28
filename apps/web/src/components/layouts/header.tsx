@@ -7,6 +7,8 @@ import { MobileNav } from "@/components/layouts/mobile-nav";
 import { navLinks } from "@/lib/nav-links";
 import { Link } from "@tanstack/react-router";
 import { useAuth } from "@/context/auth-context";
+import { useCart } from "@/context/cart-context";
+import { ShoppingCart } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -21,6 +23,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 export function Header() {
 	const scrolled = useScroll(10);
 	const { user, logout, isAuthenticated } = useAuth();
+    const { cart, setOpenCart } = useCart();
 
 	return (
 		<header
@@ -54,9 +57,23 @@ export function Header() {
 						</Link>
 					))}
 					<div className="ml-2 flex items-center gap-2">
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            className="relative h-8 w-8"
+                            onClick={() => setOpenCart(true)}
+                        >
+                            <ShoppingCart className="h-4 w-4" />
+                            {cart.length > 0 && (
+                                <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] text-primary-foreground font-medium ring-1 ring-background">
+                                    {cart.length}
+                                </span>
+                            )}
+                        </Button>
+                        
 						{isAuthenticated && user ? (
 							<DropdownMenu>
-							<DropdownMenuTrigger className="outline-none" asChild>
+							<DropdownMenuTrigger className="outline-none">
 								<Button variant="ghost" className="relative h-8 w-8 rounded-full">
 									<Avatar className="h-8 w-8">
 										<AvatarImage src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${user.email}`} alt={user.full_name} />
@@ -73,7 +90,10 @@ export function Header() {
 									</div>
 								</DropdownMenuLabel>
 								<DropdownMenuSeparator />
-								<DropdownMenuItem>Profile</DropdownMenuItem>
+								<DropdownMenuItem>
+                                    <Link to="/saved" className="w-full cursor-pointer">Saved Trips</Link>
+                                </DropdownMenuItem>
+                                <DropdownMenuItem>Profile</DropdownMenuItem>
 								{user.role === 'admin' && <DropdownMenuItem>Admin Dashboard</DropdownMenuItem>}
 								{user.role === 'vendor' && <DropdownMenuItem>Vendor Dashboard</DropdownMenuItem>}
 								<DropdownMenuSeparator />

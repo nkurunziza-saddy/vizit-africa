@@ -1,14 +1,15 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { format } from "date-fns";
-import { CalendarDays, Hotel, MapPin, QrCode, Users } from "lucide-react";
+import { CalendarDays, Hotel, MapPin, QrCode, Users, CheckCircle2, Info, ExternalLink, Receipt } from "lucide-react";
 import QRCode from "react-qr-code";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAuth } from "@/context/auth-context";
 import { useMyBookings } from "@/hooks/use-bookings";
+import { Separator } from "@/components/ui/separator";
 
 export const Route = createFileRoute("/_app/dashboard/")({
 	component: DashboardIndex,
@@ -20,13 +21,13 @@ function DashboardIndex() {
 	if (!user) return null;
 
 	return (
-		<div className="space-y-6">
-			<div>
-				<h2 className="text-lg font-semibold tracking-tight">
+		<div className="space-y-8 pb-10">
+			<div className="flex flex-col gap-2">
+				<h2 className="text-3xl font-bold tracking-tight">
 					Welcome back, {user.full_name.split(" ")[0]}!
 				</h2>
 				<p className="text-muted-foreground">
-					Here is an overview of your account activity.
+					Manage your trips, profile, and account settings here.
 				</p>
 			</div>
 
@@ -41,30 +42,42 @@ function TouristDashboard() {
 	const { user } = useAuth();
 	const { data: bookings, isLoading } = useMyBookings(user?.id);
 
-	if (isLoading) return <div>Loading dashboard...</div>;
+	if (isLoading) return (
+        <div className="flex flex-col items-center justify-center py-20 gap-4">
+            <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+            <p className="text-muted-foreground animate-pulse">Loading your adventures...</p>
+        </div>
+    );
 
 	const upcomingBookings =
 		bookings?.filter(
 			(b) => b.status === "confirmed" || b.status === "pending",
 		) || [];
 
+    const pastBookings = 
+        bookings?.filter(
+            (b) => b.status === "completed" || b.status === "cancelled"
+        ) || [];
+
 	return (
 		<Tabs defaultValue="upcoming" className="w-full">
-			<div className="flex items-center justify-between mb-4">
-				<h3 className="text-lg font-semibold">Your Trips</h3>
-				<TabsList>
-					<TabsTrigger value="upcoming">Upcoming</TabsTrigger>
-					<TabsTrigger value="past">Past</TabsTrigger>
+			<div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-4">
+				<h3 className="text-xl font-semibold">Your Trips</h3>
+				<TabsList className="grid w-full sm:w-[400px] grid-cols-2">
+					<TabsTrigger value="upcoming">Upcoming ({upcomingBookings.length})</TabsTrigger>
+					<TabsTrigger value="past">History ({pastBookings.length})</TabsTrigger>
 				</TabsList>
 			</div>
 
 			<TabsContent value="upcoming" className="space-y-4">
 				{upcomingBookings.length === 0 ? (
-					<div className="text-center py-12 border border-dashed rounded-lg">
-						<CalendarDays className="mx-auto h-12 w-12 text-muted-foreground/50" />
-						<h3 className="mt-4 text-lg font-semibold">No upcoming trips</h3>
-						<p className="text-sm text-muted-foreground mb-4">
-							You haven't booked any trips yet.
+					<div className="text-center py-16 border-2 border-dashed rounded-xl bg-muted/20">
+						<div className="mx-auto w-16 h-16 bg-muted rounded-full flex items-center justify-center mb-4">
+                            <CalendarDays className="h-8 w-8 text-muted-foreground/50" />
+                        </div>
+						<h3 className="text-lg font-semibold">No upcoming trips</h3>
+						<p className="text-sm text-muted-foreground mb-6 max-w-xs mx-auto">
+							Ready for your next adventure in Rwanda? Explore our top-rated stays and tours.
 						</p>
 						<Link
 							to="/listings"
@@ -81,7 +94,7 @@ function TouristDashboard() {
 								page: undefined,
 							}}
 						>
-							<Button>Explore Destinations</Button>
+							<Button size="lg" className="px-8 shadow-md">Explore Destinations</Button>
 						</Link>
 					</div>
 				) : (
@@ -91,58 +104,67 @@ function TouristDashboard() {
 				)}
 			</TabsContent>
 
-			<TabsContent value="past">
-				<div className="text-center py-12 border border-dashed rounded-lg">
-					<p className="text-muted-foreground">No past bookings found.</p>
-				</div>
+			<TabsContent value="past" className="space-y-4">
+				{pastBookings.length === 0 ? (
+					<div className="text-center py-16 border-2 border-dashed rounded-xl bg-muted/20">
+						<p className="text-muted-foreground">No past bookings found.</p>
+					</div>
+                ) : (
+                    pastBookings.map((booking) => (
+						<BookingCard key={booking.id} booking={booking} />
+					))
+                )}
 			</TabsContent>
 		</Tabs>
 	);
 }
 
 function BookingCard({ booking }: { booking: any }) {
-	// In a real app we would join with listings to get title, image etc.
-	// For now we'll mock the listing details or fetch them if we had a comprehensive store
-	// Let's assume we can fetch listing title or use a placeholder
 	return (
-		<div className="flex flex-col sm:flex-row border rounded-lg overflow-hidden hover:bg-accent/5 transition-colors">
+		<div className="group relative flex flex-col sm:flex-row border rounded-xl overflow-hidden bg-card hover:shadow-lg transition-all duration-300">
 			<div
-				className="h-32 sm:w-48 bg-muted bg-cover bg-center"
+				className="h-40 sm:w-64 bg-muted bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
 				style={{
 					backgroundImage:
 						"url(https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=80)",
 				}}
-			/>
-			<div className="flex-1 p-4 flex flex-col justify-between">
+			>
+                <div className="absolute top-2 left-2">
+                    <Badge className="bg-background/80 backdrop-blur-sm text-foreground hover:bg-background/90 border-none shadow-sm">
+                        Hotel
+                    </Badge>
+                </div>
+            </div>
+			<div className="flex-1 p-5 flex flex-col justify-between">
 				<div>
-					<div className="flex justify-between items-start">
+					<div className="flex justify-between items-start gap-2">
 						<div>
-							<h4 className="font-semibold text-lg">Luxury Hotel Stay</h4>
-							<div className="flex items-center text-sm text-muted-foreground gap-1">
-								<MapPin className="h-3 w-3" /> Kigali, Rwanda
+							<h4 className="font-bold text-xl tracking-tight group-hover:text-primary transition-colors">Trip to Kigali</h4>
+							<div className="flex items-center text-sm text-muted-foreground gap-1.5 mt-1">
+								<MapPin className="h-3.5 w-3.5 text-primary" /> Kigali, Rwanda
 							</div>
 						</div>
 						<Badge
-							variant={booking.status === "confirmed" ? "default" : "secondary"}
-							className="capitalize"
+							variant={booking.status === "confirmed" ? "default" : (booking.status === "cancelled" ? "destructive" : "secondary")}
+							className="capitalize px-3 py-0.5 rounded-full"
 						>
 							{booking.status}
 						</Badge>
 					</div>
-					<div className="mt-2 text-sm">
-						<p>
-							Date: {format(new Date(booking.created_at), "PPP")} (Mock Date)
-						</p>
-						<p>
-							Amount: {booking.currency} {booking.total_amount}
-						</p>
+					<div className="mt-4 grid grid-cols-2 gap-4 text-sm">
+						<div className="flex items-center gap-2 text-muted-foreground">
+                            <CalendarDays className="h-4 w-4" />
+                            <span>Booked on {format(new Date(booking.created_at), "MMM d, yyyy")}</span>
+                        </div>
+						<div className="flex items-center gap-2 text-muted-foreground">
+                            <Receipt className="h-4 w-4" />
+                            <span className="font-medium text-foreground">{booking.currency} {booking.total_amount}</span>
+                        </div>
 					</div>
 				</div>
 
-				<div className="mt-4 flex justify-end gap-2">
-					<Button variant="outline" size="sm">
-						View Details
-					</Button>
+				<div className="mt-6 flex flex-wrap items-center justify-end gap-3">
+                    <BookingDetailsModal booking={booking} />
 					{booking.status === "confirmed" && <TicketModal booking={booking} />}
 				</div>
 			</div>
@@ -150,47 +172,127 @@ function BookingCard({ booking }: { booking: any }) {
 	);
 }
 
+function BookingDetailsModal({ booking }: { booking: any }) {
+    return (
+        <Dialog>
+            <DialogTrigger>
+                <Button variant="outline" size="sm" className="gap-2">
+                    <Info className="h-4 w-4" /> View Details
+                </Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-lg">
+                <DialogHeader>
+                    <DialogTitle>Booking Details</DialogTitle>
+                </DialogHeader>
+                <div className="space-y-6 py-4">
+                    <div className="flex gap-4">
+                        <div className="h-20 w-20 rounded-lg bg-muted bg-cover bg-center shrink-0" style={{ backgroundImage: "url(https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=200&q=80)" }} />
+                        <div className="flex-1">
+                            <h4 className="font-bold">Luxury Hotel stay in Kigali</h4>
+                            <p className="text-sm text-muted-foreground">Reference: #BK-{booking.id}</p>
+                            <Badge variant="outline" className="mt-2">Confirmed</Badge>
+                        </div>
+                    </div>
+                    
+                    <Separator />
+                    
+                    <div className="grid grid-cols-2 gap-y-4 text-sm">
+                        <div className="space-y-1">
+                            <p className="text-muted-foreground">Check-in</p>
+                            <p className="font-medium">Jan 27, 2026</p>
+                        </div>
+                        <div className="space-y-1">
+                            <p className="text-muted-foreground">Check-out</p>
+                            <p className="font-medium">Jan 30, 2026</p>
+                        </div>
+                        <div className="space-y-1">
+                            <p className="text-muted-foreground">Guests</p>
+                            <p className="font-medium">2 Adults</p>
+                        </div>
+                        <div className="space-y-1">
+                            <p className="text-muted-foreground">Payment Method</p>
+                            <p className="font-medium">Visa •••• 4242</p>
+                        </div>
+                    </div>
+
+                    <Separator />
+
+                    <div className="space-y-2">
+                        <p className="text-sm font-semibold">Price Breakdown</p>
+                        <div className="space-y-1 text-sm">
+                            <div className="flex justify-between">
+                                <span className="text-muted-foreground">3 nights x $120.00</span>
+                                <span>$360.00</span>
+                            </div>
+                            <div className="flex justify-between">
+                                <span className="text-muted-foreground">Service Fee</span>
+                                <span>$0.00</span>
+                            </div>
+                            <Separator className="my-2" />
+                            <div className="flex justify-between font-bold text-base">
+                                <span>Total</span>
+                                <span>{booking.currency} {booking.total_amount}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="pt-4 flex gap-3">
+                         <Button className="flex-1 gap-2">
+                            <Receipt className="h-4 w-4" /> Download Invoice
+                         </Button>
+                         <Button variant="outline" className="gap-2">
+                             <ExternalLink className="h-4 w-4" /> Contact Vendor
+                         </Button>
+                    </div>
+                </div>
+            </DialogContent>
+        </Dialog>
+    );
+}
+
 function TicketModal({ booking }: { booking: any }) {
 	return (
 		<Dialog>
-			<DialogTrigger className="gap-2">
-				<QrCode className="h-3 w-3" /> Digital Ticket
+			<DialogTrigger>
+				<Button size="sm" className="gap-2 shadow-sm">
+                    <QrCode className="h-4 w-4" /> Digital Ticket
+                </Button>
 			</DialogTrigger>
 			<DialogContent className="sm:max-w-md">
 				<div className="flex flex-col items-center justify-center p-6 space-y-6 text-center">
-					<div className="rounded-full bg-green-100 p-3 text-green-600 dark:bg-green-900/30 dark:text-green-400">
-						<CheckCircleIcon className="h-8 w-8" />
+					<div className="rounded-full bg-green-100 p-4 text-green-600 dark:bg-green-900/30 dark:text-green-400 animate-bounce">
+						<CheckCircle2 className="h-10 w-10" />
 					</div>
 					<div className="space-y-1">
 						<h3 className="font-bold text-2xl">Booking Confirmed!</h3>
 						<p className="text-sm text-muted-foreground">
-							Show this QR code at the reception.
+							Show this QR code at the reception when you arrive.
 						</p>
 					</div>
 
-					<div className="p-4 bg-white rounded-xl shadow-sm border">
+					<div className="p-4 bg-white rounded-xl shadow-lg border-2 border-primary/5">
 						<QRCode value={`VIZIT-BOOKING-${booking.id}`} size={200} />
 					</div>
 
-					<div className="w-full text-left space-y-2 bg-muted/50 p-4 rounded-lg text-sm">
+					<div className="w-full text-left space-y-2 bg-muted/50 p-4 rounded-xl text-sm border border-border/50">
 						<div className="flex justify-between">
 							<span className="text-muted-foreground">Booking ID</span>
-							<span className="font-mono font-medium">#{booking.id}</span>
+							<span className="font-mono font-bold">#{booking.id}</span>
 						</div>
 						<div className="flex justify-between">
 							<span className="text-muted-foreground">Customer</span>
 							<span className="font-medium">Test Tourist</span>
 						</div>
-						<div className="flex justify-between">
+						<div className="flex justify-between border-t pt-2 mt-2">
 							<span className="text-muted-foreground">Amount Paid</span>
-							<span className="font-medium">
+							<span className="font-bold text-primary">
 								{booking.currency} {booking.total_amount}
 							</span>
 						</div>
 					</div>
 
-					<Button className="w-full" onClick={() => window.print()}>
-						Download PDF
+					<Button className="w-full py-6 text-base" onClick={() => window.print()}>
+						Download Ticket (PDF)
 					</Button>
 				</div>
 			</DialogContent>
@@ -198,53 +300,32 @@ function TicketModal({ booking }: { booking: any }) {
 	);
 }
 
-function CheckCircleIcon(props: any) {
-	return (
-		<svg
-			{...props}
-			xmlns="http://www.w3.org/2000/svg"
-			width="24"
-			height="24"
-			viewBox="0 0 24 24"
-			fill="none"
-			stroke="currentColor"
-			strokeWidth="2"
-			strokeLinecap="round"
-			strokeLinejoin="round"
-		>
-			<title>Check Circle</title>
-			<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
-			<polyline points="22 4 12 14.01 9 11.01" />
-		</svg>
-	);
-}
-
 function VendorDashboard() {
 	return (
-		<div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-			<Card>
+		<div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+			<Card className="shadow-sm">
 				<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
 					<CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
 					<div className="text-muted-foreground font-bold">$</div>
 				</CardHeader>
 				<CardContent>
 					<div className="text-2xl font-bold">$4,231.89</div>
-					<p className="text-xs text-muted-foreground">
+					<p className="text-xs text-green-600 font-medium">
 						+20.1% from last month
 					</p>
 				</CardContent>
 			</Card>
-			<Card>
+			<Card className="shadow-sm">
 				<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
 					<CardTitle className="text-sm font-medium">Active Listings</CardTitle>
 					<Hotel className="h-4 w-4 text-muted-foreground" />
 				</CardHeader>
 				<CardContent>
 					<div className="text-2xl font-bold">12</div>
-					<p className="text-xs text-muted-foreground">+2 new this month</p>
+					<p className="text-xs text-muted-foreground font-medium">+2 new this month</p>
 				</CardContent>
 			</Card>
-			<Card>
+			<Card className="shadow-sm">
 				<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
 					<CardTitle className="text-sm font-medium">
 						Pending Bookings
@@ -253,7 +334,7 @@ function VendorDashboard() {
 				</CardHeader>
 				<CardContent>
 					<div className="text-2xl font-bold">3</div>
-					<p className="text-xs text-muted-foreground">Needs approval</p>
+					<p className="text-xs text-orange-600 font-medium">Needs approval</p>
 				</CardContent>
 			</Card>
 		</div>
@@ -262,25 +343,25 @@ function VendorDashboard() {
 
 function AdminDashboard() {
 	return (
-		<div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-			<Card>
+		<div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+			<Card className="shadow-sm">
 				<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
 					<CardTitle className="text-sm font-medium">Total Users</CardTitle>
 					<Users className="h-4 w-4 text-muted-foreground" />
 				</CardHeader>
 				<CardContent>
 					<div className="text-2xl font-bold">1,234</div>
-					<p className="text-xs text-muted-foreground">+180 from last month</p>
+					<p className="text-xs text-green-600 font-medium">+180 from last month</p>
 				</CardContent>
 			</Card>
-			<Card>
+			<Card className="shadow-sm border-2 border-primary/10">
 				<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
 					<CardTitle className="text-sm font-medium">Pending Vendors</CardTitle>
-					<Badge variant="destructive">5</Badge>
+					<Badge variant="destructive" className="animate-pulse">5</Badge>
 				</CardHeader>
 				<CardContent>
 					<div className="text-2xl font-bold">5</div>
-					<p className="text-xs text-muted-foreground">Requires verification</p>
+					<p className="text-xs text-muted-foreground font-medium">Requires verification</p>
 				</CardContent>
 			</Card>
 		</div>

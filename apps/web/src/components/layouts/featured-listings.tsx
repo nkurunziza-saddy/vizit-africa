@@ -15,24 +15,21 @@ const featuredListings: (ListingCardProps & { listing: Listing })[] = [
 		price: 350,
 		rating: 4.9,
 		reviewCount: 128,
-		image: "", // ListingCard usually handles the default image if empty/mocked inside, but we pass one below
+		image: "https://images.unsplash.com/photo-1493246507139-91e8bef99c02?auto=format&fit=crop&w=800&q=80", 
 		category: "hotel",
         listing: {
             id: 1,
+            vendor_id: 1,
+            location_id: 2, // Musanze/Volcanoes
             title: "Luxury Safari Lodge",
             description: "Experience the ultimate safari luxury.",
-            location_id: "Volcanoes National Park",
+            listing_type: "hotel_room",
             base_price: 350,
             currency: "USD",
-            rating: 4.9,
-            reviews_count: 128,
-            image_url: "",
-            images: [],
-            amenities: ["Wifi", "Pool"],
-            listing_type: ["hotel"],
-            vendor_id: 1,
-            addons: [], 
-            availability: []
+            capacity: 4,
+            status: "active",
+            created_at: new Date().toISOString(),
+            addons: []
         }
 	},
 	{
@@ -42,24 +39,21 @@ const featuredListings: (ListingCardProps & { listing: Listing })[] = [
 		price: 85,
 		rating: 4.7,
 		reviewCount: 64,
-		image: "",
+		image: "https://images.unsplash.com/photo-1518780664697-55e3ad937233?auto=format&fit=crop&w=800&q=80",
 		category: "bnb",
         listing: {
             id: 2,
+            vendor_id: 2,
+            location_id: 2,
             title: "Cozy Mountain BnB",
             description: "A cozy retreat in the mountains.",
-            location_id: "Musanze",
+            listing_type: "bnb",
             base_price: 85,
             currency: "USD",
-            rating: 4.7,
-            reviews_count: 64,
-            image_url: "",
-            images: [],
-            amenities: ["Kitchen", "Wifi"],
-            listing_type: ["bnb"],
-            vendor_id: 2,
-            addons: [],
-            availability: []
+            capacity: 2,
+            status: "active",
+            created_at: new Date().toISOString(),
+            addons: []
         }
 	},
 	{
@@ -69,24 +63,21 @@ const featuredListings: (ListingCardProps & { listing: Listing })[] = [
 		price: 120,
 		rating: 4.8,
 		reviewCount: 92,
-		image: "",
+		image: "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=800&q=80",
 		category: "car",
         listing: {
             id: 3,
+            vendor_id: 3,
+            location_id: 1,
             title: "Toyota Land Cruiser",
             description: "Robust 4x4 for your adventures.",
-            location_id: "Kigali",
+            listing_type: "car",
             base_price: 120,
             currency: "USD",
-            rating: 4.8,
-            reviews_count: 92,
-            image_url: "",
-            images: [],
-            amenities: ["AC"],
-            listing_type: ["car"],
-            vendor_id: 3,
-            addons: [],
-            availability: []
+            capacity: 5,
+            status: "active",
+            created_at: new Date().toISOString(),
+            addons: []
         }
 	},
 	{
@@ -96,24 +87,21 @@ const featuredListings: (ListingCardProps & { listing: Listing })[] = [
 		price: 1500,
 		rating: 5.0,
 		reviewCount: 256,
-		image: "",
+		image: "https://images.unsplash.com/photo-1543326166-51f67f0f6224?auto=format&fit=crop&w=800&q=80",
 		category: "tour",
         listing: {
             id: 4,
+            vendor_id: 4,
+            location_id: 2,
             title: "Gorilla Trekking",
             description: "Once in a lifetime experience.",
-            location_id: "Volcanoes National Park",
+            listing_type: "tour",
             base_price: 1500,
             currency: "USD",
-            rating: 5.0,
-            reviews_count: 256,
-            image_url: "",
-            images: [],
-            amenities: ["Guide"],
-            listing_type: ["tour"],
-            vendor_id: 4,
-            addons: [],
-            availability: []
+            capacity: 10,
+            status: "active",
+            created_at: new Date().toISOString(),
+            addons: []
         }
 	},
 ];
