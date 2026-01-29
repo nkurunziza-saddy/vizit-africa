@@ -1,0 +1,180 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  /* Rwanda-inspired warm palette */
+  --cream: 45 30% 94%;
+  --cream-dark: 40 25% 88%;
+  --terracotta: 25 70% 45%;
+  --terracotta-light: 25 65% 55%;
+  --forest: 145 25% 25%;
+  --forest-light: 145 20% 35%;
+  --earth: 30 30% 35%;
+  --gold: 42 85% 55%;
+
+  --background: var(--cream);
+  --foreground: var(--forest);
+  --card: 45 30% 96%;
+  --card-foreground: var(--forest);
+  --popover: 45 30% 96%;
+  --popover-foreground: var(--forest);
+  --primary: var(--terracotta);
+  --primary-foreground: 45 30% 98%;
+  --secondary: var(--forest);
+  --secondary-foreground: 45 30% 96%;
+  --muted: 40 20% 85%;
+  --muted-foreground: 145 15% 40%;
+  --accent: var(--gold);
+  --accent-foreground: var(--forest);
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 0 0% 98%;
+  --border: 40 20% 82%;
+  --input: 40 20% 82%;
+  --ring: var(--terracotta);
+  --radius: 0.5rem;
+}
+
+.dark {
+  --background: var(--forest);
+  --foreground: var(--cream);
+  --card: 145 25% 20%;
+  --card-foreground: var(--cream);
+  --popover: 145 25% 20%;
+  --popover-foreground: var(--cream);
+  --primary: var(--terracotta-light);
+  --primary-foreground: 45 30% 98%;
+  --secondary: 145 20% 30%;
+  --secondary-foreground: var(--cream);
+  --muted: 145 15% 30%;
+  --muted-foreground: 45 25% 70%;
+  --accent: var(--gold);
+  --accent-foreground: var(--forest);
+  --border: 145 20% 30%;
+  --input: 145 20% 30%;
+  --ring: var(--terracotta-light);
+}
+
+@theme inline {
+  --color-border: hsl(var(--border));
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+  --radius-radius: var(--radius);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-source-sans), sans-serif;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-playfair), serif;
+  }
+}
+
+@layer utilities {
+  .font-display {
+    font-family: var(--font-playfair), serif;
+  }
+
+  .font-body {
+    font-family: var(--font-source-sans), sans-serif;
+  }
+
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-[hsl(25,70%,45%)] to-[hsl(42,85%,55%)];
+  }
+
+  .bg-cream {
+    background-color: hsl(45, 30%, 94%);
+  }
+
+  .bg-forest {
+    background-color: hsl(145, 25%, 25%);
+  }
+
+  .bg-terracotta {
+    background-color: hsl(25, 70%, 45%);
+  }
+
+  .text-cream {
+    color: hsl(45, 30%, 94%);
+  }
+
+  .text-forest {
+    color: hsl(145, 25%, 25%);
+  }
+
+  .text-terracotta {
+    color: hsl(25, 70%, 45%);
+  }
+
+  .text-gold {
+    color: hsl(42, 85%, 55%);
+  }
+}
+
+/* Smooth scroll */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(45, 30%, 94%);
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(145, 25%, 25%);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(145, 20%, 35%);
+}
+
+/* Animation utilities */
+.parallax-section {
+  will-change: transform;
+}
+
+.reveal-text {
+  clip-path: inset(0 100% 0 0);
+}
+
+.reveal-text.revealed {
+  clip-path: inset(0 0 0 0);
+  transition: clip-path 1s ease-out;
+}

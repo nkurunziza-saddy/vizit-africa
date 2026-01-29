@@ -10,6 +10,7 @@ import { Link, useNavigate } from "@tanstack/react-router";
 import { useAuth } from "@/context/auth-context";
 import { useCart } from "@/context/cart-context";
 import { NotificationBell } from "@/components/notifications";
+import { LanguageSwitcher, CurrencySwitcher } from "@/components/i18n";
 import { ShoppingCart } from "lucide-react";
 import {
   DropdownMenu,
@@ -85,6 +86,8 @@ export function Header() {
             </Link>
           ))}
           <div className="ml-2 flex items-center gap-2">
+            <LanguageSwitcher />
+            <CurrencySwitcher />
             <Button
               variant="ghost"
               size="icon"
