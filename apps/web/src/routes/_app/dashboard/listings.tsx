@@ -189,7 +189,7 @@ function AddListingDialog({ vendorId }: { vendorId: number }) {
 		<Dialog open={open} onOpenChange={setOpen}>
 			<DialogTrigger>
 				<Button>
-					<Plus className="mr-2 h-4 w-4" /> Add New Listing
+					<Plus /> Add New Listing
 				</Button>
 			</DialogTrigger>
 			<DialogContent className="sm:max-w-[425px]">

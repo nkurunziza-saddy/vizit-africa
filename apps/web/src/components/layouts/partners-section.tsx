@@ -36,7 +36,7 @@ const partners = [
 export const PartnersSection = () => {
 	return (
 		<SectionContainer title="Affiliated Partners">
-			<div className="relative border-y bg-linear-to-r from-secondary via-transparent to-secondary py-8">
+			<div className="relative border-y py-8">
 				<InfiniteSlider gap={48} speed={40} speedOnHover={20}>
 					{partners.map((partner) => (
 						<div
