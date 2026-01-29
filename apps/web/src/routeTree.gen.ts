@@ -16,6 +16,7 @@ import { Route as AppSavedRouteImport } from './routes/_app/saved'
 import { Route as AppGalleryRouteImport } from './routes/_app/gallery'
 import { Route as AppDashboardRouteImport } from './routes/_app/dashboard'
 import { Route as AppContactRouteImport } from './routes/_app/contact'
+import { Route as AppBlogRouteImport } from './routes/_app/blog'
 import { Route as AppAboutRouteImport } from './routes/_app/about'
 import { Route as AppListingsIndexRouteImport } from './routes/_app/listings/index'
 import { Route as AppDashboardIndexRouteImport } from './routes/_app/dashboard/index'
@@ -63,6 +64,11 @@ const AppDashboardRoute = AppDashboardRouteImport.update({
 const AppContactRoute = AppContactRouteImport.update({
   id: '/contact',
   path: '/contact',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppBlogRoute = AppBlogRouteImport.update({
+  id: '/blog',
+  path: '/blog',
   getParentRoute: () => AppRoute,
 } as any)
 const AppAboutRoute = AppAboutRouteImport.update({
@@ -141,6 +147,7 @@ export interface FileRoutesByFullPath {
   '/': typeof AppIndexRoute
   '/login': typeof LoginRoute
   '/about': typeof AppAboutRoute
+  '/blog': typeof AppBlogRoute
   '/contact': typeof AppContactRoute
   '/dashboard': typeof AppDashboardRouteWithChildren
   '/gallery': typeof AppGalleryRoute
@@ -162,6 +169,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/about': typeof AppAboutRoute
+  '/blog': typeof AppBlogRoute
   '/contact': typeof AppContactRoute
   '/gallery': typeof AppGalleryRoute
   '/saved': typeof AppSavedRoute
@@ -185,6 +193,7 @@ export interface FileRoutesById {
   '/_app': typeof AppRouteWithChildren
   '/login': typeof LoginRoute
   '/_app/about': typeof AppAboutRoute
+  '/_app/blog': typeof AppBlogRoute
   '/_app/contact': typeof AppContactRoute
   '/_app/dashboard': typeof AppDashboardRouteWithChildren
   '/_app/gallery': typeof AppGalleryRoute
@@ -210,6 +219,7 @@ export interface FileRouteTypes {
     | '/'
     | '/login'
     | '/about'
+    | '/blog'
     | '/contact'
     | '/dashboard'
     | '/gallery'
@@ -231,6 +241,7 @@ export interface FileRouteTypes {
   to:
     | '/login'
     | '/about'
+    | '/blog'
     | '/contact'
     | '/gallery'
     | '/saved'
@@ -253,6 +264,7 @@ export interface FileRouteTypes {
     | '/_app'
     | '/login'
     | '/_app/about'
+    | '/_app/blog'
     | '/_app/contact'
     | '/_app/dashboard'
     | '/_app/gallery'
@@ -327,6 +339,13 @@ declare module '@tanstack/react-router' {
       path: '/contact'
       fullPath: '/contact'
       preLoaderRoute: typeof AppContactRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/blog': {
+      id: '/_app/blog'
+      path: '/blog'
+      fullPath: '/blog'
+      preLoaderRoute: typeof AppBlogRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/about': {
@@ -454,6 +473,7 @@ const AppDashboardRouteWithChildren = AppDashboardRoute._addFileChildren(
 
 interface AppRouteChildren {
   AppAboutRoute: typeof AppAboutRoute
+  AppBlogRoute: typeof AppBlogRoute
   AppContactRoute: typeof AppContactRoute
   AppDashboardRoute: typeof AppDashboardRouteWithChildren
   AppGalleryRoute: typeof AppGalleryRoute
@@ -470,6 +490,7 @@ interface AppRouteChildren {
 
 const AppRouteChildren: AppRouteChildren = {
   AppAboutRoute: AppAboutRoute,
+  AppBlogRoute: AppBlogRoute,
   AppContactRoute: AppContactRoute,
   AppDashboardRoute: AppDashboardRouteWithChildren,
   AppGalleryRoute: AppGalleryRoute,

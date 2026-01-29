@@ -15,4 +15,8 @@ export const navLinks = [
 		label: "Contact",
 		href: "/contact",
 	},
+	{
+		label:"Blog",
+		href:"/blog",
+	}
 ];
