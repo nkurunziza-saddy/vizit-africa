@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import gsap from "gsap";
@@ -8,487 +8,593 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Navigation } from "@/components/navigation";
 import { Footer } from "@/components/footer";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { listings, testimonials, serviceTypeLabels } from "@/lib/data";
-import {
-  ArrowRight,
-  Star,
-  MapPin,
-  Plane,
-  Hotel,
-  Home,
-  Car,
-  Mountain,
-} from "lucide-react";
+import { listings, testimonials } from "@/lib/data";
+import { unsplashImages } from "@/lib/images";
+import { ArrowRight, Star, MapPin, Heart, Compass } from "lucide-react";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const serviceIcons = {
-  flights: Plane,
-  hotels: Hotel,
-  bnbs: Home,
-  "car-rentals": Car,
-  experiences: Mountain,
-};
-
-export default function HomePage() {
+export default function Page() {
   const heroRef = useRef<HTMLDivElement>(null);
-  const introRef = useRef<HTMLDivElement>(null);
-  const storyRef = useRef<HTMLDivElement>(null);
-  const servicesRef = useRef<HTMLDivElement>(null);
-  const featuredRef = useRef<HTMLDivElement>(null);
-  const testimonialRef = useRef<HTMLDivElement>(null);
+  const [scrollProgress, setScrollProgress] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const winScroll = document.documentElement.scrollTop;
+      const height =
+        document.documentElement.scrollHeight -
+        document.documentElement.clientHeight;
+      const scrolled = (winScroll / height) * 100;
+      setScrollProgress(scrolled);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Hero animations
-      gsap.from(".hero-title", {
-        y: 100,
-        opacity: 0,
-        duration: 1.5,
-        ease: "power3.out",
-      });
+      const tl = gsap.timeline({ defaults: { ease: "power4.out" } });
 
-      gsap.from(".hero-subtitle", {
-        y: 50,
-        opacity: 0,
-        duration: 1.2,
-        delay: 0.3,
-        ease: "power3.out",
-      });
+      tl.from(".hero-overlay", { scale: 1.3, duration: 1.8 })
+        .from(
+          ".hero-title-word",
+          { y: 200, opacity: 0, rotateX: -90, stagger: 0.15, duration: 1.2 },
+          0.3,
+        )
+        .from(".hero-subtitle", { y: 60, opacity: 0, duration: 1 }, 1)
+        .from(".hero-cta", { scale: 0.8, opacity: 0, duration: 0.9 }, 1.3);
 
-      gsap.from(".hero-cta", {
-        y: 30,
-        opacity: 0,
-        duration: 1,
-        delay: 0.6,
-        ease: "power3.out",
-      });
-
-      gsap.from(".scroll-indicator", {
-        y: -20,
-        opacity: 0,
-        duration: 1,
-        delay: 1,
-        ease: "power3.out",
-      });
-
-      // Parallax effect on hero image
       gsap.to(".hero-image", {
-        yPercent: 30,
+        yPercent: 50,
+        scale: 1.1,
         ease: "none",
         scrollTrigger: {
           trigger: heroRef.current,
           start: "top top",
           end: "bottom top",
-          scrub: true,
+          scrub: 1,
         },
       });
 
-      // Intro section animations
-      gsap.from(".intro-text", {
-        y: 80,
-        opacity: 0,
-        duration: 1.2,
-        scrollTrigger: {
-          trigger: introRef.current,
-          start: "top 80%",
-          end: "top 40%",
-          toggleActions: "play none none reverse",
-        },
-      });
-
-      gsap.from(".intro-coordinates", {
-        y: 40,
-        opacity: 0,
-        duration: 1,
-        delay: 0.3,
-        scrollTrigger: {
-          trigger: introRef.current,
-          start: "top 70%",
-          end: "top 40%",
-          toggleActions: "play none none reverse",
-        },
-      });
-
-      // Story section parallax
-      gsap.from(".story-title", {
-        y: 100,
-        opacity: 0,
-        duration: 1.2,
-        scrollTrigger: {
-          trigger: storyRef.current,
-          start: "top 80%",
-          toggleActions: "play none none reverse",
-        },
-      });
-
-      gsap.from(".story-paragraph", {
-        y: 60,
-        opacity: 0,
-        stagger: 0.2,
-        duration: 1,
-        scrollTrigger: {
-          trigger: storyRef.current,
-          start: "top 60%",
-          toggleActions: "play none none reverse",
-        },
-      });
-
-      // Services section
-      gsap.from(".service-card", {
-        y: 80,
-        opacity: 0,
-        stagger: 0.15,
-        duration: 0.8,
-        scrollTrigger: {
-          trigger: servicesRef.current,
-          start: "top 70%",
-          toggleActions: "play none none reverse",
-        },
-      });
-
-      // Featured listings
-      gsap.from(".featured-card", {
-        y: 100,
-        opacity: 0,
-        stagger: 0.2,
-        duration: 1,
-        scrollTrigger: {
-          trigger: featuredRef.current,
-          start: "top 70%",
-          toggleActions: "play none none reverse",
-        },
-      });
-
-      // Testimonials
-      gsap.from(".testimonial-card", {
-        y: 60,
-        opacity: 0,
-        stagger: 0.15,
-        duration: 0.8,
-        scrollTrigger: {
-          trigger: testimonialRef.current,
-          start: "top 70%",
-          toggleActions: "play none none reverse",
-        },
+      gsap.to(".scroll-pulse", {
+        scale: 1.2,
+        opacity: 0.4,
+        duration: 1.5,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut",
       });
     });
 
     return () => ctx.revert();
   }, []);
 
-  const featuredListings = listings.filter((l) => l.featured).slice(0, 4);
-
   return (
-    <main className="bg-cream min-h-screen overflow-hidden">
+    <main className="bg-[#0A0E0D] min-h-screen overflow-x-hidden">
+      {/* Progress bar */}
+      <div className="fixed top-0 left-0 right-0 h-0.5 bg-[#1A2420] z-[100]">
+        <div
+          className="h-full bg-gradient-to-r from-[#C85A3A] via-[#E8B44A] to-[#C85A3A] transition-all duration-300"
+          style={{ width: `${scrollProgress}%` }}
+        />
+      </div>
+
       <Navigation />
 
-      {/* Hero Section */}
+      {/* Hero */}
       <section
         ref={heroRef}
         className="relative h-screen flex items-center justify-center overflow-hidden"
       >
-        {/* Background Image with Parallax */}
         <div className="hero-image absolute inset-0 z-0">
           <Image
-            src="https://www.discoverafrica.com/wp-content/uploads/wetu/14988/sinamatella_-_rwanda_-_virunga_-_20180914_-_630.jpg"
-            alt="Rwanda Virunga Mountains"
+            src={unsplashImages.hero}
+            alt="Rwanda Mountains"
             fill
-            className="object-cover"
+            className="object-cover scale-110"
             priority
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-forest/40 via-forest/20 to-cream" />
+          <div className="hero-overlay absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/80" />
         </div>
 
-        {/* Hero Content */}
+        <div className="absolute inset-0 z-[1] opacity-[0.03] mix-blend-overlay">
+          <div className="w-full h-full bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48ZmlsdGVyIGlkPSJhIiB4PSIwIiB5PSIwIj48ZmVUdXJidWxlbmNlIGJhc2VGcmVxdWVuY3k9Ii43NSIgc3RpdGNoVGlsZXM9InN0aXRjaCIgdHlwZT0iZnJhY3RhbE5vaXNlIi8+PGZlQ29sb3JNYXRyaXggdHlwZT0ic2F0dXJhdGUiIHZhbHVlcz0iMCIvPjwvZmlsdGVyPjxwYXRoIGQ9Ik0wIDBoMzAwdjMwMEgweiIgZmlsdGVyPSJ1cmwoI2EpIiBvcGFjaXR5PSIuMDUiLz48L3N2Zz4=')]" />
+        </div>
+
         <div className="relative z-10 text-center px-6 max-w-5xl mx-auto">
-          <p className="hero-subtitle text-cream/90 uppercase tracking-[0.3em] text-sm mb-6">
-            Welcome to
-          </p>
-          <h1 className="hero-title font-display text-6xl md:text-8xl lg:text-9xl text-cream mb-6 leading-none">
-            MURUGO
-          </h1>
-          <p className="hero-subtitle font-display text-xl md:text-2xl text-gold italic mb-8">
-            Your Home in the Land of a Thousand Hills
-          </p>
-          <div className="hero-cta flex flex-col sm:flex-row gap-4 justify-center">
-            <Button
-              render={<Link href="/listings" />}
-              size="lg"
-              className="bg-terracotta hover:bg-terracotta-light text-cream rounded-none px-8 py-6 uppercase tracking-wider"
-            >
-              Begin Your Journey
-            </Button>
-            <Button
-              render={<Link href="/gallery" />}
-              size="lg"
-              variant="outline"
-              className="border-cream text-cream hover:bg-cream/10 rounded-none px-8 py-6 uppercase tracking-wider"
-            >
-              Explore Rwanda
-            </Button>
-          </div>
-        </div>
-
-        {/* Scroll Indicator */}
-        <div className="scroll-indicator absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-cream/70">
-          <span className="text-xs uppercase tracking-widest">
-            Scroll to discover
-          </span>
-          <div className="w-px h-12 bg-gradient-to-b from-cream/70 to-transparent animate-pulse" />
-        </div>
-      </section>
-
-      {/* Introduction Section */}
-      <section ref={introRef} className="py-32 px-6 bg-cream">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="intro-text font-display text-3xl md:text-4xl lg:text-5xl text-forest/80 leading-relaxed mb-12">
-            There is a place in the heart of Africa where mist-shrouded
-            mountains meet the sky, where ancient forests whisper secrets, and
-            where the warmth of its people feels like coming home.
-          </h2>
-          <div className="intro-coordinates flex justify-center items-center gap-8 text-forest/50 font-mono text-sm">
-            <span>1.9403 S</span>
-            <div className="w-16 h-px bg-forest/20" />
-            <span>29.8739 E</span>
-          </div>
-        </div>
-      </section>
-
-      {/* Story Section */}
-      <section ref={storyRef} className="py-24 px-6 bg-cream">
-        <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-16 items-center">
-          <div>
-            <h2 className="story-title font-display text-4xl md:text-5xl lg:text-6xl text-forest leading-tight mb-8">
-              Here, travelers become family, and every journey tells a story.
-            </h2>
-          </div>
-          <div className="space-y-6 text-forest/70 text-lg leading-relaxed">
-            <p className="story-paragraph">
-              Rwanda is more than a destination. It is a land transformed, a
-              nation that has risen with grace and determination to become one
-              of Africa&apos;s most inspiring success stories.
-            </p>
-            <p className="story-paragraph">
-              From the gentle giants of the Virunga mountains to the tranquil
-              shores of Lake Kivu, from the vibrant streets of Kigali to the
-              ancient rainforests of Nyungwe, every corner of this remarkable
-              country offers wonder.
-            </p>
-            <p className="story-paragraph">
-              At Murugo, we believe travel should feel like coming home. We
-              connect you with local hosts, authentic experiences, and the
-              genuine hospitality that Rwandans are known for. Whether
-              you&apos;re seeking adventure or tranquility, we&apos;ll help you
-              find your place in the land of a thousand hills.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Services Section */}
-      <section ref={servicesRef} className="py-24 px-6 bg-forest">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <p className="text-gold uppercase tracking-[0.2em] text-sm mb-4">
-              What We Offer
-            </p>
-            <h2 className="font-display text-4xl md:text-5xl text-cream">
-              Everything You Need
-            </h2>
+          <div className="inline-flex items-center gap-2 mb-8 px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-xl">
+            <Compass className="w-4 h-4 text-[#E8B44A]" />
+            <span className="text-white/90 text-xs font-medium tracking-[0.2em] uppercase">
+              A Journey Awaits
+            </span>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
-            {(
-              Object.entries(serviceTypeLabels) as [
-                keyof typeof serviceIcons,
-                string,
-              ][]
-            ).map(([type, label]) => {
-              const Icon = serviceIcons[type];
-              return (
-                <Link
-                  key={type}
-                  href={`/listings?type=${type}`}
-                  className="service-card group"
-                >
-                  <Card className="bg-cream/5 border-cream/10 hover:bg-cream/10 transition-all duration-300 p-8 text-center rounded-none h-full">
-                    <Icon className="w-10 h-10 text-gold mx-auto mb-4 group-hover:scale-110 transition-transform" />
-                    <h3 className="font-display text-xl text-cream mb-2">
-                      {label}
-                    </h3>
-                    <p className="text-cream/60 text-sm">
-                      {type === "flights" && "Fly to Rwanda"}
-                      {type === "hotels" && "Luxury stays"}
-                      {type === "bnbs" && "Local homes"}
-                      {type === "car-rentals" && "Explore freely"}
-                      {type === "experiences" && "Unforgettable moments"}
-                    </p>
-                  </Card>
-                </Link>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* Featured Listings Section */}
-      <section ref={featuredRef} className="py-24 px-6 bg-cream">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 gap-6">
-            <div>
-              <p className="text-terracotta uppercase tracking-[0.2em] text-sm mb-4">
-                Handpicked for You
-              </p>
-              <h2 className="font-display text-4xl md:text-5xl text-forest">
-                Featured Experiences
-              </h2>
+          <h1 className="mb-6 leading-[0.9]">
+            <div className="overflow-hidden mb-1">
+              <span className="hero-title-word inline-block font-serif text-[clamp(2.5rem,10vw,8rem)] font-bold text-white tracking-tight">
+                Rwanda
+              </span>
             </div>
-            <Button
-              render={
-                <Link href="/listings" className="flex items-center gap-2" />
-              }
-              variant="ghost"
-              className="text-forest hover:text-terracotta group"
-            >
-              View All
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </Button>
-          </div>
+            <div className="overflow-hidden mb-1">
+              <span className="hero-title-word inline-block font-serif text-[clamp(2.5rem,10vw,8rem)] font-bold text-white tracking-tight">
+                Calls
+              </span>
+            </div>
+            <div className="overflow-hidden">
+              <span className="hero-title-word inline-block font-serif text-[clamp(2.5rem,10vw,8rem)] font-bold text-[#E8B44A] tracking-tight italic">
+                You Home
+              </span>
+            </div>
+          </h1>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {featuredListings.map((listing) => (
-              <Link
-                key={listing.id}
-                href={`/listings/${listing.id}`}
-                className="featured-card group"
+          <p className="hero-subtitle font-light text-lg md:text-xl text-white/80 mb-10 max-w-2xl mx-auto leading-relaxed">
+            Where ancient forests whisper stories, mountain gorillas walk among
+            mist, and every sunset paints the sky in colors you've only dreamed
+            of.
+          </p>
+
+          <div className="hero-cta">
+            <Link href="/listings">
+              <Button
+                size="lg"
+                className="group bg-[#C85A3A] hover:bg-[#A04A2E] text-white font-medium rounded-none px-10 py-6 uppercase tracking-[0.15em] text-sm shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105"
               >
-                <Card className="overflow-hidden border-0 shadow-none bg-transparent">
-                  <div className="relative aspect-[4/5] overflow-hidden mb-4">
-                    <Image
-                      src={listing.image}
-                      alt={listing.title}
-                      fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-700"
-                    />
-                    <Badge className="absolute top-4 left-4 bg-forest text-cream rounded-none">
-                      {serviceTypeLabels[listing.type]}
-                    </Badge>
-                  </div>
-                  <div>
-                    <div className="flex items-center gap-1 text-sm text-forest/60 mb-2">
-                      <MapPin className="w-3 h-3" />
-                      {listing.location}
-                    </div>
-                    <h3 className="font-display text-xl text-forest group-hover:text-terracotta transition-colors mb-2">
-                      {listing.title}
-                    </h3>
-                    <p className="text-forest/60 text-sm mb-3 line-clamp-2">
-                      {listing.shortDescription}
-                    </p>
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-1">
-                        <Star className="w-4 h-4 fill-gold text-gold" />
-                        <span className="text-sm font-medium text-forest">
-                          {listing.rating}
-                        </span>
-                        <span className="text-sm text-forest/50">
-                          ({listing.reviews})
-                        </span>
-                      </div>
-                      <span className="font-display text-lg text-terracotta">
-                        ${listing.price}
-                        <span className="text-sm text-forest/50">
-                          {listing.duration ? `/${listing.duration}` : "/night"}
-                        </span>
-                      </span>
-                    </div>
-                  </div>
-                </Card>
-              </Link>
+                Begin Your Story
+                <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+              </Button>
+            </Link>
+          </div>
+        </div>
+
+      </section>
+
+      {/* Stats */}
+      <section className="relative py-20 md:py-28 bg-gradient-to-b from-[#0A0E0D] via-[#0F1512] to-[#0A0E0D]">
+        <div className="max-w-5xl mx-auto px-6 text-center">
+          <div className="w-12 h-px bg-gradient-to-r from-transparent via-[#E8B44A] to-transparent mx-auto mb-6" />
+
+          <h2 className="font-serif text-3xl md:text-5xl lg:text-6xl text-white mb-6">
+            Land of a{" "}
+            <span className="text-[#E8B44A] italic">Thousand Hills</span>
+          </h2>
+
+          <p className="text-white/60 text-base md:text-lg max-w-2xl mx-auto leading-relaxed mb-12">
+            A place where nature commands reverence, endangered giants roam
+            free, and the spirit of Ubuntu pulses through every interaction.
+          </p>
+
+          <div className="grid grid-cols-3 gap-4 md:gap-8 max-w-3xl mx-auto">
+            {[
+              { number: "400+", label: "Gorillas" },
+              { number: "13", label: "Volcanoes" },
+              { number: "~13M", label: "People" },
+            ].map((stat, i) => (
+              <div
+                key={i}
+                className="p-4 md:p-6 bg-white/5 border border-white/10 hover:bg-white/10 transition-colors"
+              >
+                <p className="font-serif text-3xl md:text-4xl font-bold text-[#E8B44A] mb-1">
+                  {stat.number}
+                </p>
+                <p className="text-white/60 text-xs md:text-sm">{stat.label}</p>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Testimonials Section */}
-      <section ref={testimonialRef} className="py-24 px-6 bg-cream-dark">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <p className="text-terracotta uppercase tracking-[0.2em] text-sm mb-4">
-              Stories from Our Guests
+      {/* Regions */}
+      <RegionsSection />
+
+      {/* Journey Grid */}
+      <section className="py-20 md:py-28 bg-gradient-to-b from-[#0A0E0D] to-[#0F1512]">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="text-center mb-12">
+            <div className="w-12 h-px bg-gradient-to-r from-transparent via-[#E8B44A] to-transparent mx-auto mb-4" />
+            <h2 className="font-serif text-3xl md:text-4xl text-white mb-2">
+              The <span className="text-[#E8B44A] italic">Journey</span>
+            </h2>
+            <p className="text-white/50 text-sm">
+              From forest floor to mountain peak
             </p>
-            <h2 className="font-display text-4xl md:text-5xl text-forest">
-              Travelers Who Found Home
+          </div>
+
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
+            {[
+              { title: "Ancient Depths", image: unsplashImages.deepForest },
+              { title: "Bamboo Forests", image: unsplashImages.bamboo },
+              { title: "Mountain Peaks", image: unsplashImages.mountainVista },
+              { title: "Lake Shores", image: unsplashImages.lakeside },
+            ].map((scene, index) => (
+              <div
+                key={index}
+                className="group relative aspect-[3/4] overflow-hidden bg-[#1A2420] cursor-pointer"
+              >
+                <Image
+                  src={scene.image}
+                  alt={scene.title}
+                  fill
+                  className="object-cover group-hover:scale-110 transition-transform duration-700"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+
+                <div className="absolute top-3 right-3 w-6 h-6 rounded-full bg-[#E8B44A]/20 border border-[#E8B44A]/40 flex items-center justify-center">
+                  <span className="text-[#E8B44A] text-xs font-bold">
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+                </div>
+
+                <div className="absolute bottom-0 inset-x-0 p-4">
+                  <h3 className="font-serif text-base md:text-lg font-bold text-white">
+                    {scene.title}
+                  </h3>
+                </div>
+
+                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-[#E8B44A] to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Featured Listings */}
+      <section className="py-20 md:py-28 px-6 bg-[#0F1512]">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-12">
+            <div className="w-12 h-px bg-gradient-to-r from-transparent via-[#E8B44A] to-transparent mx-auto mb-4" />
+            <h2 className="font-serif text-3xl md:text-4xl text-white mb-2">
+              Curated <span className="text-[#E8B44A] italic">Experiences</span>
+            </h2>
+            <p className="text-white/50 text-sm">
+              Hand-selected by local hosts
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {listings
+              .filter((l) => l.featured)
+              .slice(0, 4)
+              .map((listing) => (
+                <Link
+                  key={listing.id}
+                  href={`/listings/${listing.id}`}
+                  className="group"
+                >
+                  <div className="relative aspect-[3/4] overflow-hidden bg-[#1A2420]">
+                    <Image
+                      src={listing.image || unsplashImages.lodge}
+                      alt={listing.title}
+                      fill
+                      className="object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent" />
+
+                    <div className="absolute top-3 left-3">
+                      <Badge className="bg-[#C85A3A] text-white text-[10px] font-bold border-0 px-2 py-0.5">
+                        {listing.type.toUpperCase()}
+                      </Badge>
+                    </div>
+
+                    <div className="absolute bottom-0 inset-x-0 p-4">
+                      <h3 className="font-serif text-base font-bold text-white mb-1 line-clamp-1">
+                        {listing.title}
+                      </h3>
+                      <div className="flex items-center gap-1 text-white/60 text-xs mb-2">
+                        <MapPin className="w-3 h-3" />
+                        <span className="line-clamp-1">{listing.location}</span>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <Star className="w-3 h-3 fill-[#E8B44A] text-[#E8B44A]" />
+                        <span className="text-white text-xs font-medium">
+                          {listing.rating}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </Link>
+              ))}
+          </div>
+
+          <div className="text-center mt-10">
+            <Link href="/listings">
+              <Button
+                variant="outline"
+                className="group border-white/20 text-white hover:border-[#E8B44A] hover:bg-[#E8B44A]/10 rounded-none px-8 py-5 uppercase tracking-[0.15em] text-xs"
+              >
+                View All
+                <ArrowRight className="w-3 h-3 ml-2 group-hover:translate-x-1 transition-transform" />
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials */}
+      <section className="py-20 md:py-28 px-6 bg-gradient-to-b from-[#0F1512] to-[#0A0E0D]">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-12">
+            <div className="w-12 h-px bg-gradient-to-r from-transparent via-[#E8B44A] to-transparent mx-auto mb-4" />
+            <h2 className="font-serif text-3xl md:text-4xl text-white">
+              Stories of{" "}
+              <span className="text-[#E8B44A] italic">Transformation</span>
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {testimonials.map((testimonial) => (
-              <Card
+              <div
                 key={testimonial.id}
-                className="testimonial-card bg-cream p-8 border-0 shadow-lg rounded-none"
+                className="p-6 bg-white/5 border border-white/10 hover:border-[#E8B44A]/30 transition-colors"
               >
-                <p className="text-forest/70 text-lg leading-relaxed mb-6 italic">
-                  &ldquo;{testimonial.text}&rdquo;
+                <div className="text-4xl text-[#E8B44A]/20 font-serif mb-4">
+                  "
+                </div>
+
+                <div className="flex gap-0.5 mb-4">
+                  {[...Array(5)].map((_, i) => (
+                    <Star
+                      key={i}
+                      className="w-3 h-3 fill-[#E8B44A] text-[#E8B44A]"
+                    />
+                  ))}
+                </div>
+
+                <p className="text-white/70 text-sm leading-relaxed mb-6">
+                  "{testimonial.text}"
                 </p>
-                <div className="flex items-center gap-4">
-                  <div className="relative w-12 h-12 rounded-full overflow-hidden">
+
+                <div className="flex items-center gap-3 pt-4 border-t border-white/10">
+                  <div className="relative w-10 h-10 rounded-full overflow-hidden">
                     <Image
-                      src={testimonial.image}
+                      src={testimonial.image || "/placeholder.svg"}
                       alt={testimonial.name}
                       fill
                       className="object-cover"
                     />
                   </div>
                   <div>
-                    <p className="font-display text-forest font-medium">
+                    <p className="font-serif font-bold text-white text-sm">
                       {testimonial.name}
                     </p>
-                    <p className="text-forest/50 text-sm">
+                    <p className="text-white/50 text-xs">
                       {testimonial.location}
                     </p>
                   </div>
                 </div>
-              </Card>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="relative py-32 px-6 overflow-hidden">
+      {/* Final CTA */}
+      <section className="relative py-28 md:py-36 px-6 overflow-hidden">
         <div className="absolute inset-0 z-0">
           <Image
-            src="https://res.cloudinary.com/take-memories/images/f_auto,dpr_auto,q_auto,w_2000,c_fill,h_1200/gm/hbb8oblj5tozmimydbaz/rwanda-sehenswurdigkeiten"
-            alt="Rwanda Gorilla"
+            src={unsplashImages.finalCta}
+            alt="Rwanda sunset"
             fill
             className="object-cover"
           />
-          <div className="absolute inset-0 bg-forest/80" />
+          <div className="absolute inset-0 bg-black/75" />
         </div>
 
-        <div className="relative z-10 max-w-4xl mx-auto text-center">
-          <h2 className="font-display text-4xl md:text-6xl text-cream mb-6">
-            Ready to Find Your Home in Rwanda?
+        <div className="relative z-10 max-w-3xl mx-auto text-center">
+          <Heart className="w-10 h-10 text-[#E8B44A] mx-auto mb-6" />
+
+          <h2 className="font-serif text-4xl md:text-6xl text-white mb-6 leading-tight">
+            Your Story
+            <br />
+            <span className="text-[#E8B44A] italic">Begins Now</span>
           </h2>
-          <p className="text-cream/80 text-xl mb-10 max-w-2xl mx-auto">
-            Let us help you plan an unforgettable journey to the heart of
-            Africa. Your adventure in the land of a thousand hills awaits.
+
+          <p className="text-white/70 text-base md:text-lg mb-10 max-w-xl mx-auto">
+            The mountains are calling. The forests are waiting. Rwanda's people
+            are ready to welcome you as family.
           </p>
-          <Button
-            render={<Link href="/listings" />}
-            size="lg"
-            className="bg-gold hover:bg-gold/90 text-forest rounded-none px-10 py-7 uppercase tracking-wider text-base font-medium"
-          >
-            Start Planning
-          </Button>
+
+          <Link href="/listings">
+            <Button
+              size="lg"
+              className="group bg-[#C85A3A] hover:bg-[#A04A2E] text-white font-medium rounded-none px-12 py-6 uppercase tracking-[0.15em] text-sm shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105"
+            >
+              Start Your Journey
+              <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+            </Button>
+          </Link>
         </div>
       </section>
 
       <Footer />
     </main>
+  );
+}
+
+// Regions Section with pinned scroll
+function RegionsSection() {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const triggersRef = useRef<ScrollTrigger[]>([]);
+
+  const regions = [
+    {
+      id: "virunga",
+      title: "Virunga Mountains",
+      subtitle: "Where Giants Roam",
+      description:
+        "Trek through mist-shrouded forests to meet mountain gorillas in their natural sanctuary.",
+      image: unsplashImages.virunga,
+      color: "#2D5A3D",
+      accent: "#4ADE80",
+    },
+    {
+      id: "nyungwe",
+      title: "Nyungwe Forest",
+      subtitle: "Ancient Rainforest",
+      description:
+        "Walk among canopies older than civilization. Cross suspended bridges high above the forest floor.",
+      image: unsplashImages.nyungwe,
+      color: "#3D7A4F",
+      accent: "#86EFAC",
+    },
+    {
+      id: "kivu",
+      title: "Lake Kivu",
+      subtitle: "Waters of Peace",
+      description:
+        "Volcanic beaches meet crystal waters. Watch fishing boats dance on waves turned gold by sunset.",
+      image: unsplashImages.lakeKivu,
+      color: "#2A5C7A",
+      accent: "#60A5FA",
+    },
+    {
+      id: "kigali",
+      title: "Kigali",
+      subtitle: "Rwanda's Heart",
+      description:
+        "A city that rose from ashes to become a beacon of hope. World-class dining and modern African energy.",
+      image: unsplashImages.kigali,
+      color: "#C85A3A",
+      accent: "#FDBA74",
+    },
+  ];
+
+  useEffect(() => {
+    if (!containerRef.current) return;
+
+    triggersRef.current.forEach((trigger) => trigger.kill());
+    triggersRef.current = [];
+
+    const ctx = gsap.context(() => {
+      const scrollTrigger = ScrollTrigger.create({
+        trigger: containerRef.current,
+        start: "top top",
+        end: `+=${regions.length * 100}vh`,
+        pin: true,
+        scrub: 1,
+        snap: {
+          snapTo: (progress) => {
+            const snapPoints = regions.map((_, i) => i / (regions.length - 1));
+            return snapPoints.reduce((prev, curr) =>
+              Math.abs(curr - progress) < Math.abs(prev - progress)
+                ? curr
+                : prev,
+            );
+          },
+          duration: { min: 0.2, max: 0.4 },
+          ease: "power2.inOut",
+        },
+        onUpdate: (self) => {
+          const newIndex = Math.min(
+            Math.floor(self.progress * (regions.length - 1) + 0.5),
+            regions.length - 1,
+          );
+          if (newIndex !== activeIndex) {
+            setActiveIndex(newIndex);
+          }
+        },
+      });
+
+      triggersRef.current.push(scrollTrigger);
+    }, containerRef);
+
+    return () => {
+      triggersRef.current.forEach((trigger) => trigger.kill());
+      ctx.revert();
+    };
+  }, []);
+
+  return (
+    <section
+      ref={containerRef}
+      className="relative h-screen bg-[#0A0E0D] overflow-hidden"
+    >
+      {/* Background */}
+      <div className="absolute inset-0">
+        {regions.map((region, index) => (
+          <div
+            key={region.id}
+            className="absolute inset-0 transition-opacity duration-700"
+            style={{ opacity: activeIndex === index ? 1 : 0 }}
+          >
+            <Image
+              src={region.image}
+              alt={region.title}
+              fill
+              className="object-cover"
+              priority={index === 0}
+            />
+            <div
+              className="absolute inset-0"
+              style={{
+                background: `linear-gradient(to right, ${region.color}E6 0%, ${region.color}99 40%, transparent 100%)`,
+              }}
+            />
+          </div>
+        ))}
+      </div>
+
+      {/* Content */}
+      <div className="relative z-10 h-full flex items-center px-6 md:px-12 max-w-6xl mx-auto">
+        <div className="max-w-lg">
+          {regions.map((region, index) => (
+            <div
+              key={region.id}
+              className="transition-all duration-500"
+              style={{
+                opacity: activeIndex === index ? 1 : 0,
+                transform: `translateY(${activeIndex === index ? 0 : 20}px)`,
+                display: activeIndex === index ? "block" : "none",
+              }}
+            >
+              <div
+                className="w-12 h-0.5 mb-4"
+                style={{ backgroundColor: region.accent }}
+              />
+              <p
+                className="text-xs uppercase tracking-[0.2em] font-medium mb-2"
+                style={{ color: region.accent }}
+              >
+                {region.subtitle}
+              </p>
+              <h3 className="font-serif text-4xl md:text-5xl font-bold text-white mb-4 leading-tight">
+                {region.title}
+              </h3>
+              <p className="text-white/70 text-sm md:text-base mb-6 leading-relaxed">
+                {region.description}
+              </p>
+              <Link href={`/listings?region=${region.id}`}>
+                <Button
+                  size="sm"
+                  className="group bg-white/10 hover:bg-white/20 border border-white/20 text-white rounded-none px-6 py-4 uppercase tracking-[0.15em] text-xs transition-all"
+                >
+                  Explore
+                  <ArrowRight className="w-3 h-3 ml-2 group-hover:translate-x-1 transition-transform" />
+                </Button>
+              </Link>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Progress */}
+      <div className="absolute bottom-6 right-6 flex gap-2">
+        {regions.map((_, index) => (
+          <div
+            key={index}
+            className={`h-1 rounded-full transition-all duration-300 ${
+              index === activeIndex ? "w-6 bg-[#E8B44A]" : "w-1 bg-white/30"
+            }`}
+          />
+        ))}
+      </div>
+
+      <div className="absolute bottom-6 left-6 text-white/40 font-mono text-xs">
+        {String(activeIndex + 1).padStart(2, "0")} /{" "}
+        {String(regions.length).padStart(2, "0")}
+      </div>
+    </section>
   );
 }

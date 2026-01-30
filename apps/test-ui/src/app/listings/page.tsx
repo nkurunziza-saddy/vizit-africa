@@ -32,6 +32,7 @@ import {
   X,
   Grid3X3,
   List,
+  Filter,
 } from "lucide-react";
 
 function ListingsContent() {
@@ -40,11 +41,12 @@ function ListingsContent() {
 
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedType, setSelectedType] = useState<ServiceType | "all">("all");
+  const [priceRange, setPriceRange] = useState<[number, number]>([0, 2000]);
   const [sortBy, setSortBy] = useState<
     "featured" | "price-low" | "price-high" | "rating"
   >("featured");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
-  const [showFilters, setShowFilters] = useState(false);
+  const [showFilters, setShowFilters] = useState(true);
 
   // Read initial filter from URL
   useEffect(() => {
@@ -57,13 +59,13 @@ function ListingsContent() {
   // Animate listings on load
   useEffect(() => {
     gsap.from(".listing-card", {
-      y: 50,
+      y: 40,
       opacity: 0,
-      stagger: 0.1,
+      stagger: 0.08,
       duration: 0.6,
       ease: "power2.out",
     });
-  }, [selectedType, sortBy, searchQuery]);
+  }, [selectedType, sortBy, searchQuery, priceRange]);
 
   const filteredListings = useMemo(() => {
     let result = [...listings];
@@ -72,6 +74,12 @@ function ListingsContent() {
     if (selectedType !== "all") {
       result = result.filter((listing) => listing.type === selectedType);
     }
+
+    // Filter by price range
+    result = result.filter(
+      (listing) =>
+        listing.price >= priceRange[0] && listing.price <= priceRange[1],
+    );
 
     // Filter by search query
     if (searchQuery) {
@@ -102,15 +110,16 @@ function ListingsContent() {
     }
 
     return result;
-  }, [selectedType, searchQuery, sortBy]);
+  }, [selectedType, searchQuery, sortBy, priceRange]);
 
-  const handleTypeChange = (value: string | null) => {
-    if (!value) return;
-    setSelectedType(value as ServiceType | "all");
-    if (value === "all") {
-      router.push("/listings");
-    } else {
-      router.push(`/listings?type=${value}`);
+  const handleTypeChange = (value: ServiceType | "all" | null) => {
+    if (value !== null) {
+      setSelectedType(value);
+      if (value === "all") {
+        router.push("/listings");
+      } else {
+        router.push(`/listings?type=${value}`);
+      }
     }
   };
 
@@ -118,171 +127,204 @@ function ListingsContent() {
     setSearchQuery("");
     setSelectedType("all");
     setSortBy("featured");
+    setPriceRange([0, 2000]);
     router.push("/listings");
   };
 
   const hasActiveFilters =
-    selectedType !== "all" || searchQuery || sortBy !== "featured";
+    selectedType !== "all" ||
+    searchQuery ||
+    sortBy !== "featured" ||
+    priceRange[0] > 0 ||
+    priceRange[1] < 2000;
 
   return (
-    <main className="bg-cream min-h-screen">
+    <main className="bg-background min-h-screen">
       <Navigation />
 
       {/* Hero Section */}
-      <section className="pt-32 pb-16 px-6 bg-forest">
+      <section className="pt-32 pb-16 px-6 bg-secondary">
         <div className="max-w-7xl mx-auto">
-          <p className="text-gold uppercase tracking-[0.2em] text-sm mb-4">
-            Discover Rwanda
+          <p className="text-accent uppercase tracking-[0.15em] text-xs font-semibold mb-4">
+            Explore Rwanda
           </p>
-          <h1 className="font-display text-5xl md:text-6xl text-cream mb-6">
-            Explore Our Services
+          <h1 className="font-display text-5xl md:text-6xl text-primary-foreground mb-6">
+            Discover Experiences
           </h1>
-          <p className="text-cream/70 text-xl max-w-2xl">
-            From flights and accommodations to unforgettable experiences, find
-            everything you need for your Rwandan adventure.
+          <p className="text-primary-foreground/80 text-lg max-w-2xl">
+            Browse our curated collection of flights, accommodations, car
+            rentals, and unforgettable experiences across Rwanda.
           </p>
         </div>
       </section>
 
-      {/* Filters Section */}
-      <section className="sticky top-0 z-40 bg-cream border-b border-forest/10 py-4 px-6">
-        <div className="max-w-7xl mx-auto">
-          {/* Mobile Filter Toggle */}
-          <div className="md:hidden flex items-center justify-between mb-4">
-            <Button
-              variant="outline"
-              onClick={() => setShowFilters(!showFilters)}
-              className="rounded-none border-forest/20"
-            >
-              <SlidersHorizontal className="w-4 h-4 mr-2" />
-              Filters
-            </Button>
-            <div className="flex gap-2">
+      {/* Main Content */}
+      <div className="flex flex-col lg:flex-row gap-8 px-6 py-12 max-w-7xl mx-auto">
+        {/* Sidebar Filters */}
+        <div
+          className={`${
+            showFilters ? "block" : "hidden"
+          } lg:block lg:w-64 flex-shrink-0 transition-all duration-300`}
+        >
+          <div className="sticky top-32 space-y-6">
+            <div className="flex items-center justify-between lg:hidden mb-4">
+              <h3 className="font-serif font-semibold text-foreground">
+                Filters
+              </h3>
+              <button
+                onClick={() => setShowFilters(false)}
+                className="p-1 hover:bg-muted rounded-sm transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Search in Sidebar */}
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+              <Input
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-10 bg-card border-border rounded-sm"
+              />
+            </div>
+
+            {/* Service Type Filter */}
+            <div>
+              <label className="block text-sm font-semibold text-foreground mb-3">
+                Service Type
+              </label>
+              <Select value={selectedType} onValueChange={handleTypeChange}>
+                <SelectTrigger className="bg-card border-border rounded-sm">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent className="rounded-sm">
+                  <SelectItem value="all">All Types</SelectItem>
+                  {Object.entries(serviceTypeLabels).map(([key, label]) => (
+                    <SelectItem key={key} value={key}>
+                      {label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Price Range Filter */}
+            <div>
+              <label className="block text-sm font-semibold text-foreground mb-3">
+                Price Range
+              </label>
+              <div className="space-y-3">
+                <div className="flex gap-2">
+                  <Input
+                    type="number"
+                    placeholder="Min"
+                    value={priceRange[0]}
+                    onChange={(e) =>
+                      setPriceRange([
+                        parseInt(e.target.value) || 0,
+                        priceRange[1],
+                      ])
+                    }
+                    className="bg-card border-border rounded-sm text-sm"
+                  />
+                  <Input
+                    type="number"
+                    placeholder="Max"
+                    value={priceRange[1]}
+                    onChange={(e) =>
+                      setPriceRange([
+                        priceRange[0],
+                        parseInt(e.target.value) || 2000,
+                      ])
+                    }
+                    className="bg-card border-border rounded-sm text-sm"
+                  />
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  ${priceRange[0]} - ${priceRange[1]}
+                </p>
+              </div>
+            </div>
+
+            {/* Sort */}
+            <div>
+              <label className="block text-sm font-semibold text-foreground mb-3">
+                Sort By
+              </label>
+              <Select
+                value={sortBy}
+                onValueChange={(v) => setSortBy(v as typeof sortBy)}
+              >
+                <SelectTrigger className="bg-card border-border rounded-sm">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent className="rounded-sm">
+                  <SelectItem value="featured">Featured</SelectItem>
+                  <SelectItem value="price-low">Price: Low to High</SelectItem>
+                  <SelectItem value="price-high">Price: High to Low</SelectItem>
+                  <SelectItem value="rating">Highest Rated</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Clear Filters */}
+            {hasActiveFilters && (
+              <Button
+                variant="outline"
+                onClick={clearFilters}
+                className="w-full border-border rounded-sm text-foreground hover:bg-muted bg-transparent"
+              >
+                <X className="w-4 h-4 mr-2" />
+                Clear Filters
+              </Button>
+            )}
+          </div>
+        </div>
+
+        {/* Listings Content */}
+        <div className="flex-1">
+          {/* Top Bar */}
+          <div className="flex items-center justify-between gap-4 mb-8">
+            <div className="flex items-center gap-2 lg:hidden">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setShowFilters(true)}
+                className="border-border rounded-sm"
+              >
+                <Filter className="w-4 h-4 mr-2" />
+                Filters
+              </Button>
+            </div>
+
+            <p className="text-sm text-muted-foreground">
+              {filteredListings.length}{" "}
+              {filteredListings.length === 1 ? "result" : "results"} found
+            </p>
+
+            <div className="flex gap-2 ml-auto">
               <Button
                 variant={viewMode === "grid" ? "secondary" : "ghost"}
-                size="icon"
+                size="sm"
                 onClick={() => setViewMode("grid")}
-                className="rounded-none"
+                className="rounded-sm"
               >
                 <Grid3X3 className="w-4 h-4" />
               </Button>
               <Button
                 variant={viewMode === "list" ? "secondary" : "ghost"}
-                size="icon"
+                size="sm"
                 onClick={() => setViewMode("list")}
-                className="rounded-none"
+                className="rounded-sm"
               >
                 <List className="w-4 h-4" />
               </Button>
             </div>
           </div>
 
-          {/* Desktop Filters */}
-          <div className={`${showFilters ? "block" : "hidden"} md:block`}>
-            <div className="flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
-              <div className="flex flex-col sm:flex-row gap-4 flex-1 w-full md:w-auto">
-                {/* Search */}
-                <div className="relative flex-1 max-w-md">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-forest/40" />
-                  <Input
-                    placeholder="Search destinations, experiences..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="pl-10 rounded-none border-forest/20 bg-white"
-                  />
-                </div>
-
-                {/* Type Filter */}
-                <Select value={selectedType} onValueChange={handleTypeChange}>
-                  <SelectTrigger className="w-full sm:w-[180px] rounded-none border-forest/20 bg-white">
-                    <SelectValue placeholder="All Types" />
-                  </SelectTrigger>
-                  <SelectContent className="rounded-none">
-                    <SelectItem value="all">All Types</SelectItem>
-                    {Object.entries(serviceTypeLabels).map(([key, label]) => (
-                      <SelectItem key={key} value={key}>
-                        {label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-
-                {/* Sort */}
-                <Select
-                  value={sortBy}
-                  onValueChange={(v) => setSortBy(v as typeof sortBy)}
-                >
-                  <SelectTrigger className="w-full sm:w-[180px] rounded-none border-forest/20 bg-white">
-                    <SelectValue placeholder="Sort by" />
-                  </SelectTrigger>
-                  <SelectContent className="rounded-none">
-                    <SelectItem value="featured">Featured</SelectItem>
-                    <SelectItem value="price-low">
-                      Price: Low to High
-                    </SelectItem>
-                    <SelectItem value="price-high">
-                      Price: High to Low
-                    </SelectItem>
-                    <SelectItem value="rating">Highest Rated</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="hidden md:flex items-center gap-4">
-                {hasActiveFilters && (
-                  <Button
-                    variant="ghost"
-                    onClick={clearFilters}
-                    className="text-forest/60 hover:text-forest"
-                  >
-                    <X className="w-4 h-4 mr-1" />
-                    Clear
-                  </Button>
-                )}
-                <div className="flex gap-2">
-                  <Button
-                    variant={viewMode === "grid" ? "secondary" : "ghost"}
-                    size="icon"
-                    onClick={() => setViewMode("grid")}
-                    className="rounded-none"
-                  >
-                    <Grid3X3 className="w-4 h-4" />
-                  </Button>
-                  <Button
-                    variant={viewMode === "list" ? "secondary" : "ghost"}
-                    size="icon"
-                    onClick={() => setViewMode("list")}
-                    className="rounded-none"
-                  >
-                    <List className="w-4 h-4" />
-                  </Button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Results Count */}
-          <div className="mt-4 flex items-center justify-between">
-            <p className="text-forest/60 text-sm">
-              {filteredListings.length}{" "}
-              {filteredListings.length === 1 ? "result" : "results"} found
-            </p>
-            {hasActiveFilters && (
-              <Button
-                variant="link"
-                onClick={clearFilters}
-                className="text-terracotta md:hidden p-0 h-auto"
-              >
-                Clear filters
-              </Button>
-            )}
-          </div>
-        </div>
-      </section>
-
-      {/* Listings Grid */}
-      <section className="py-12 px-6">
-        <div className="max-w-7xl mx-auto">
+          {/* Listings Grid/List */}
           {filteredListings.length > 0 ? (
             <div
               className={`grid gap-6 ${
@@ -301,19 +343,19 @@ function ListingsContent() {
             </div>
           ) : (
             <div className="text-center py-20">
-              <p className="text-forest/60 text-xl mb-4">
+              <p className="text-muted-foreground text-lg mb-6">
                 No listings found matching your criteria
               </p>
               <Button
                 onClick={clearFilters}
-                className="bg-terracotta hover:bg-terracotta-light text-cream rounded-none"
+                className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-sm"
               >
                 Clear Filters
               </Button>
             </div>
           )}
         </div>
-      </section>
+      </div>
 
       <Footer />
     </main>
@@ -330,54 +372,58 @@ function ListingCard({
   if (viewMode === "list") {
     return (
       <Link href={`/listings/${listing.id}`} className="listing-card group">
-        <Card className="overflow-hidden border-0 shadow-md hover:shadow-xl transition-shadow duration-300 rounded-none">
+        <Card className="overflow-hidden border border-border shadow-sm hover:shadow-md transition-shadow duration-300 rounded-sm h-full">
           <div className="flex flex-col sm:flex-row">
-            <div className="relative w-full sm:w-64 h-48 sm:h-auto flex-shrink-0">
+            <div className="relative w-full sm:w-72 h-48 sm:h-auto flex-shrink-0">
               <Image
-                src={listing.image}
+                src={listing.image || "/placeholder.svg"}
                 alt={listing.title}
                 fill
                 className="object-cover group-hover:scale-105 transition-transform duration-700"
               />
-              <Badge className="absolute top-4 left-4 bg-forest text-cream rounded-none">
+              <Badge className="absolute top-4 left-4 bg-secondary text-primary-foreground rounded-sm text-xs">
                 {serviceTypeLabels[listing.type]}
               </Badge>
             </div>
-            <div className="p-6 flex-1">
-              <div className="flex items-center gap-1 text-sm text-forest/60 mb-2">
-                <MapPin className="w-3 h-3" />
-                {listing.location}
+            <div className="p-6 flex-1 flex flex-col justify-between">
+              <div>
+                <div className="flex items-center gap-1 text-xs text-muted-foreground mb-2 font-medium">
+                  <MapPin className="w-3 h-3" />
+                  {listing.location}
+                </div>
+                <h3 className="font-serif text-xl text-foreground group-hover:text-primary transition-colors mb-2 font-semibold">
+                  {listing.title}
+                </h3>
+                <p className="text-muted-foreground text-sm mb-4 line-clamp-2">
+                  {listing.shortDescription}
+                </p>
+                {listing.amenities.length > 0 && (
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    {listing.amenities.slice(0, 4).map((amenity) => (
+                      <Badge
+                        key={amenity}
+                        variant="outline"
+                        className="rounded-sm text-xs border-border"
+                      >
+                        {amenity}
+                      </Badge>
+                    ))}
+                  </div>
+                )}
               </div>
-              <h3 className="font-display text-2xl text-forest group-hover:text-terracotta transition-colors mb-2">
-                {listing.title}
-              </h3>
-              <p className="text-forest/60 mb-4 line-clamp-2">
-                {listing.shortDescription}
-              </p>
-              <div className="flex flex-wrap gap-2 mb-4">
-                {listing.amenities.slice(0, 4).map((amenity) => (
-                  <Badge
-                    key={amenity}
-                    variant="outline"
-                    className="rounded-none text-xs"
-                  >
-                    {amenity}
-                  </Badge>
-                ))}
-              </div>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-1">
-                  <Star className="w-4 h-4 fill-gold text-gold" />
-                  <span className="text-sm font-medium text-forest">
+              <div className="flex items-center justify-between pt-4 border-t border-border">
+                <div className="flex items-center gap-2">
+                  <Star className="w-4 h-4 fill-accent text-accent" />
+                  <span className="text-sm font-semibold text-foreground">
                     {listing.rating}
                   </span>
-                  <span className="text-sm text-forest/50">
-                    ({listing.reviews} reviews)
+                  <span className="text-xs text-muted-foreground">
+                    ({listing.reviews})
                   </span>
                 </div>
-                <span className="font-display text-2xl text-terracotta">
+                <span className="font-serif text-lg text-primary font-semibold">
                   ${listing.price}
-                  <span className="text-sm text-forest/50">
+                  <span className="text-xs text-muted-foreground font-normal">
                     {listing.duration ? `/${listing.duration}` : "/night"}
                   </span>
                 </span>
@@ -391,47 +437,49 @@ function ListingCard({
 
   return (
     <Link href={`/listings/${listing.id}`} className="listing-card group">
-      <Card className="overflow-hidden border-0 shadow-md hover:shadow-xl transition-shadow duration-300 rounded-none h-full">
+      <Card className="overflow-hidden border border-border shadow-sm hover:shadow-md transition-shadow duration-300 rounded-sm h-full flex flex-col">
         <div className="relative aspect-[4/3] overflow-hidden">
           <Image
-            src={listing.image}
+            src={listing.image || "/placeholder.svg"}
             alt={listing.title}
             fill
             className="object-cover group-hover:scale-105 transition-transform duration-700"
           />
-          <Badge className="absolute top-4 left-4 bg-forest text-cream rounded-none">
+          <Badge className="absolute top-4 left-4 bg-secondary text-primary-foreground rounded-sm text-xs">
             {serviceTypeLabels[listing.type]}
           </Badge>
           {listing.featured && (
-            <Badge className="absolute top-4 right-4 bg-gold text-forest rounded-none">
+            <Badge className="absolute top-4 right-4 bg-accent text-secondary rounded-sm text-xs font-semibold">
               Featured
             </Badge>
           )}
         </div>
-        <div className="p-6">
-          <div className="flex items-center gap-1 text-sm text-forest/60 mb-2">
-            <MapPin className="w-3 h-3" />
-            {listing.location}
+        <div className="p-5 flex flex-col flex-1 justify-between">
+          <div>
+            <div className="flex items-center gap-1 text-xs text-muted-foreground mb-2 font-medium">
+              <MapPin className="w-3 h-3" />
+              {listing.location}
+            </div>
+            <h3 className="font-serif text-lg text-foreground group-hover:text-primary transition-colors mb-2 font-semibold line-clamp-2">
+              {listing.title}
+            </h3>
+            <p className="text-muted-foreground text-sm mb-4 line-clamp-2">
+              {listing.shortDescription}
+            </p>
           </div>
-          <h3 className="font-display text-xl text-forest group-hover:text-terracotta transition-colors mb-2">
-            {listing.title}
-          </h3>
-          <p className="text-forest/60 text-sm mb-4 line-clamp-2">
-            {listing.shortDescription}
-          </p>
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between pt-4 border-t border-border">
             <div className="flex items-center gap-1">
-              <Star className="w-4 h-4 fill-gold text-gold" />
-              <span className="text-sm font-medium text-forest">
+              <Star className="w-4 h-4 fill-accent text-accent" />
+              <span className="text-sm font-semibold text-foreground">
                 {listing.rating}
               </span>
-              <span className="text-sm text-forest/50">
+              <span className="text-xs text-muted-foreground">
                 ({listing.reviews})
               </span>
             </div>
-            <span className="font-display text-lg text-terracotta">
+            <span className="font-serif text-lg text-primary font-semibold">
               ${listing.price}
-              <span className="text-sm text-forest/50">
+              <span className="text-xs text-muted-foreground font-normal">
                 {listing.duration ? `/${listing.duration}` : "/night"}
               </span>
             </span>
@@ -444,7 +492,7 @@ function ListingCard({
 
 export default function ListingsPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-cream" />}>
+    <Suspense fallback={<div className="min-h-screen bg-background" />}>
       <ListingsContent />
     </Suspense>
   );
