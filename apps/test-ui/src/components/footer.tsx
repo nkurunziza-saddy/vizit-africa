@@ -1,5 +1,5 @@
-import Link from 'next/link';
-import { Mail, MapPin, Phone } from 'lucide-react';
+import Link from "next/link";
+import { Mail, MapPin, Phone } from "lucide-react";
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
@@ -11,7 +11,7 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
           {/* Brand */}
           <div className="lg:col-span-2">
-            <h3 className="font-display text-3xl mb-4">MURUGO</h3>
+            <h3 className="font-display text-3xl mb-4">VIZIT AFRICA</h3>
             <p className="text-primary-foreground/80 max-w-md leading-relaxed mb-6">
               Your home away from home in Rwanda. We connect travelers with
               authentic experiences, comfortable stays, and the warm hospitality
@@ -28,7 +28,7 @@ export function Footer() {
               </div>
               <div className="flex items-center gap-3">
                 <Mail className="w-4 h-4 text-accent" />
-                <span className="text-sm">hello@murugo.rw</span>
+                <span className="text-sm">hello@vizit africa.rw</span>
               </div>
             </div>
           </div>
@@ -101,12 +101,18 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <a href="#about" className="hover:text-primary-foreground transition-colors text-sm">
+                <a
+                  href="#about"
+                  className="hover:text-primary-foreground transition-colors text-sm"
+                >
                   About Rwanda
                 </a>
               </li>
               <li>
-                <a href="#contact" className="hover:text-primary-foreground transition-colors text-sm">
+                <a
+                  href="#contact"
+                  className="hover:text-primary-foreground transition-colors text-sm"
+                >
                   Contact Us
                 </a>
               </li>
@@ -119,7 +125,7 @@ export function Footer() {
       <div className="border-t border-primary-foreground/10">
         <div className="max-w-7xl mx-auto px-6 py-6 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-primary-foreground/50 text-sm">
-            © {currentYear} Murugo Rwanda. All rights reserved.
+            © {currentYear} Vizit Africa Rwanda. All rights reserved.
           </p>
           <p className="text-primary-foreground/50 text-sm">
             Made with love for Rwanda 🏔️

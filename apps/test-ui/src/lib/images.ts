@@ -3,40 +3,40 @@
 
 export const unsplashImages = {
   // Hero - Dramatic mountain/forest landscape
-  hero: "https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?w=1920&q=80",
+  hero: "https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?q=80&w=2000",
 
   // Regions - Card Deck
   virunga:
-    "https://images.unsplash.com/photo-1535083783855-76462b2f9ce8?w=800&q=80", // Mountain gorilla habitat
+    "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=800", // Gorilla/Primate
   nyungwe:
-    "https://images.unsplash.com/photo-1448375240586-882707db888b?w=800&q=80", // Rainforest canopy
+    "https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?q=80&w=800", // Forest
   lakeKivu:
-    "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", // Lake/mountains
+    "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=800", // Lake (Generic beautiful beach/lake)
   kigali:
-    "https://images.unsplash.com/photo-1486325212027-8081e485255e?w=800&q=80", // Modern African city
+    "https://images.unsplash.com/photo-1550961806-03f6f212727e?q=80&w=800", // City
 
   // Horizontal Journey Scenes
   deepForest:
-    "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=1200&q=80", // Misty forest path
+    "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=1200", // Forest path
   bamboo:
-    "https://images.unsplash.com/photo-1596324608967-d436251b0e3e?w=1200&q=80", // Bamboo forest
+    "https://images.unsplash.com/photo-1588392382834-a891154bca4d?q=80&w=1200", // Bamboo-like forest
   mountainVista:
-    "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1200&q=80", // Mountain peaks
+    "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=1200", // Mountains
   lakeside:
-    "https://images.unsplash.com/photo-1439066615861-d1af74d74000?w=1200&q=80", // Lake sunset
+    "https://images.unsplash.com/photo-1499363536502-87642509e31b?q=80&w=1200", // Lake evening
 
   // Featured Listings (generic beautiful travel images)
   lodge:
-    "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600&q=80",
+    "https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=600",
   safari:
-    "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=600&q=80",
+    "https://images.unsplash.com/photo-1575550959106-5a7defe28b56?q=80&w=600",
   resort:
-    "https://images.unsplash.com/photo-1582719508461-905c673771fd?w=600&q=80",
-  camp: "https://images.unsplash.com/photo-1523987355523-c7b5b0dd90a7?w=600&q=80",
+    "https://images.unsplash.com/photo-1571896349842-812e88e34e59?q=80&w=600",
+  camp: "https://images.unsplash.com/photo-1493246507139-91e8fad9978e?q=80&w=600",
 
   // Final CTA
   finalCta:
-    "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=1920&q=80", // Dramatic landscape
+    "https://images.unsplash.com/photo-1472214103451-9374bd1c798e?q=80&w=2000",
 };
 
 // Helper to get image with fallback

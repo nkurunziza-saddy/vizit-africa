@@ -324,7 +324,7 @@ export default function ListingDetailPage({
                     <span className="text-primary font-semibold text-lg">M</span>
                   </div>
                   <div>
-                    <p className="font-semibold text-foreground">Murugo Team</p>
+                    <p className="font-semibold text-foreground">Vizit Africa Team</p>
                     <p className="text-xs text-muted-foreground">Verified Host</p>
                   </div>
                 </div>
