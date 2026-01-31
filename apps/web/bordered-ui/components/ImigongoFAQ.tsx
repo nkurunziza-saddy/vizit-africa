@@ -58,7 +58,6 @@ export function ImigongoFAQ() {
                     {faq.question}
                   </span>
 
-                  {/* Custom Toggle: Expanding Diamond */}
                   <div className="relative w-6 h-6 flex items-center justify-center mt-1">
                     <PatternDiamond
                       className={cn(

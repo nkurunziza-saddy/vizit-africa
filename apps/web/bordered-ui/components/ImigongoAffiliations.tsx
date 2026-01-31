@@ -15,7 +15,6 @@ export function ImigongoAffiliations() {
         </p>
 
         <div className="flex flex-wrap justify-center gap-12 md:gap-24 opacity-80 grayscale mix-blend-screen">
-          {/* Text placeholders for logos - in production these would be SVG/Images */}
           {partners.map((p) => (
             <span
               key={p}

@@ -99,7 +99,7 @@ function ImigongoLoginPage() {
                 Access Portal
               </h1>
               <span className="text-[10px] font-mono text-imigongo-ochre border border-imigongo-ochre px-1">
-                AUTH.v2
+                AUTH
               </span>
             </div>
             <p className="text-xs font-mono text-muted-foreground uppercase">

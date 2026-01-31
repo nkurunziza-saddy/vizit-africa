@@ -27,13 +27,9 @@ export function ImigongoCard({
 }: ImigongoCardProps) {
   return (
     <div
-      className={cn(
-        "flex flex-col bg-white h-full group", // Grid cell background
-        className,
-      )}
+      className={cn("flex flex-col bg-white h-full group", className)}
       {...props}
     >
-      {/* 1. Image Section */}
       <div className="relative aspect-[4/3] w-full overflow-hidden">
         <img
           src={imageSrc}
@@ -43,12 +39,9 @@ export function ImigongoCard({
         <div className="absolute inset-0 border-[3px] border-white pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
       </div>
 
-      {/* 2. Structural Divider (The Ridge) */}
       <div className="h-4 w-full bg-imigongo-black flex items-center overflow-hidden">
         <PatternZigZag className="w-[200%] h-full text-white animate-pulse" />
       </div>
-
-      {/* 3. Content Block */}
       <div className="p-6 md:p-8 flex flex-col flex-grow">
         <div className="flex items-baseline justify-between mb-4">
           <h3 className="text-xl font-black uppercase tracking-tight text-imigongo-black group-hover:text-imigongo-ochre transition-colors max-w-[70%]">
@@ -83,7 +76,6 @@ export function ImigongoCard({
         </div>
       </div>
 
-      {/* 4. Action Bar (Hidden by default, reveals on interaction or just subtle) */}
       <button className="w-full py-4 bg-imigongo-ochre text-white font-bold uppercase tracking-widest text-xs hover:bg-imigongo-black transition-colors">
         Book Experience
       </button>

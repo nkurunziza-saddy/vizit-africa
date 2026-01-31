@@ -4,20 +4,16 @@ import { PatternZigZag } from "./ImigongoPatterns";
 export function ImigongoHero() {
   return (
     <div className="relative min-h-screen w-full flex flex-col justify-end pb-20 overflow-hidden bg-imigongo-black">
-      {/* Background Image - Full Screen */}
       <div className="absolute inset-0 z-0">
         <img
-          src="https://images.unsplash.com/photo-1504707748692-419802cf939d?q=80&w=2047&auto=format&fit=crop"
-          alt="Volcanic Earth Texture"
-          className="w-full h-full object-cover grayscale-20 contrast-125 brightness-50"
+          src="https://images.unsplash.com/photo-1530982011887-3cc11cc85693?q=80&w=2838&auto=format&fit=crop"
+          alt="African Cultural Heritage"
+          className="w-full h-full object-cover grayscale-40 contrast-125 brightness-75"
         />
-        {/* Engineered Overlay: Solid washes */}
         <div className="absolute inset-0 bg-imigongo-black/20 mix-blend-multiply" />
-        <div className="absolute inset-0 bg-linear-to-t from-imigongo-black/90 via-transparent to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-imigongo-black/90 via-transparent to-transparent" />
 
-        {/* Structural Grid Overlay - The "Schematic" Effect */}
         <div className="absolute inset-x-4 md:inset-x-12 inset-y-8 border-l border-r border-white/10 pointer-events-none grid grid-cols-1 md:grid-cols-4 lg:grid-cols-12 gap-4">
-          {/* Grid Columns with Technical Markers */}
           {[...Array(12)].map((_, i) => (
             <div
               key={i}
@@ -38,9 +34,7 @@ export function ImigongoHero() {
         </div>
       </div>
 
-      {/* Content - Aligned to Grid */}
       <div className="relative z-10 px-4 md:px-12 grid grid-cols-1 md:grid-cols-4 lg:grid-cols-12 gap-8 items-end">
-        {/* Headline Area */}
         <div className="col-span-1 md:col-span-3 lg:col-span-7 mb-8 lg:mb-0">
           <div className="inline-flex items-center gap-4 mb-8">
             <span className="text-[10px] font-mono text-imigongo-ochre border border-imigongo-ochre/50 bg-black/50 backdrop-blur-sm px-2 py-1">
@@ -53,7 +47,6 @@ export function ImigongoHero() {
 
           <h1 className="text-6xl md:text-8xl lg:text-[10rem] leading-[0.8] font-black text-white uppercase tracking-tighter mb-8">
             Raw <br />
-            {/* Solid Color Emphasis */}
             <span className="text-imigongo-ochre">Nature</span>
           </h1>
 
@@ -62,10 +55,8 @@ export function ImigongoHero() {
           </p>
         </div>
 
-        {/* Structural Search Widget - SOLID CONTROL PANEL */}
         <div className="col-span-1 md:col-span-4 lg:col-span-5 w-full">
           <div className="bg-white border-2 border-white p-0 shadow-2xl shadow-black/50 relative">
-            {/* Pseudo-element for stacked paper effect */}
             <div className="absolute -bottom-2 -right-2 w-full h-full bg-imigongo-ochre -z-10" />
 
             <div className="flex items-center justify-between p-6 border-b border-imigongo-black/10 bg-white">
@@ -129,7 +120,6 @@ export function ImigongoHero() {
         </div>
       </div>
 
-      {/* Bottom Decorative Pattern - Solid */}
       <div className="absolute bottom-0 left-0 right-0 h-4 z-10 opacity-50 mix-blend-overlay">
         <PatternZigZag className="w-full h-full text-white" />
       </div>

@@ -42,13 +42,11 @@ export function ImigongoFeatures() {
             key={i}
             className="bg-white p-10 flex flex-col items-center text-center group hover:bg-imigongo-black hover:text-white transition-all duration-300 relative overflow-hidden"
           >
-            {/* Tech Background Number */}
             <span className="absolute top-2 right-4 text-[6rem] font-black text-black/[0.03] group-hover:text-white/[0.05] leading-none pointer-events-none">
               0{i + 1}
             </span>
 
             <div className="relative mb-8 p-4">
-              {/* Box Frame for Icon */}
               <div className="absolute inset-0 border-2 border-imigongo-black group-hover:border-white transition-colors" />
               <div className="absolute inset-0 border border-imigongo-black/20 m-1 group-hover:border-white/20" />
 
@@ -65,7 +63,6 @@ export function ImigongoFeatures() {
               {f.desc}
             </p>
 
-            {/* Corner Markers */}
             <div className="absolute bottom-2 left-2 w-2 h-2 border-b border-l border-current opacity-0 group-hover:opacity-50 transition-opacity" />
             <div className="absolute bottom-2 right-2 w-2 h-2 border-b border-r border-current opacity-0 group-hover:opacity-50 transition-opacity" />
           </div>
