@@ -51,26 +51,22 @@ export function ImigongoServices() {
               key={i}
               className="group relative h-auto md:h-64 w-full border-b border-imigongo-black/10 flex flex-col md:flex-row hover:bg-imigongo-black/5 transition-colors overflow-hidden"
             >
-              {/* ID Marking */}
               <div className="absolute top-4 left-4 z-20 text-[10px] font-mono font-bold text-imigongo-black/30 group-hover:text-imigongo-ochre transition-colors">
                 REF.{service.id}
               </div>
 
-              {/* Image Strip */}
               <div className="w-full md:w-1/3 h-64 md:h-full relative overflow-hidden border-r border-imigongo-black/10">
                 <img
                   src={service.image}
                   alt={service.title}
                   className="w-full h-full object-cover grayscale contrast-125 transition-transform duration-700 group-hover:scale-105"
                 />
-                {/* Tech Overlay */}
                 <div className="absolute inset-0 bg-imigongo-ochre/0 group-hover:bg-imigongo-ochre/10 transition-colors mix-blend-multiply" />
                 <div className="absolute bottom-4 right-4 text-white opacity-0 group-hover:opacity-100 transition-opacity">
                   <Plus className="w-6 h-6" strokeWidth={1} />
                 </div>
               </div>
 
-              {/* Content */}
               <div className="flex-1 flex flex-col md:flex-row items-start md:items-center justify-between p-8 md:p-12">
                 <div>
                   <h3 className="text-3xl font-black uppercase text-imigongo-black mb-3 flex items-center gap-4 tracking-tight">

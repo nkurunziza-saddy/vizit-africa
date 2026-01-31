@@ -5,7 +5,6 @@ import {
   useSearch,
 } from "@tanstack/react-router";
 import { AtSignIcon, ChevronLeftIcon } from "lucide-react";
-import { Logo } from "@/components/logo";
 import { Button } from "@/components/ui/button";
 import { ImigongoFloatingPaths } from "@/components/ui/imigongo-floating-paths";
 import {
@@ -15,7 +14,7 @@ import {
 } from "@/components/ui/input-group";
 import { useAuth } from "@/context/auth-context";
 import { z } from "zod";
-import { cn } from "@/lib/utils";
+// cn removed
 
 const searchSchema = z.object({
   redirect: z.string().optional(),
@@ -46,37 +45,13 @@ function ImigongoLoginPage() {
 
   return (
     <main className="relative md:h-screen md:overflow-hidden lg:grid lg:grid-cols-2 bg-imigongo-black font-sans">
-      {/* LEFT COL: The "Wall" */}
       <div className="relative hidden h-full flex-col border-r border-white/10 bg-imigongo-black p-12 lg:flex overflow-hidden">
-        {/* Geometric Background */}
         <div className="absolute inset-0">
           <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-5 mix-blend-overlay" />
-          <ImigongoFloatingPaths position={1} />
-        </div>
-
-        <Link to="/" className="z-10 w-fit">
-          <div className="flex items-center gap-3 font-bold text-xl text-white uppercase tracking-widest">
-            <div className="flex aspect-square size-10 items-center justify-center border-2 border-imigongo-ochre bg-imigongo-black text-imigongo-ochre">
-              <Logo className="size-6" />
-            </div>
-            Vizit Africa
-          </div>
-        </Link>
-
-        <div className="z-10 mt-auto border-l-2 border-imigongo-ochre pl-6">
-          <blockquote className="space-y-4">
-            <p className="text-2xl font-light text-white leading-relaxed tracking-wide">
-              &ldquo;Architecture begins where engineering ends. Verify your
-              identity to access the archives.&rdquo;
-            </p>
-            <footer className="font-mono text-xs text-imigongo-ochre uppercase tracking-widest">
-              ~ System Administrator
-            </footer>
-          </blockquote>
+          <ImigongoFloatingPaths />
         </div>
       </div>
 
-      {/* RIGHT COL: The "Control Panel" Form */}
       <div className="relative flex min-h-screen flex-col justify-center p-8 bg-zinc-50">
         <Link to="/" className="absolute top-8 left-8">
           <Button
@@ -84,26 +59,25 @@ function ImigongoLoginPage() {
             className="gap-2 text-imigongo-black hover:bg-imigongo-black/5 hover:text-imigongo-ochre uppercase tracking-widest text-xs font-bold"
           >
             <ChevronLeftIcon className="h-4 w-4" />
-            Return
+            Go back
           </Button>
         </Link>
 
         <div className="mx-auto w-full max-w-lg border-2 border-imigongo-black/10 bg-white p-12 shadow-2xl shadow-imigongo-black/5 relative">
-          {/* Tech Decoration */}
           <div className="absolute -top-1 -right-1 w-4 h-4 border-t-2 border-r-2 border-imigongo-ochre" />
           <div className="absolute -bottom-1 -left-1 w-4 h-4 border-b-2 border-l-2 border-imigongo-ochre" />
 
           <div className="flex flex-col space-y-2 mb-8 border-b-2 border-imigongo-black pb-4">
             <div className="flex items-center justify-between">
               <h1 className="font-black text-2xl uppercase tracking-tighter text-imigongo-black">
-                Access Portal
+                Login
               </h1>
               <span className="text-[10px] font-mono text-imigongo-ochre border border-imigongo-ochre px-1">
-                AUTH
+                GATE.01
               </span>
             </div>
             <p className="text-xs font-mono text-muted-foreground uppercase">
-              Enter credentials to proceed.
+              Enter credentials to access booking.
             </p>
           </div>
 
@@ -113,7 +87,7 @@ function ImigongoLoginPage() {
               type="button"
             >
               <GoogleIcon className="mr-2 h-4 w-4" />
-              Google Access
+              Continue with Google
             </Button>
           </div>
 
@@ -128,11 +102,11 @@ function ImigongoLoginPage() {
           <form className="space-y-4">
             <InputGroup className="rounded-none">
               <InputGroupInput
-                placeholder="USER.ID / EMAIL"
+                placeholder="PASSENGER ID / EMAIL"
                 type="email"
-                className="rounded-none border-2 border-imigongo-black/20 focus:border-imigongo-ochre bg-transparent font-mono text-sm placeholder:uppercase placeholder:text-xs h-12"
+                className="rounded-none border-imigongo-black/20 focus:border-imigongo-ochre bg-transparent font-mono text-sm placeholder:uppercase placeholder:text-xs h-12"
               />
-              <InputGroupAddon className="rounded-none border-t-2 border-b-2 border-r-2 border-imigongo-black/20 bg-zinc-50 text-imigongo-black/50">
+              <InputGroupAddon>
                 <AtSignIcon className="h-4 w-4" />
               </InputGroupAddon>
             </InputGroup>
@@ -141,11 +115,10 @@ function ImigongoLoginPage() {
               className="w-full rounded-none bg-imigongo-ochre text-white hover:bg-imigongo-black transition-colors font-black uppercase tracking-widest text-xs h-12 shadow-none"
               type="button"
             >
-              Authenticate
+              Secure Login
             </Button>
           </form>
 
-          {/* Test Accounts Panel */}
           <div className="mt-8 pt-8 border-t border-dashed border-imigongo-black/20">
             <span className="block text-[10px] font-mono text-center text-imigongo-black/40 mb-4 uppercase">
               Test Environments

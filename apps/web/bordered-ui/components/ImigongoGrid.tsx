@@ -14,7 +14,7 @@ export function ImigongoGrid({
   return (
     <div
       className={cn(
-        "grid bg-imigongo-black/10 gap-px border border-imigongo-black/10", // The "gap" creates the line effect
+        "grid bg-imigongo-black/10 gap-px border border-imigongo-black/10",
         cols === 1 && "grid-cols-1",
         cols === 2 && "grid-cols-1 md:grid-cols-2",
         cols === 3 && "grid-cols-1 md:grid-cols-2 lg:grid-cols-3",
@@ -23,10 +23,6 @@ export function ImigongoGrid({
       )}
       {...props}
     >
-      {/* 
-        The children of this grid should ideally have white/solid backgrounds 
-        so the 'gap' (showing the bg-imigongo-black/10) looks like a separator line.
-      */}
       {children}
     </div>
   );

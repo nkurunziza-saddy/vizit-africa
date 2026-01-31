@@ -4,7 +4,6 @@ import React from "react";
 export function ImigongoFooter() {
   return (
     <footer className="bg-imigongo-black text-white py-16 border-t-4 border-imigongo-ochre relative overflow-hidden">
-      {/* Background Pattern */}
       <div className="absolute top-0 right-0 p-8 opacity-10 pointer-events-none">
         <PatternDiamond className="w-64 h-64" />
       </div>
@@ -66,7 +65,7 @@ export function ImigongoFooter() {
 
       <div className="container mx-auto px-4 mt-16 pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center text-sm text-white/40">
         <p>&copy; 2025 Vizit Africa. All rights reserved.</p>
-        <p>Inspired by Imigongo Art</p>
+        <p>Inspired by Imigongo</p>
       </div>
     </footer>
   );

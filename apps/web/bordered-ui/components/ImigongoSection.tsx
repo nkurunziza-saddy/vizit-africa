@@ -19,7 +19,6 @@ export function ImigongoSection({
     >
       {title && (
         <div className="flex items-end gap-6 mb-16">
-          {/* Structural Vertical Line Block */}
           <div className="hidden md:flex flex-col gap-1 w-6">
             {Array.from({ length: 5 }).map((_, i) => (
               <PatternDiamond key={i} className="w-6 h-6 text-imigongo-black" />
