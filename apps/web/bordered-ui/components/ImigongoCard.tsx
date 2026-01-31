@@ -1,19 +1,26 @@
 import React from "react";
 import { cn } from "@/lib/utils";
-import { PatternDiamond, PatternSpiral } from "./ImigongoPatterns";
+import { Star } from "lucide-react";
+import { PatternZigZag } from "./ImigongoPatterns";
 
 interface ImigongoCardProps extends React.ComponentProps<"div"> {
-  title?: string;
-  imageSrc?: string;
-  price?: string;
-  badge?: string;
+  title: string;
+  imageSrc: string;
+  price: string;
+  rating?: number;
+  reviews?: number;
+  duration?: string;
+  location?: string;
 }
 
 export function ImigongoCard({
   title,
   imageSrc,
   price,
-  badge,
+  rating = 4.8,
+  reviews = 124,
+  duration = "3h",
+  location = "Kigali",
   className,
   children,
   ...props
@@ -21,71 +28,65 @@ export function ImigongoCard({
   return (
     <div
       className={cn(
-        "group relative bg-white border-2 border-imigongo-black overflow-hidden hover:-translate-y-1 hover:shadow-[4px_4px_0px_var(--color-imigongo-ochre)] transition-all duration-300",
+        "flex flex-col bg-white h-full group", // Grid cell background
         className,
       )}
       {...props}
     >
-      {/* Accent Corner */}
-      <div className="absolute top-0 right-0 p-1 bg-imigongo-black text-white z-10">
-        <PatternDiamond className="w-4 h-4 text-imigongo-white" />
+      {/* 1. Image Section */}
+      <div className="relative aspect-[4/3] w-full overflow-hidden">
+        <img
+          src={imageSrc}
+          alt={title}
+          className="h-full w-full object-cover grayscale-20 group-hover:grayscale-0 transition-all duration-700"
+        />
+        <div className="absolute inset-0 border-[3px] border-white pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
       </div>
 
-      {imageSrc && (
-        <div className="relative h-48 w-full border-b-2 border-imigongo-black overflow-hidden">
-          <img
-            src={imageSrc}
-            alt={title}
-            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-          />
-          {badge && (
-            <span className="absolute top-2 left-2 bg-imigongo-ochre text-white text-xs font-bold px-2 py-1 uppercase tracking-wider border border-imigongo-black">
-              {badge}
-            </span>
-          )}
-        </div>
-      )}
+      {/* 2. Structural Divider (The Ridge) */}
+      <div className="h-4 w-full bg-imigongo-black flex items-center overflow-hidden">
+        <PatternZigZag className="w-[200%] h-full text-white animate-pulse" />
+      </div>
 
-      <div className="p-4 relative">
-        {/* Decorative Spiral on background */}
-        <PatternSpiral className="absolute bottom-2 right-2 w-16 h-16 text-imigongo-ochre/10 pointer-events-none" />
-
-        {title && (
-          <h3 className="text-xl font-bold uppercase tracking-tight text-imigongo-black mb-2">
+      {/* 3. Content Block */}
+      <div className="p-6 md:p-8 flex flex-col flex-grow">
+        <div className="flex items-baseline justify-between mb-4">
+          <h3 className="text-xl font-black uppercase tracking-tight text-imigongo-black group-hover:text-imigongo-ochre transition-colors max-w-[70%]">
             {title}
           </h3>
-        )}
-
-        {price && (
-          <div className="text-imigongo-ochre font-mono font-bold text-lg mb-3">
+          <span className="text-imigongo-ochre font-mono font-bold text-lg">
             {price}
-          </div>
-        )}
-
-        <div className="text-imigongo-dark/80 text-sm relative z-10">
-          {children}
+          </span>
         </div>
 
-        <div className="mt-4 pt-4 border-t-2 border-dashed border-imigongo-black/20 flex justify-between items-center">
-          <span className="text-xs font-bold text-imigongo-black uppercase">
-            Book Now
-          </span>
-          <svg
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="w-4 h-4 text-imigongo-ochre group-hover:translate-x-1 transition-transform"
-          >
-            <path d="M5 12h14" />
-            <path d="m12 5 7 7-7 7" />
-          </svg>
+        {children && (
+          <p className="text-imigongo-black/70 text-sm leading-relaxed mb-6 line-clamp-3">
+            {children}
+          </p>
+        )}
+
+        <div className="mt-auto grid grid-cols-3 border-t border-imigongo-black/10 pt-4 text-xs font-bold uppercase tracking-wider text-imigongo-black/50">
+          <div className="flex flex-col gap-1">
+            <span className="text-[10px] text-imigongo-ochre">Rating</span>
+            <div className="flex items-center gap-1 text-imigongo-black">
+              <Star className="w-3 h-3 fill-current" /> {rating}
+            </div>
+          </div>
+          <div className="flex flex-col gap-1 pl-4 border-l border-imigongo-black/10">
+            <span className="text-[10px] text-imigongo-ochre">Time</span>
+            <span className="text-imigongo-black">{duration}</span>
+          </div>
+          <div className="flex flex-col gap-1 pl-4 border-l border-imigongo-black/10">
+            <span className="text-[10px] text-imigongo-ochre">Place</span>
+            <span className="text-imigongo-black truncate">{location}</span>
+          </div>
         </div>
       </div>
+
+      {/* 4. Action Bar (Hidden by default, reveals on interaction or just subtle) */}
+      <button className="w-full py-4 bg-imigongo-ochre text-white font-bold uppercase tracking-widest text-xs hover:bg-imigongo-black transition-colors">
+        Book Experience
+      </button>
     </div>
   );
 }

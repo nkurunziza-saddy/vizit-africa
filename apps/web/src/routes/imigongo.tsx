@@ -1,106 +1,169 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { ImigongoContainer } from "bordered-ui/components/ImigongoContainer";
-import { ImigongoCard } from "bordered-ui/components/ImigongoCard";
-import { ImigongoSection } from "bordered-ui/components/ImigongoSection";
-import { PatternZigZag } from "bordered-ui/components/ImigongoPatterns";
+import { ImigongoCard } from "../../bordered-ui/components/ImigongoCard";
+import { ImigongoFooter } from "../../bordered-ui/components/ImigongoFooter";
+import { ImigongoGrid } from "../../bordered-ui/components/ImigongoGrid";
+import { ImigongoHeader } from "../../bordered-ui/components/ImigongoHeader";
+import { ImigongoHero } from "../../bordered-ui/components/ImigongoHero";
+import { ImigongoSection } from "../../bordered-ui/components/ImigongoSection";
+import { PatternZigZag } from "../../bordered-ui/components/ImigongoPatterns";
+
+import { ImigongoFeatures } from "../../bordered-ui/components/ImigongoFeatures";
+import { ImigongoServices } from "../../bordered-ui/components/ImigongoServices";
+import { ImigongoAffiliations } from "../../bordered-ui/components/ImigongoAffiliations";
+import { ImigongoFAQ } from "../../bordered-ui/components/ImigongoFAQ";
 
 export const Route = createFileRoute("/imigongo")({
-  component: ImigongoPage,
+	component: ImigongoPage,
 });
 
-import { ImigongoHeader } from "bordered-ui/components/ImigongoHeader";
-import { ImigongoFooter } from "bordered-ui/components/ImigongoFooter";
-
 function ImigongoPage() {
-  return (
-    <div className="bg-background min-h-screen flex flex-col">
-      <ImigongoHeader />
-      <main className="flex-grow">
-        {/* Hero Section */}
-        <div className="relative pt-20 pb-16 overflow-hidden">
-          <div className="absolute top-0 inset-x-0 h-4 bg-imigongo-ochre/10">
-            <PatternZigZag className="w-full h-full text-imigongo-black opacity-20" />
-          </div>
+	return (
+		<div className="bg-background min-h-screen flex flex-col">
+			<ImigongoHeader />
+			<main className="flex-grow">
+				<ImigongoHero />
+				<ImigongoAffiliations />
+				<ImigongoFeatures />
+				<ImigongoServices />
 
-          <div className="container mx-auto px-4 text-center">
-            <span className="inline-block py-1 px-3 border border-imigongo-black text-xs font-bold uppercase tracking-widest mb-4 bg-imigongo-ochre text-white">
-              Premium experience
-            </span>
-            <h1 className="text-5xl md:text-7xl font-black mb-6 uppercase tracking-tighter text-imigongo-black">
-              Discover{" "}
-              <span className="text-imigongo-ochre underline decoration-wavy decoration-4">
-                Rwanda
-              </span>
-            </h1>
-            <p className="text-xl md:text-2xl text-imigongo-black/70 max-w-2xl mx-auto mb-10 font-medium">
-              Immerse yourself in the culture with our curated tours and
-              experiences.
-            </p>
-          </div>
-        </div>
+				<ImigongoSection title="Popular Experiences">
+					<ImigongoGrid cols={3}>
+						<ImigongoCard
+							title="Kigali Street Art Walk"
+							price="$45"
+							imageSrc="https://images.unsplash.com/photo-1547891654-e66ed7ebb968?q=80&w=2070&auto=format&fit=crop"
+							rating={4.9}
+							reviews={86}
+							duration="3h"
+							location="Nyamirambo"
+						>
+							Discover the vibrant murals and hidden galleries of Kigali's most
+							colorful neighborhood with a local artist.
+						</ImigongoCard>
 
-        <ImigongoSection title="Upcoming Events" patternPosition="top">
-          <ImigongoContainer variant="zigzag" className="mt-8 bg-white/50">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              <ImigongoCard
-                title="Kigali Art Walk"
-                price="$45"
-                imageSrc="https://images.unsplash.com/photo-1547891654-e66ed7ebb968?q=80&w=2070&auto=format&fit=crop"
-                badge="Popular"
-              >
-                Explore the vibrant street art and galleries of Nyamirambo.
-              </ImigongoCard>
+						<ImigongoCard
+							title="Volcanoes National Park Trek"
+							price="$1500"
+							imageSrc="https://plus.unsplash.com/premium_photo-1664303847960-586318f59035?q=80&w=1974&auto=format&fit=crop"
+							rating={5.0}
+							reviews={204}
+							duration="2d"
+							location="Musanze"
+						>
+							A once-in-a-lifetime encounter with the majestic mountain gorillas
+							in their natural habitat.
+						</ImigongoCard>
 
-              <ImigongoCard
-                title="Coffee Masterclass"
-                price="$30"
-                imageSrc="https://images.unsplash.com/photo-1497935586351-b67a49e012bf?q=80&w=2071&auto=format&fit=crop"
-              >
-                Learn the journey from bean to cup with expert baristas.
-              </ImigongoCard>
+						<ImigongoCard
+							title="Lake Kivu Kayak Adventure"
+							price="$60"
+							imageSrc="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?q=80&w=2070&auto=format&fit=crop"
+							rating={4.7}
+							reviews={42}
+							duration="4h"
+							location="Gisenyi"
+						>
+							Paddle through the serene waters of Lake Kivu and watch the sunset
+							over the singing fishermen.
+						</ImigongoCard>
 
-              <ImigongoCard
-                title="Traditional Dance"
-                price="$60"
-                imageSrc="https://images.unsplash.com/photo-1516483638261-f4dbaf036963?q=80&w=668&auto=format&fit=crop"
-                badge="Selling Fast"
-              >
-                An evening of Intore dance and drumming performances.
-              </ImigongoCard>
-            </div>
-          </ImigongoContainer>
-        </ImigongoSection>
+						<ImigongoCard
+							title="Akagera Game Drive"
+							price="$120"
+							imageSrc="https://images.unsplash.com/photo-1516426122078-c23e76319801?q=80&w=2068&auto=format&fit=crop"
+							rating={4.8}
+							reviews={115}
+							duration="1d"
+							location="Akagera"
+						>
+							Spot the Big Five in Rwanda's only savannah park with experienced
+							guides.
+						</ImigongoCard>
 
-        <ImigongoSection
-          className="bg-imigongo-black text-white"
-          patternPosition="bottom"
-        >
-          <div className="grid md:grid-cols-2 gap-12 items-center py-12">
-            <div>
-              <h2 className="text-4xl font-black mb-6 uppercase">
-                The Imigongo Story
-              </h2>
-              <p className="text-lg opacity-90 leading-relaxed mb-6">
-                Originating from the Kibungo province, Imigongo art is a
-                traditional form created using cow dung and natural pigments.
-                The geometric patterns—zigzags, spirals, and diamonds—represent
-                the topography and everyday life of Rwanda.
-              </p>
-              <button className="px-8 py-3 bg-imigongo-ochre text-white font-bold uppercase tracking-wider border-2 border-white hover:bg-white hover:text-imigongo-black transition-colors">
-                Learn More
-              </button>
-            </div>
-            <div className="relative aspect-square md:aspect-video border-4 border-white">
-              <div className="absolute inset-0 bg-imigongo-ochre/20 z-0"></div>
-              <PatternZigZag className="absolute top-1/2 left-0 w-full text-white/10 -translate-y-1/2 scale-150 rotate-45" />
-              <div className="absolute inset-0 flex items-center justify-center">
-                <span className="text-6xl font-black opacity-20">ART</span>
-              </div>
-            </div>
-          </div>
-        </ImigongoSection>
-      </main>
-      <ImigongoFooter />
-    </div>
-  );
+						<ImigongoCard
+							title="Cultural Village Visit"
+							price="$35"
+							imageSrc="https://images.unsplash.com/photo-1523531294919-4bcd7c65e216?q=80&w=2070&auto=format&fit=crop"
+							rating={4.6}
+							reviews={55}
+							duration="5h"
+							location="Musanze"
+						>
+							Experience traditional Rwandan life, dance, and archery at the
+							Iby'Iwacu Cultural Village.
+						</ImigongoCard>
+
+						<ImigongoCard
+							title="Coffee Plantation Tour"
+							price="$25"
+							imageSrc="https://images.unsplash.com/photo-1600093463592-8e36ae95ef56?q=80&w=2070&auto=format&fit=crop"
+							rating={4.9}
+							reviews={92}
+							duration="3h"
+							location="Huye"
+						>
+							Trace the journey of the coffee bean from the crop to the cup in
+							the heart of Rwanda's coffee region.
+						</ImigongoCard>
+					</ImigongoGrid>
+				</ImigongoSection>
+
+				<div className="w-full grid grid-cols-1 md:grid-cols-2 min-h-[80vh]">
+					{/* Left Col: Image Art */}
+					<div className="relative h-[60vh] md:h-auto bg-imigongo-black overflow-hidden group">
+						<img
+							src="https://images.unsplash.com/photo-1547891654-e66ed7ebb968?q=80&w=2070&auto=format&fit=crop"
+							alt="Imigongo Art Process"
+							className="absolute inset-0 w-full h-full object-cover grayscale opacity-60 group-hover:scale-105 transition-transform duration-[3s] ease-in-out"
+						/>
+						<div className="absolute inset-0 bg-imigongo-ochre/20 mix-blend-multiply" />
+
+						{/* Structural Overlay Text */}
+						<div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+							<span className="text-[20vw] font-black text-white/10 leading-none tracking-tighter mix-blend-overlay">
+								ART
+							</span>
+						</div>
+					</div>
+
+					{/* Right Col: Story Text */}
+					<div className="bg-imigongo-black text-white flex flex-col justify-center p-12 md:p-24 lg:p-32 border-l-4 border-imigongo-ochre">
+						<div className="mb-12">
+							<PatternZigZag className="w-64 h-8 text-imigongo-ochre mb-8 -ml-2" />
+							<h2 className="text-5xl md:text-7xl font-black uppercase tracking-tighter leading-[0.9] mb-8">
+								The <br />
+								<span className="text-imigongo-ochre">Earth</span> <br />
+								Speaks
+							</h2>
+						</div>
+
+						<div className="space-y-8 max-w-xl">
+							<p className="text-2xl font-light leading-relaxed text-white/90">
+								Originating from the walls of the royal huts in Kibungo,
+								Imigongo is more than decoration—it is architecture.
+							</p>
+							<p className="text-lg text-white/60 leading-relaxed">
+								Created using cow dung and natural pigments, the geometric
+								ridges created zigzags, spirals, and diamonds that represented
+								the topography of the Rwandan hills and the rhythm of everyday
+								life. Today, we bring this structural beauty to your travel
+								experience.
+							</p>
+						</div>
+
+						<div className="mt-16">
+							<button
+								type="button"
+								className="px-12 py-5 border-2 border-white/20 text-white font-bold uppercase tracking-[0.2em] hover:bg-imigongo-ochre hover:border-imigongo-ochre transition-all"
+							>
+								Read the full story
+							</button>
+						</div>
+					</div>
+				</div>
+				<ImigongoFAQ />
+			</main>
+			<ImigongoFooter />
+		</div>
+	);
 }
