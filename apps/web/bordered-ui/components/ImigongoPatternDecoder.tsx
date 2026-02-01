@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import { PatternZigZag } from "./ImigongoPatterns";
+import { PatternVerticalDiamond } from "./ImigongoPatterns";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
@@ -72,7 +72,7 @@ export function ImigongoPatternDecoder() {
           </p>
           <div className="flex gap-4">
             <div className="w-16 h-16 border-2 border-imigongo-black flex items-center justify-center">
-              <PatternZigZag className="w-8 h-8" />
+              <PatternVerticalDiamond className="w-8 h-8" />
             </div>
             <p className="text-sm font-bold uppercase tracking-widest max-w-[150px] self-center">
               Strength in <br /> Structure
@@ -88,7 +88,7 @@ export function ImigongoPatternDecoder() {
           <div className="grid-part-2 absolute bg-white w-32 h-32 bottom-10 right-10 rotate-45 mix-blend-difference" />
           <div className="grid-part-1 absolute bg-white w-16 h-16 inset-0 m-auto rotate-12 mix-blend-difference" />
 
-          <PatternZigZag className="w-full h-full text-imigongo-ochre opacity-20 absolute inset-0" />
+          <PatternVerticalDiamond className="w-full h-full text-imigongo-ochre opacity-20 absolute inset-0" />
           <h3 className="relative z-10 text-white text-5xl font-black uppercase mix-blend-overlay opacity-50">
             Geometry
           </h3>

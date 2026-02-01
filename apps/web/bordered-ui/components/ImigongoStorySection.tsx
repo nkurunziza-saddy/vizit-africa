@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import { motion, useScroll, useTransform } from "motion/react";
 import { cn } from "@/lib/utils";
-import { PatternZigZag } from "./ImigongoPatterns";
+import { PatternHorizontalDiamonds } from "./ImigongoPatterns";
 import { ImigongoCuratorNote } from "./ImigongoCuratorNote";
 
 interface ImigongoStorySectionProps {
@@ -73,7 +73,7 @@ export function ImigongoStorySection({
       >
         <motion.div style={{ y: textY }}>
           <div className="mb-12 relative">
-            <PatternZigZag className="w-64 h-8 text-imigongo-ochre mb-8 -ml-2" />
+            <PatternHorizontalDiamonds className="w-64 h-8 text-imigongo-ochre mb-8 -ml-2" />
 
             <div className="text-5xl md:text-7xl font-black uppercase tracking-tighter leading-[0.9] mb-8">
               {title}

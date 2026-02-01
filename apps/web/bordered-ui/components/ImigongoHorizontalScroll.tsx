@@ -2,7 +2,8 @@ import { useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
-import { PatternZigZag } from "./ImigongoPatterns";
+import { ImigongoSectionTitle } from "./ImigongoSectionTitle";
+import { PatternVerticalDiamond } from "./ImigongoPatterns";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -11,7 +12,7 @@ const parks = [
     title: "Volcanoes",
     subtitle: "Home of the Mountain Gorilla",
     image:
-      "https://plus.unsplash.com/premium_photo-1664303847960-586318f59035?q=80&w=1974&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1688647668631-f925f5431fcd?q=80&w=1974&auto=format&fit=crop",
     desc: "A chain of dormant volcanoes forming a sanctuary for the gentle giants.",
     id: "01",
   },
@@ -75,16 +76,28 @@ export function ImigongoHorizontalScroll() {
     >
       <div ref={triggerRef} className="h-full flex flex-col justify-center">
         <div className="px-12 mb-12 flex flex-col z-10 relative">
-          <div className="flex items-center gap-4 mb-4">
-            <PatternZigZag className="w-8 h-8 text-imigongo-ochre shrink-0 rotate-90" />
-            <h2 className="text-3xl md:text-4xl font-black uppercase tracking-tighter text-white leading-none">
-              The Great <span className="text-imigongo-ochre">Parks</span>
-            </h2>
-          </div>
-          <p className="text-xl text-white/70 max-w-2xl font-serif font-light">
-            A journey through the varied and majestic landscapes of the rift
-            valley.
-          </p>
+          <ImigongoSectionTitle
+            title={
+              <>
+                The Great <span className="text-imigongo-ochre">Parks</span>
+              </>
+            }
+            subtitle="A journey through the varied and majestic landscapes of the rift valley."
+            align="left"
+            theme="dark"
+            className="mb-0"
+            tooltip={
+              <div className="flex flex-col gap-1">
+                <h4 className="font-bold uppercase tracking-widest text-imigongo-ochre text-xs">
+                  Isi (The Earth)
+                </h4>
+                <p className="text-white/80 font-light text-xs leading-relaxed">
+                  Protected lands. Material: *Ibyatsi* (grass) and *Inkwi*
+                  (wood), representing the organic flow of nature.
+                </p>
+              </div>
+            }
+          />
         </div>
 
         <div ref={sliderRef} className="flex gap-8 items-center px-12 w-max">
@@ -124,7 +137,7 @@ export function ImigongoHorizontalScroll() {
 
           <div className="h-[60vh] w-[400px] flex-shrink-0 flex items-center justify-center border-l border-white/10 opacity-50 pr-24">
             <div className="text-center">
-              <PatternZigZag className="w-24 h-24 text-imigongo-ochre mx-auto mb-8 rotate-90" />
+              <PatternVerticalDiamond className="w-24 h-96 text-imigongo-ochre mx-auto mb-8" />
               <span className="text-white text-3xl font-bold uppercase tracking-widest block">
                 End of <br /> Expedition
               </span>

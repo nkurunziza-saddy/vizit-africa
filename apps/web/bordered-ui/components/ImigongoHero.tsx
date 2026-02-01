@@ -1,5 +1,5 @@
 import { Search, Calendar, Users, MapPin } from "lucide-react";
-import { PatternZigZag } from "./ImigongoPatterns";
+import { PatternZigZag, PatternVerticalDiamond } from "./ImigongoPatterns";
 import { motion } from "motion/react";
 
 export function ImigongoHero() {
@@ -7,15 +7,15 @@ export function ImigongoHero() {
     <div className="relative min-h-screen w-full flex flex-col justify-end pb-20 overflow-hidden bg-imigongo-black">
       <div className="absolute inset-0 z-0">
         <img
-          src="https://images.unsplash.com/photo-1530982011887-3cc11cc85693?q=80&w=2838&auto=format&fit=crop"
+          src="https://images.unsplash.com/photo-1688647668631-f925f5431fcd?q=80&w=2600&auto=format&fit=crop"
           alt="African Cultural Heritage"
-          className="w-full h-full object-cover grayscale-40 contrast-125 brightness-75"
+          className="w-full h-full object-cover grayscale-20 contrast-125 brightness-50"
         />
-        <div className="absolute inset-0 bg-imigongo-black/20 mix-blend-multiply" />
-        <div className="absolute inset-0 bg-gradient-to-t from-imigongo-black/90 via-transparent to-transparent" />
+        <div className="absolute inset-0 bg-imigongo-black/40 mix-blend-multiply" />
+        <div className="absolute inset-0 bg-gradient-to-t from-imigongo-black via-transparent to-black/30" />
 
-        <div className="absolute inset-0 opacity-10 mix-blend-overlay pointer-events-none">
-          <PatternZigZag className="w-full h-full text-white scale-[2] rotate-3 opacity-30" />
+        <div className="absolute top-0 right-12 bottom-0 w-32 opacity-20 pointer-events-none hidden lg:block">
+          <PatternVerticalDiamond className="w-full h-full text-white/10" />
         </div>
       </div>
 

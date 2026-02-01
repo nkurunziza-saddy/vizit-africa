@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { cn } from "@/lib/utils";
-import { PatternDiamond, PatternZigZag } from "./ImigongoPatterns";
+import { PatternDiamond } from "./ImigongoPatterns";
+import { ImigongoSectionTitle } from "./ImigongoSectionTitle";
 
 const faqs = [
   {
@@ -31,30 +32,24 @@ export function ImigongoFAQ() {
   return (
     <div className="py-24 bg-imigongo-black/5">
       <div className="container mx-auto px-4 max-w-4xl">
-        <div className="flex flex-col items-center gap-4 relative text-center mb-16">
-          <div className="w-24 h-1 bg-imigongo-ochre mb-2" />
-
-          <div className="flex items-center gap-4 justify-center">
-            <PatternZigZag
-              className="w-8 h-8 text-imigongo-ochre shrink-0 rotate-90"
-              strokeWidth={3}
-            />
-            <h2 className="text-4xl md:text-5xl font-black uppercase tracking-tighter text-imigongo-black">
-              Frequently Asked
-            </h2>
-            <PatternZigZag
-              className="w-8 h-8 text-imigongo-ochre shrink-0 rotate-90"
-              strokeWidth={3}
-            />
-          </div>
-
-          <div className="w-full max-w-md h-3 mt-1 overflow-hidden">
-            <PatternZigZag
-              className="w-full h-full text-imigongo-black"
-              strokeWidth={3}
-            />
-          </div>
-        </div>
+        <ImigongoSectionTitle
+          title={
+            <>
+              Frequently <span className="text-imigongo-ochre">Asked</span>
+            </>
+          }
+          tooltip={
+            <div className="flex flex-col gap-1">
+              <h4 className="font-bold uppercase tracking-widest text-imigongo-ochre text-xs">
+                Amatsiko (Curiosity)
+              </h4>
+              <p className="font-light text-xs leading-relaxed opacity-80">
+                The quest for knowledge. Material: *Ingwa* (white clay),
+                highlighting paths and clarifying shapes.
+              </p>
+            </div>
+          }
+        />
 
         <div className="border-t-2 border-imigongo-black">
           {faqs.map((faq, i) => {

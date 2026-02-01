@@ -1,4 +1,9 @@
-import { PatternZigZag } from "./ImigongoPatterns";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { PatternHorizontalDiamonds } from "./ImigongoPatterns";
 import React from "react";
 
 export function ImigongoHeader() {
@@ -6,9 +11,27 @@ export function ImigongoHeader() {
     <header className="sticky top-0 z-50 w-full bg-white border-b-2 border-imigongo-black">
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 bg-imigongo-ochre flex items-center justify-center">
-            <PatternZigZag className="w-full h-full text-white rotate-90 scale-150" />
-          </div>
+          <Tooltip>
+            <TooltipTrigger>
+              <PatternHorizontalDiamonds className="w-12 h-6 text-imigongo-ochre shrink-0 cursor-help" />
+            </TooltipTrigger>
+            <TooltipContent className="bg-imigongo-black border border-imigongo-ochre text-white p-4 max-w-xs shadow-xl rounded-none">
+              <div className="flex flex-col gap-1">
+                <h4 className="font-bold uppercase tracking-widest text-imigongo-ochre text-xs">
+                  Imigongo (Cow Dung Art)
+                </h4>
+                <div className="mt-2 border-t border-white/20 pt-2">
+                  <span className="block text-[10px] uppercase font-bold text-imigongo-ochre mb-1">
+                    Material
+                  </span>
+                  <p className="text-white/80 font-light text-xs leading-relaxed">
+                    Cow dung (Amase) mixed with natural ash (Ivu) and pigmented
+                    earth.
+                  </p>
+                </div>
+              </div>
+            </TooltipContent>
+          </Tooltip>
           <span className="text-xl font-black uppercase tracking-tighter text-imigongo-black">
             Vizit<span className="text-imigongo-ochre">Africa</span>
           </span>

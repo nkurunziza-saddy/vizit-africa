@@ -4,9 +4,8 @@ import {
   useNavigate,
   useSearch,
 } from "@tanstack/react-router";
-import { AtSignIcon, ChevronLeftIcon } from "lucide-react";
+import { AtSignIcon, ChevronLeftIcon, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { ImigongoFloatingPaths } from "@/components/ui/imigongo-floating-paths";
 import {
   InputGroup,
   InputGroupAddon,
@@ -14,7 +13,11 @@ import {
 } from "@/components/ui/input-group";
 import { useAuth } from "@/context/auth-context";
 import { z } from "zod";
-// cn removed
+import {
+  PatternHorizontalDiamonds,
+  PatternVerticalDiamond,
+} from "../../bordered-ui/components/ImigongoPatterns";
+import { ImigongoLenis } from "../../bordered-ui/components/ImigongoLenis";
 
 const searchSchema = z.object({
   redirect: z.string().optional(),
@@ -26,7 +29,7 @@ export const Route = createFileRoute("/imigongo-login")({
 });
 
 function ImigongoLoginPage() {
-  const { login, isLoading } = useAuth();
+  const { login } = useAuth();
   const navigate = useNavigate();
   const search = useSearch({ from: "/imigongo-login" });
 
@@ -44,155 +47,165 @@ function ImigongoLoginPage() {
   };
 
   return (
-    <main className="relative md:h-screen md:overflow-hidden lg:grid lg:grid-cols-2 bg-imigongo-black font-sans">
-      <div className="relative hidden h-full flex-col border-r border-white/10 bg-imigongo-black p-12 lg:flex overflow-hidden">
-        {/* Rich Textured Background for Tourism Vibe */}
-        <div className="absolute inset-0">
-          {/* Woven Basket / Natural Texture Effect */}
-          <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1590422731174-84d56734139e?q=80&w=2675&auto=format&fit=crop')] opacity-20 mix-blend-overlay grayscale contrast-125" />
-          <div className="absolute inset-0 bg-linear-to-b from-imigongo-black via-transparent to-imigongo-black opacity-80" />
+    <ImigongoLenis>
+      <main className="relative min-h-screen bg-imigongo-black font-sans flex items-center justify-center p-4 md:p-8 overflow-hidden">
+        {/* Background Texture */}
+        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-5 pointer-events-none" />
+        <div className="absolute inset-0 bg-linear-to-br from-imigongo-ochre/10 via-transparent to-transparent pointer-events-none" />
 
-          {/* Static Zig-Zag Borders */}
-          <ImigongoFloatingPaths />
+        {/* Floating Patterns */}
+        <div className="absolute top-0 left-10 h-full opacity-10 pointer-events-none hidden lg:block">
+          <PatternVerticalDiamond className="w-24 h-full text-white" />
+        </div>
+        <div className="absolute bottom-0 right-10 h-full opacity-10 pointer-events-none hidden lg:block">
+          <PatternVerticalDiamond className="w-24 h-full text-white rotate-180" />
         </div>
 
-        {/* Central Cultural Motif - The "Gallery Piece" */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 flex items-center justify-center opacity-10 pointer-events-none">
-          <div className="relative w-64 h-64 border-2 border-imigongo-ochre rotate-45 flex items-center justify-center">
-            <div className="w-48 h-48 border border-white rotate-0" />
-            <div className="absolute inset-0 border-t-2 border-r-2 border-white scale-125" />
-          </div>
-        </div>
-
-        <Link to="/" className="z-10 w-fit">
-          <div className="flex items-center gap-3 font-bold text-xl text-white uppercase tracking-widest bg-black/40 backdrop-blur-md px-4 py-2 border border-white/10">
-            <div className="flex aspect-square size-8 items-center justify-center bg-imigongo-ochre text-imigongo-black">
-              <span className="text-[10px] font-black">VZ</span>
-            </div>
-            Vizit Africa
-          </div>
-        </Link>
-
-        <div className="z-10 mt-auto border-l-4 border-imigongo-ochre pl-8 py-2 bg-black/20 backdrop-blur-sm max-w-lg">
-          <blockquote className="space-y-4">
-            <span className="text-[10px] font-mono text-imigongo-ochre uppercase tracking-widest block mb-2">
-              Discover Rwanda
-            </span>
-            <p className="text-3xl font-light text-white leading-tight tracking-wide font-serif italic">
-              "Experience the art of travel. Where ancient tradition meets
-              modern comfort."
-            </p>
-          </blockquote>
-        </div>
-      </div>
-
-      <div className="relative flex min-h-screen flex-col justify-center p-8 bg-zinc-50">
-        <Link to="/" className="absolute top-8 left-8">
+        <Link to="/" className="absolute top-8 left-8 z-50">
           <Button
             variant="ghost"
-            className="gap-2 text-imigongo-black hover:bg-imigongo-black/5 hover:text-imigongo-ochre uppercase tracking-widest text-xs font-bold"
+            className="gap-2 text-white/50 hover:bg-white/10 hover:text-imigongo-ochre uppercase tracking-widest text-xs font-bold"
           >
             <ChevronLeftIcon className="h-4 w-4" />
-            Go back
+            Home
           </Button>
         </Link>
 
-        <div className="mx-auto w-full max-w-lg border-2 border-imigongo-black/10 bg-white p-12 shadow-2xl shadow-imigongo-black/5 relative">
-          <div className="absolute -top-1 -right-1 w-4 h-4 border-t-2 border-r-2 border-imigongo-ochre" />
-          <div className="absolute -bottom-1 -left-1 w-4 h-4 border-b-2 border-l-2 border-imigongo-ochre" />
+        {/* Ticket Container */}
+        <div className="relative w-full max-w-4xl bg-[#f0eee6] shadow-2xl overflow-hidden flex flex-col md:flex-row min-h-[600px] border border-white/10">
+          {/* Left Side: The "Stub" */}
+          <div className="relative w-full md:w-1/3 bg-imigongo-ochre p-8 flex flex-col justify-between border-r-2 border-dashed border-imigongo-black/20 text-imigongo-black">
+            <div className="absolute -right-3 top-[-10px] w-6 h-6 bg-imigongo-black rounded-full" />
+            <div className="absolute -right-3 bottom-[-10px] w-6 h-6 bg-imigongo-black rounded-full" />
 
-          {/* Travel Stamp Decoration */}
-          {/* Travel Stamp Decoration - Warmer */}
-          <div className="absolute top-12 right-12 w-24 h-24 border-2 border-imigongo-black/5 rounded-full flex items-center justify-center rotate-[-10deg] opacity-30 pointer-events-none">
-            <div className="w-20 h-20 border border-imigongo-black/10 rounded-full flex items-center justify-center text-[10px] font-black text-center uppercase leading-none text-imigongo-ochre tracking-widest">
-              Karibu
-              <br />
-              Rwanda
-            </div>
-          </div>
+            <div>
+              <div className="flex items-center gap-2 mb-8">
+                <div className="w-8 h-8 border-2 border-imigongo-black flex items-center justify-center rotate-45">
+                  <div className="w-4 h-4 bg-imigongo-black rotate-0" />
+                </div>
+                <span className="font-black uppercase tracking-tighter text-2xl">
+                  Vizit
+                </span>
+              </div>
 
-          <div className="flex flex-col space-y-2 mb-8 border-b-2 border-imigongo-black pb-4 relative z-10">
-            <div className="flex items-center justify-between">
-              <h1 className="font-black text-2xl uppercase tracking-tighter text-imigongo-black">
-                Welcome
+              <h1 className="text-4xl md:text-5xl font-black uppercase leading-[0.8] tracking-tighter mb-4">
+                Admit <br /> One
               </h1>
-              <span className="text-[10px] font-bold tracking-widest text-imigongo-ochre px-1">
-                MEMBERS
-              </span>
+              <p className="font-serif italic text-lg leading-tight opacity-80">
+                To the land of a thousand hills.
+              </p>
             </div>
-            <p className="text-xs text-muted-foreground font-medium">
-              Begin your journey.
-            </p>
+
+            <div className="mt-8 md:mt-0">
+              <div className="text-[10px] font-bold uppercase tracking-widest mb-2 opacity-60">
+                Date
+              </div>
+              <div className="text-xl font-mono font-bold border-b-2 border-imigongo-black pb-1 mb-6">
+                {new Date().toLocaleDateString("en-GB", {
+                  day: "2-digit",
+                  month: "short",
+                  year: "numeric",
+                })}
+              </div>
+
+              <div className="barcode h-12 w-full bg-[url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAABCAYAAAC7x/WqAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+/Pp/mixwAAAA2SURBVHjaYvz//z8D0xQgyIikmpEBCwOlwnhQwCgWAgX//2fAIOYA4z8GqEIQGwMjiL0AAgwA3y0P0/40r6YAAAAASUVORK5CYII=')] bg-repeat-x opacity-80" />
+            </div>
           </div>
 
-          <div className="space-y-4">
-            <Button
-              className="w-full rounded-none border-2 border-imigongo-black bg-white text-imigongo-black hover:bg-imigongo-black hover:text-white transition-colors font-bold uppercase tracking-widest text-xs h-12 shadow-none"
-              type="button"
-            >
-              <GoogleIcon className="mr-2 h-4 w-4" />
-              Continue with Google
-            </Button>
-          </div>
+          {/* Right Side: The Form */}
+          <div className="flex-1 bg-[#f8f5f1] p-8 md:p-12 relative flex flex-col justify-center">
+            {/* Horizontal Pattern Top/Bottom */}
+            <div className="absolute top-0 left-0 right-0 h-4 opacity-10">
+              <PatternHorizontalDiamonds className="text-imigongo-black w-full h-full" />
+            </div>
+            <div className="absolute bottom-0 left-0 right-0 h-4 opacity-10">
+              <PatternHorizontalDiamonds className="text-imigongo-black w-full h-full" />
+            </div>
 
-          <div className="flex w-full items-center justify-center my-6">
-            <div className="h-px w-full bg-imigongo-black/20" />
-            <span className="px-3 text-imigongo-black/40 text-[10px] font-bold uppercase">
-              OR
-            </span>
-            <div className="h-px w-full bg-imigongo-black/20" />
-          </div>
+            <div className="max-w-md mx-auto w-full relative z-10">
+              <h2 className="text-2xl font-black uppercase tracking-widest text-imigongo-black mb-8 text-center flex items-center justify-center gap-4">
+                <span className="h-px w-12 bg-imigongo-black/20" />
+                Portal Access
+                <span className="h-px w-12 bg-imigongo-black/20" />
+              </h2>
 
-          <form className="space-y-4">
-            <InputGroup className="rounded-none">
-              <InputGroupInput
-                placeholder="PASSENGER ID / EMAIL"
-                type="email"
-                className="rounded-none border-imigongo-black/20 focus:border-imigongo-ochre bg-transparent font-mono text-sm placeholder:uppercase placeholder:text-xs h-12"
-              />
-              <InputGroupAddon>
-                <AtSignIcon className="h-4 w-4" />
-              </InputGroupAddon>
-            </InputGroup>
+              <div className="space-y-6">
+                <div>
+                  <label
+                    htmlFor="email"
+                    className="block text-[10px] font-bold uppercase tracking-widest text-imigongo-black/50 mb-2"
+                  >
+                    Account / Email
+                  </label>
+                  <InputGroup className="bg-transparent border-b-2 border-imigongo-black/20 focus-within:border-imigongo-ochre transition-colors">
+                    <InputGroupInput
+                      id="email"
+                      placeholder="ENTER YOUR EMAIL"
+                      type="email"
+                      className="border-none bg-transparent font-mono text-imigongo-black placeholder:text-imigongo-black/20 h-10 px-0 shadow-none focus-visible:ring-0"
+                    />
+                    <InputGroupAddon className="bg-transparent border-none text-imigongo-black">
+                      <AtSignIcon className="h-4 w-4" />
+                    </InputGroupAddon>
+                  </InputGroup>
+                </div>
 
-            <Button
-              className="w-full rounded-none bg-imigongo-ochre text-white hover:bg-imigongo-black transition-colors font-black uppercase tracking-widest text-xs h-12 shadow-none"
-              type="button"
-            >
-              Secure Login
-            </Button>
-          </form>
-
-          <div className="mt-8 pt-8 border-t border-dashed border-imigongo-black/20">
-            <span className="block text-[10px] font-mono text-center text-imigongo-black/40 mb-4 uppercase">
-              Test Environments
-            </span>
-            <div className="grid grid-cols-3 gap-2">
-              {["Tourist", "Vendor", "Admin"].map((role) => (
-                <button
+                <Button
+                  className="w-full h-14 bg-imigongo-black text-white hover:bg-imigongo-ochre transition-all duration-300 font-black uppercase tracking-[0.2em] text-xs shadow-xl hover:shadow-2xl hover:-translate-y-1 rounded-none flex items-center justify-between px-6 group"
                   type="button"
-                  key={role}
-                  onClick={() =>
-                    handleTestLogin(
-                      `${role.toLowerCase()}@vizit.rw`,
-                      `${role.toLowerCase()}123`,
-                    )
-                  }
-                  disabled={isLoading}
-                  className="px-2 py-2 border border-imigongo-black/20 text-[10px] uppercase font-bold text-imigongo-black hover:border-imigongo-ochre hover:text-imigongo-ochre transition-colors disabled:opacity-50"
                 >
-                  {role}
-                </button>
-              ))}
+                  <span>Access Portal</span>
+                  <div className="w-8 h-8 bg-white/10 flex items-center justify-center rounded-full group-hover:bg-white/20 transition-colors">
+                    <ArrowRight className="w-4 h-4" />
+                  </div>
+                </Button>
+
+                <div className="flex flex-col gap-3 mt-6">
+                  <Button
+                    className="w-full h-10 border border-imigongo-black/10 bg-white text-imigongo-black hover:bg-imigongo-black/5 transition-colors font-bold uppercase tracking-widest text-[10px] rounded-none shadow-sm flex items-center justify-center gap-3"
+                    type="button"
+                  >
+                    <GoogleIcon className="w-4 h-4" />
+                    Continue with Google
+                  </Button>
+                  <Button
+                    className="w-full h-10 border border-imigongo-black/10 bg-[#1877F2] text-white hover:bg-[#1877F2]/90 transition-colors font-bold uppercase tracking-widest text-[10px] rounded-none shadow-sm flex items-center justify-center gap-3"
+                    type="button"
+                  >
+                    <FacebookIcon className="w-4 h-4" />
+                    Continue with Facebook
+                  </Button>
+                </div>
+
+                {/* Simplified Test Logins */}
+                <div className="mt-8 pt-8 border-t border-dashed border-imigongo-black/20">
+                  <p className="text-[10px] font-mono text-center text-imigongo-black/40 mb-4 uppercase tracking-widest">
+                    Test Access (Will be Removed)
+                  </p>
+                  <div className="flex justify-center gap-2">
+                    {["Tourist", "Vendor", "Admin"].map((role) => (
+                      <button
+                        key={role}
+                        type="button"
+                        onClick={() =>
+                          handleTestLogin(
+                            `${role.toLowerCase()}@vizit.rw`,
+                            `${role.toLowerCase()}123`,
+                          )
+                        }
+                        className="px-3 py-1 text-[9px] font-bold uppercase tracking-widest border border-imigongo-black/10 hover:bg-imigongo-black hover:text-white transition-colors text-imigongo-black/60"
+                      >
+                        {role}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-
-        <p className="mt-8 text-center text-[10px] uppercase text-imigongo-black/40 max-w-xs mx-auto tracking-widest">
-          Your Gateway to Adventure
-        </p>
-      </div>
-    </main>
+      </main>
+    </ImigongoLenis>
   );
 }
 
@@ -204,8 +217,18 @@ const GoogleIcon = (props: React.ComponentProps<"svg">) => (
     {...props}
   >
     <title>Google Icon</title>
-    <g>
-      <path d="M12.479,14.265v-3.279h11.049c0.108,0.571,0.164,1.247,0.164,1.979c0,2.46-0.672,5.502-2.84,7.669   C18.744,22.829,16.051,24,12.483,24C5.869,24,0.308,18.613,0.308,12S5.869,0,12.483,0c3.659,0,6.265,1.436,8.223,3.307L18.392,5.62   c-1.404-1.317-3.307-2.341-5.913-2.341C7.65,3.279,3.873,7.171,3.873,12s3.777,8.721,8.606,8.721c3.132,0,4.916-1.258,6.059-2.401   c0.927-0.927,1.537-2.251,1.777-4.059L12.479,14.265z" />
-    </g>
+    <path d="M12.479,14.265v-3.279h11.049c0.108,0.571,0.164,1.247,0.164,1.979c0,2.46-0.672,5.502-2.84,7.669   C18.744,22.829,16.051,24,12.483,24C5.869,24,0.308,18.613,0.308,12S5.869,0,12.483,0c3.659,0,6.265,1.436,8.223,3.307L18.392,5.62   c-1.404-1.317-3.307-2.341-5.913-2.341C7.65,3.279,3.873,7.171,3.873,12s3.777,8.721,8.606,8.721c3.132,0,4.916-1.258,6.059-2.401   c0.927-0.927,1.537-2.251,1.777-4.059L12.479,14.265z" />
+  </svg>
+);
+
+const FacebookIcon = (props: React.ComponentProps<"svg">) => (
+  <svg
+    fill="currentColor"
+    viewBox="0 0 24 24"
+    xmlns="http://www.w3.org/2000/svg"
+    {...props}
+  >
+    <title>Facebook Icon</title>
+    <path d="M9.101 23.691v-7.98H6.627v-3.667h2.474v-1.58c0-4.085 1.848-5.978 5.858-5.978.401 0 .955.042 1.468.103a8.68 8.68 0 0 1 1.141.195v3.325a8.623 8.623 0 0 0-.653-.036c-2.148 0-2.791 1.657-2.791 3.48v1.065h3.917l-.523 3.667h-3.394v7.98H9.101Z" />
   </svg>
 );

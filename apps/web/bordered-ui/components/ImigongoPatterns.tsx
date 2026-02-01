@@ -86,3 +86,96 @@ export function PatternSpiral({
     </svg>
   );
 }
+
+export function PatternVerticalDiamond({
+  className,
+  color = "currentColor",
+  strokeWidth = 2,
+  ...props
+}: PatternProps) {
+  return (
+    <svg
+      viewBox="0 0 100 400"
+      preserveAspectRatio="none"
+      className={cn("w-24 h-96", className)}
+      {...props}
+    >
+      {/* 4 Stacked Concentric Diamonds */}
+      {[0, 100, 200, 300].map((offset, i) => (
+        <g key={i} transform={`translate(0, ${offset})`}>
+          {/* Outer Diamond */}
+          <path
+            d="M50,0 L100,50 L50,100 L0,50 Z"
+            fill="none"
+            stroke={color}
+            strokeWidth={strokeWidth}
+            vectorEffect="non-scaling-stroke"
+          />
+          {/* Middle Diamond */}
+          <path
+            d="M50,15 L85,50 L50,85 L15,50 Z"
+            fill="none"
+            stroke={color}
+            strokeWidth={strokeWidth}
+            vectorEffect="non-scaling-stroke"
+          />
+          {/* Inner Diamond */}
+          <path
+            d="M50,30 L70,50 L50,70 L30,50 Z"
+            fill="none"
+            stroke={color}
+            strokeWidth={strokeWidth}
+            vectorEffect="non-scaling-stroke"
+          />
+        </g>
+      ))}
+    </svg>
+  );
+}
+
+export function PatternHorizontalDiamonds({
+  className,
+  color = "currentColor",
+  strokeWidth = 2,
+  ...props
+}: PatternProps) {
+  return (
+    <svg
+      viewBox="0 0 100 20"
+      preserveAspectRatio="none"
+      className={cn("w-full h-4", className)}
+      {...props}
+    >
+      <defs>
+        <pattern
+          id="diamond-pattern"
+          x="0"
+          y="0"
+          width="20"
+          height="20"
+          patternUnits="userSpaceOnUse"
+        >
+          <path
+            d="M10,0 L20,10 L10,20 L0,10 Z"
+            fill="none"
+            stroke={color}
+            strokeWidth={strokeWidth}
+          />
+          <path
+            d="M10,5 L15,10 L10,15 L5,10 Z"
+            fill="none"
+            stroke={color}
+            strokeWidth={strokeWidth}
+          />
+        </pattern>
+      </defs>
+      <rect
+        x="0"
+        y="0"
+        width="100%"
+        height="100%"
+        fill="url(#diamond-pattern)"
+      />
+    </svg>
+  );
+}

@@ -119,25 +119,17 @@ function RwandaStoryPage() {
                 people.
               </motion.p>
             </div>
-
-            {/* Scroll Indicator */}
-            <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-50 animate-bounce">
-              <span className="text-[10px] uppercase tracking-widest text-white">
-                Scroll to Explore
-              </span>
-              <div className="w-px h-12 bg-white" />
-            </div>
           </div>
 
           <ImigongoFactGrid />
 
-          {/* 1. The Arrival (Timeline) */}
+          {/* 1. arrival timeline */}
           <ImigongoTimeline />
 
-          {/* 2. Geography Parallax */}
+          {/* 2. geography parallax */}
           <ImigongoStorySection
             category="NATURE"
-            imageSrc="https://images.unsplash.com/photo-1627916173003-882098b049d5?q=80&w=2600&auto=format&fit=crop"
+            imageSrc="https://images.unsplash.com/photo-1516426122078-c23e76319801?q=80&w=2600&auto=format&fit=crop"
             title={
               <>
                 Geography <br />
@@ -168,20 +160,20 @@ function RwandaStoryPage() {
             note="Visit in June-Sept for trekking"
           />
 
-          {/* 3. The Gorilla Encounter (High Drama) */}
+          {/* 3. gorilla encounter */}
           <ImigongoCinematicReveal />
 
-          {/* 4. Horizontal Scroll Adventure */}
+          {/* 4. horizontal scroll adventure */}
           <ImigongoHorizontalScroll />
 
-          {/* 5. Pattern Decoder */}
+          {/* 5. pattern decoder */}
           <ImigongoPatternDecoder />
 
-          {/* People & Culture Section */}
+          {/* people & culture section */}
           <ImigongoStorySection
             category="CULTURE"
             reversed
-            imageSrc="https://images.unsplash.com/photo-1523531294919-4bcd7c65e216?q=80&w=2600&auto=format&fit=crop"
+            imageSrc="https://images.unsplash.com/photo-1532798369041-b333486e1e82?q=80&w=2600&auto=format&fit=crop"
             title={
               <>
                 People <br />
@@ -213,7 +205,7 @@ function RwandaStoryPage() {
 
           <ImigongoStorySection
             category="RESILIENCE"
-            imageSrc="https://images.unsplash.com/photo-1605649988226-7248386a6352?q=80&w=2600&auto=format&fit=crop"
+            imageSrc="https://images.unsplash.com/photo-1518182170546-07fb612d5c2e?q=80&w=2600&auto=format&fit=crop"
             title={
               <>
                 History <br />

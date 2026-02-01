@@ -1,5 +1,4 @@
-import React from "react";
-import { PatternZigZag } from "./ImigongoPatterns";
+import { ImigongoSectionTitle } from "./ImigongoSectionTitle";
 
 interface FactItem {
   label: string;
@@ -19,13 +18,13 @@ export function ImigongoFactGrid() {
   return (
     <div className="bg-white py-24 border-y border-imigongo-black">
       <div className="container mx-auto px-4 max-w-7xl">
-        <div className="flex items-center gap-4 mb-16 justify-center">
-          <PatternZigZag className="w-8 h-8 text-imigongo-ochre shrink-0 rotate-90" />
-          <h2 className="text-3xl md:text-4xl font-black uppercase tracking-tighter text-imigongo-black">
-            Quick Facts
-          </h2>
-          <PatternZigZag className="w-8 h-8 text-imigongo-ochre shrink-0 rotate-90" />
-        </div>
+        <ImigongoSectionTitle
+          title={
+            <>
+              Quick <span className="text-imigongo-ochre">Facts</span>
+            </>
+          }
+        />
 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-px bg-imigongo-black/10 border border-imigongo-black/10">
           {facts.map((fact, i) => (

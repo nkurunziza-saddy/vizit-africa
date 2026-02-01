@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import { PatternZigZag } from "./ImigongoPatterns";
+import { ImigongoSectionTitle } from "./ImigongoSectionTitle";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
@@ -12,21 +12,21 @@ const timelineEvents = [
     title: "The Arrival",
     desc: "Touch down in the heart of Africa. The air is crisp, the streets are spotless.",
     image:
-      "https://images.unsplash.com/photo-1577123477810-67c4ab578939?q=80&w=2574&auto=format&fit=crop", // Kigali City
+      "https://images.unsplash.com/photo-1580060092241-402b8d003b54?q=80&w=2574&auto=format&fit=crop", // Kigali City
   },
   {
     year: "CLEAN",
     title: "Greenest City",
     desc: "A ban on plastic bags since 2008. Umuganda community work keeps the city pristine.",
     image:
-      "https://images.unsplash.com/photo-1721546251268-cf894f0e75a6?q=80&w=2670&auto=format&fit=crop", // Clean streets / Greenery
+      "https://images.unsplash.com/photo-1528659560411-eb66f272a74c?q=80&w=2670&auto=format&fit=crop", // Clean streets / Greenery
   },
   {
     year: "TECH",
     title: "Innovation Hub",
     desc: "From drone blood deliveries to Norrsken House. The future is being written here.",
     image:
-      "https://images.unsplash.com/photo-1569420951913-91af6ca0e457?q=80&w=2670&auto=format&fit=crop", // Modern architecture
+      "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2670&auto=format&fit=crop", // Modern architecture
   },
 ];
 
@@ -81,18 +81,25 @@ export function ImigongoTimeline() {
       className="bg-white py-32 relative overflow-hidden text-imigongo-black"
     >
       <div className="container mx-auto px-4 md:px-12 relative z-10">
-        <div className="text-center mb-24">
-          <div className="flex items-center justify-center gap-4 mb-4">
-            <PatternZigZag className="w-8 h-8 text-imigongo-ochre shrink-0" />
-            <h2 className="text-4xl md:text-5xl font-black uppercase tracking-tighter">
+        <ImigongoSectionTitle
+          title={
+            <>
               Kigali <span className="text-imigongo-ochre">Rising</span>
-            </h2>
-            <PatternZigZag className="w-8 h-8 text-imigongo-ochre shrink-0" />
-          </div>
-          <p className="text-xl font-serif text-imigongo-black/60 max-w-2xl mx-auto">
-            Your journey begins in the cleanest city in Africa.
-          </p>
-        </div>
+            </>
+          }
+          subtitle="Your journey begins in the cleanest city in Africa."
+          tooltip={
+            <div className="flex flex-col gap-1">
+              <h4 className="font-bold uppercase tracking-widest text-imigongo-ochre text-xs">
+                Ishema (Pride)
+              </h4>
+              <p className="text-white/80 font-light text-xs leading-relaxed">
+                Reflecting *Amahindu* (burnt earth) construction. A symbol of
+                resilience and lasting strength.
+              </p>
+            </div>
+          }
+        />
 
         <div className="relative max-w-5xl mx-auto">
           <div className="absolute left-0 md:left-1/2 top-0 bottom-0 w-px bg-imigongo-black/10 -translate-x-1/2 hidden md:block" />
