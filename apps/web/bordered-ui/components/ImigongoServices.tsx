@@ -29,17 +29,27 @@ export function ImigongoServices() {
   return (
     <div className="py-32">
       <div className="container mx-auto px-4 max-w-7xl">
-        <div className="flex flex-col md:flex-row items-end justify-between mb-16 border-b border-imigongo-black pb-8">
-          <div className="relative">
-            <div className="absolute -left-6 top-0 text-[10px] font-mono text-imigongo-ochre -rotate-90 origin-bottom-right">
-              SECT.03
-            </div>
-            <h2 className="text-5xl md:text-7xl font-black uppercase tracking-tighter text-imigongo-black leading-[0.9]">
-              Curated <br />
-              <span className="text-imigongo-ochre">Services</span>
+        <div className="flex flex-col items-start gap-4 mb-16 relative">
+          <div className="w-24 h-1 bg-imigongo-ochre mb-2" />
+
+          <div className="flex items-center gap-4">
+            <PatternZigZag
+              className="w-8 h-8 text-imigongo-ochre shrink-0 rotate-90"
+              strokeWidth={3}
+            />
+            <h2 className="text-4xl md:text-5xl font-black uppercase tracking-tighter text-imigongo-black">
+              Curated Services
             </h2>
           </div>
-          <p className="text-lg text-imigongo-black/60 max-w-sm text-right mt-8 md:mt-0 font-light">
+
+          <div className="w-full max-w-md h-3 mt-1 overflow-hidden">
+            <PatternZigZag
+              className="w-full h-full text-imigongo-black"
+              strokeWidth={3}
+            />
+          </div>
+
+          <p className="text-lg text-imigongo-black/60 max-w-md font-light mt-4">
             Beyond standard tours. We craft experiences with architectural
             precision.
           </p>

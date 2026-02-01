@@ -1,65 +1,110 @@
-import { PatternDiamond } from "./ImigongoPatterns";
 import React from "react";
 
 export function ImigongoFooter() {
   return (
     <footer className="bg-imigongo-black text-white py-16 border-t-4 border-imigongo-ochre relative overflow-hidden">
-      <div className="absolute top-0 right-0 p-8 opacity-10 pointer-events-none">
-        <PatternDiamond className="w-64 h-64" />
-      </div>
-
-      <div className="container mx-auto px-4 grid grid-cols-1 md:grid-cols-4 gap-12 relative z-10">
-        <div className="col-span-1 md:col-span-2">
-          <div className="flex items-center gap-2 mb-6">
-            <div className="w-8 h-8 bg-imigongo-ochre flex items-center justify-center">
-              <span className="font-bold text-white">V</span>
+      <div className="container mx-auto px-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 relative z-10">
+        <div className="md:col-span-2 lg:col-span-2 flex flex-col justify-between">
+          <div>
+            <div className="flex items-center gap-3 mb-8">
+              <div className="w-10 h-10 bg-imigongo-ochre flex items-center justify-center">
+                <span className="font-black text-white text-xl">V</span>
+              </div>
+              <span className="text-3xl font-black uppercase tracking-tighter text-white">
+                Vizit<span className="text-imigongo-ochre">Africa</span>
+              </span>
             </div>
-            <span className="text-2xl font-black uppercase tracking-tighter text-white">
-              Vizit<span className="text-imigongo-ochre">Africa</span>
-            </span>
+            <p className="text-white/60 max-w-sm font-light text-lg leading-relaxed mb-8 md:mb-12">
+              Curating authentic Rwandan journeys that blend ancient tradition
+              with modern luxury.
+            </p>
           </div>
-          <p className="text-white/70 max-w-sm mb-6">
-            Discover the heart of Rwanda through immersive cultural experiences
-            and curated adventures.
-          </p>
+
+          <div className="hidden lg:block">
+            <h4 className="text-imigongo-ochre font-bold uppercase tracking-widest text-xs mb-4">
+              Stay Updated
+            </h4>
+            <div className="flex items-center border-b border-white/20 pb-2 max-w-sm group focus-within:border-imigongo-ochre transition-colors">
+              <input
+                type="email"
+                placeholder="Enter your email"
+                className="bg-transparent border-none text-white placeholder:text-white/20 focus:ring-0 focus:outline-0 w-full p-0 font-mono text-sm"
+              />
+              <button className="text-white/40 group-focus-within:text-imigongo-ochre uppercase font-bold text-xs tracking-widest hover:text-white transition-colors">
+                Join
+              </button>
+            </div>
+          </div>
         </div>
 
         <div>
-          <h4 className="text-imigongo-ochre font-bold uppercase tracking-widest mb-6">
+          <h4 className="text-white font-bold uppercase tracking-widest text-xs mb-8 border-l-2 border-imigongo-ochre pl-4">
             Explore
           </h4>
-          <ul className="space-y-3">
-            {["Destinations", "Cultural Tours", "Workshops", "Events"].map(
-              (item) => (
-                <li key={item}>
-                  <a href="#" className="flex items-center gap-2 group">
-                    <span className="w-1.5 h-1.5 bg-imigongo-ochre opacity-0 group-hover:opacity-100 transition-opacity"></span>
-                    <span className="hover:translate-x-1 transition-transform">
-                      {item}
-                    </span>
-                  </a>
-                </li>
-              ),
-            )}
-          </ul>
-        </div>
-
-        <div>
-          <h4 className="text-imigongo-ochre font-bold uppercase tracking-widest mb-6">
-            Connect
-          </h4>
-          <ul className="space-y-3">
-            {["Instagram", "Twitter", "Facebook", "Newsletter"].map((item) => (
+          <ul className="space-y-4">
+            {[
+              "Destinations",
+              "Cultural Tours",
+              "Workshops",
+              "Events",
+              "The Gallery",
+            ].map((item) => (
               <li key={item}>
                 <a
                   href="#"
-                  className="hover:text-imigongo-ochre transition-colors"
+                  className="flex items-center gap-3 group text-white/60 hover:text-white transition-colors"
                 >
-                  {item}
+                  <span className="w-1 h-1 bg-imigongo-ochre opacity-0 group-hover:opacity-100 transition-opacity"></span>
+                  <span className="text-sm font-medium tracking-wide">
+                    {item}
+                  </span>
                 </a>
               </li>
             ))}
           </ul>
+        </div>
+
+        <div>
+          <h4 className="text-white font-bold uppercase tracking-widest text-xs mb-8 border-l-2 border-imigongo-ochre pl-4">
+            Company
+          </h4>
+          <ul className="space-y-4">
+            {[
+              "About Us",
+              "Our Guides",
+              "Sustainability",
+              "Partners",
+              "Contact",
+            ].map((item) => (
+              <li key={item}>
+                <a
+                  href="#"
+                  className="flex items-center gap-3 group text-white/60 hover:text-white transition-colors"
+                >
+                  <span className="w-1 h-1 bg-imigongo-ochre opacity-0 group-hover:opacity-100 transition-opacity"></span>
+                  <span className="text-sm font-medium tracking-wide">
+                    {item}
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div className="md:col-span-2 lg:hidden">
+          <h4 className="text-imigongo-ochre font-bold uppercase tracking-widest text-xs mb-4">
+            Stay Updated
+          </h4>
+          <div className="flex items-center border-b border-white/20 pb-2 max-w-md group focus-within:border-imigongo-ochre transition-colors">
+            <input
+              type="email"
+              placeholder="Enter your email"
+              className="bg-transparent border-none text-white placeholder:text-white/20 focus:ring-0 w-full p-0 font-mono text-sm"
+            />
+            <button className="text-white/40 group-focus-within:text-imigongo-ochre uppercase font-bold text-xs tracking-widest hover:text-white transition-colors">
+              Join
+            </button>
+          </div>
         </div>
       </div>
 

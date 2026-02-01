@@ -1,0 +1,143 @@
+import { useRef } from "react";
+import { PatternZigZag } from "./ImigongoPatterns";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
+
+gsap.registerPlugin(ScrollTrigger);
+
+const timelineEvents = [
+  {
+    year: "KGL",
+    title: "The Arrival",
+    desc: "Touch down in the heart of Africa. The air is crisp, the streets are spotless.",
+    image:
+      "https://images.unsplash.com/photo-1577123477810-67c4ab578939?q=80&w=2574&auto=format&fit=crop", // Kigali City
+  },
+  {
+    year: "CLEAN",
+    title: "Greenest City",
+    desc: "A ban on plastic bags since 2008. Umuganda community work keeps the city pristine.",
+    image:
+      "https://images.unsplash.com/photo-1721546251268-cf894f0e75a6?q=80&w=2670&auto=format&fit=crop", // Clean streets / Greenery
+  },
+  {
+    year: "TECH",
+    title: "Innovation Hub",
+    desc: "From drone blood deliveries to Norrsken House. The future is being written here.",
+    image:
+      "https://images.unsplash.com/photo-1569420951913-91af6ca0e457?q=80&w=2670&auto=format&fit=crop", // Modern architecture
+  },
+];
+
+export function ImigongoTimeline() {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const lineRef = useRef<HTMLDivElement>(null);
+
+  useGSAP(
+    () => {
+      const container = containerRef.current;
+      if (!container) return;
+      gsap.fromTo(
+        lineRef.current,
+        { height: "0%" },
+        {
+          height: "100%",
+          ease: "none",
+          scrollTrigger: {
+            trigger: container,
+            start: "top center",
+            end: "bottom center",
+            scrub: 1,
+          },
+        },
+      );
+
+      const items = gsap.utils.toArray(".timeline-item");
+      items.forEach((item: any) => {
+        gsap.fromTo(
+          item,
+          { opacity: 0, y: 50 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            scrollTrigger: {
+              trigger: item,
+              start: "top 80%",
+              end: "top 50%",
+              scrub: 1,
+            },
+          },
+        );
+      });
+    },
+    { scope: containerRef },
+  );
+
+  return (
+    <div
+      ref={containerRef}
+      className="bg-white py-32 relative overflow-hidden text-imigongo-black"
+    >
+      <div className="container mx-auto px-4 md:px-12 relative z-10">
+        <div className="text-center mb-24">
+          <div className="flex items-center justify-center gap-4 mb-4">
+            <PatternZigZag className="w-8 h-8 text-imigongo-ochre shrink-0" />
+            <h2 className="text-4xl md:text-5xl font-black uppercase tracking-tighter">
+              Kigali <span className="text-imigongo-ochre">Rising</span>
+            </h2>
+            <PatternZigZag className="w-8 h-8 text-imigongo-ochre shrink-0" />
+          </div>
+          <p className="text-xl font-serif text-imigongo-black/60 max-w-2xl mx-auto">
+            Your journey begins in the cleanest city in Africa.
+          </p>
+        </div>
+
+        <div className="relative max-w-5xl mx-auto">
+          <div className="absolute left-0 md:left-1/2 top-0 bottom-0 w-px bg-imigongo-black/10 -translate-x-1/2 hidden md:block" />
+          <div
+            ref={lineRef}
+            className="absolute left-0 md:left-1/2 top-0 w-1 bg-imigongo-ochre -translate-x-1/2 hidden md:block origin-top"
+          />
+
+          <div className="space-y-24">
+            {timelineEvents.map((event, i) => (
+              <div
+                key={i}
+                className={`timeline-item flex flex-col md:flex-row gap-12 md:gap-24 items-center ${i % 2 === 0 ? "" : "md:flex-row-reverse"}`}
+              >
+                <div
+                  className={`flex-1 ${i % 2 === 0 ? "text-left md:text-right" : "text-left"}`}
+                >
+                  <span className="text-6xl font-[Caveat] text-imigongo-ochre/30 leading-none block mb-4">
+                    {event.year}
+                  </span>
+                  <h3 className="text-3xl font-black uppercase tracking-tighter mb-4">
+                    {event.title}
+                  </h3>
+                  <p className="text-lg text-imigongo-black/70 font-serif leading-relaxed">
+                    {event.desc}
+                  </p>
+                </div>
+
+                <div className="w-4 h-4 rounded-full bg-imigongo-ochre shrink-0 relative z-10 hidden md:block ring-4 ring-white"></div>
+
+                <div className="flex-1">
+                  <div className="aspect-4/3 w-full overflow-hidden bg-zinc-100 relative group">
+                    <div className="absolute inset-0 border-4 border-white z-10 opacity-50" />
+                    <img
+                      src={event.image}
+                      alt={event.title}
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 filter grayscale group-hover:grayscale-0"
+                    />
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

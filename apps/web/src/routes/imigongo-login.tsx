@@ -46,9 +46,43 @@ function ImigongoLoginPage() {
   return (
     <main className="relative md:h-screen md:overflow-hidden lg:grid lg:grid-cols-2 bg-imigongo-black font-sans">
       <div className="relative hidden h-full flex-col border-r border-white/10 bg-imigongo-black p-12 lg:flex overflow-hidden">
+        {/* Rich Textured Background for Tourism Vibe */}
         <div className="absolute inset-0">
-          <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-5 mix-blend-overlay" />
+          {/* Woven Basket / Natural Texture Effect */}
+          <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1590422731174-84d56734139e?q=80&w=2675&auto=format&fit=crop')] opacity-20 mix-blend-overlay grayscale contrast-125" />
+          <div className="absolute inset-0 bg-linear-to-b from-imigongo-black via-transparent to-imigongo-black opacity-80" />
+
+          {/* Static Zig-Zag Borders */}
           <ImigongoFloatingPaths />
+        </div>
+
+        {/* Central Cultural Motif - The "Gallery Piece" */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 flex items-center justify-center opacity-10 pointer-events-none">
+          <div className="relative w-64 h-64 border-2 border-imigongo-ochre rotate-45 flex items-center justify-center">
+            <div className="w-48 h-48 border border-white rotate-0" />
+            <div className="absolute inset-0 border-t-2 border-r-2 border-white scale-125" />
+          </div>
+        </div>
+
+        <Link to="/" className="z-10 w-fit">
+          <div className="flex items-center gap-3 font-bold text-xl text-white uppercase tracking-widest bg-black/40 backdrop-blur-md px-4 py-2 border border-white/10">
+            <div className="flex aspect-square size-8 items-center justify-center bg-imigongo-ochre text-imigongo-black">
+              <span className="text-[10px] font-black">VZ</span>
+            </div>
+            Vizit Africa
+          </div>
+        </Link>
+
+        <div className="z-10 mt-auto border-l-4 border-imigongo-ochre pl-8 py-2 bg-black/20 backdrop-blur-sm max-w-lg">
+          <blockquote className="space-y-4">
+            <span className="text-[10px] font-mono text-imigongo-ochre uppercase tracking-widest block mb-2">
+              Discover Rwanda
+            </span>
+            <p className="text-3xl font-light text-white leading-tight tracking-wide font-serif italic">
+              "Experience the art of travel. Where ancient tradition meets
+              modern comfort."
+            </p>
+          </blockquote>
         </div>
       </div>
 
@@ -67,17 +101,27 @@ function ImigongoLoginPage() {
           <div className="absolute -top-1 -right-1 w-4 h-4 border-t-2 border-r-2 border-imigongo-ochre" />
           <div className="absolute -bottom-1 -left-1 w-4 h-4 border-b-2 border-l-2 border-imigongo-ochre" />
 
-          <div className="flex flex-col space-y-2 mb-8 border-b-2 border-imigongo-black pb-4">
+          {/* Travel Stamp Decoration */}
+          {/* Travel Stamp Decoration - Warmer */}
+          <div className="absolute top-12 right-12 w-24 h-24 border-2 border-imigongo-black/5 rounded-full flex items-center justify-center rotate-[-10deg] opacity-30 pointer-events-none">
+            <div className="w-20 h-20 border border-imigongo-black/10 rounded-full flex items-center justify-center text-[10px] font-black text-center uppercase leading-none text-imigongo-ochre tracking-widest">
+              Karibu
+              <br />
+              Rwanda
+            </div>
+          </div>
+
+          <div className="flex flex-col space-y-2 mb-8 border-b-2 border-imigongo-black pb-4 relative z-10">
             <div className="flex items-center justify-between">
               <h1 className="font-black text-2xl uppercase tracking-tighter text-imigongo-black">
-                Login
+                Welcome
               </h1>
-              <span className="text-[10px] font-mono text-imigongo-ochre border border-imigongo-ochre px-1">
-                GATE.01
+              <span className="text-[10px] font-bold tracking-widest text-imigongo-ochre px-1">
+                MEMBERS
               </span>
             </div>
-            <p className="text-xs font-mono text-muted-foreground uppercase">
-              Enter credentials to access booking.
+            <p className="text-xs text-muted-foreground font-medium">
+              Begin your journey.
             </p>
           </div>
 
@@ -126,6 +170,7 @@ function ImigongoLoginPage() {
             <div className="grid grid-cols-3 gap-2">
               {["Tourist", "Vendor", "Admin"].map((role) => (
                 <button
+                  type="button"
                   key={role}
                   onClick={() =>
                     handleTestLogin(
@@ -143,8 +188,8 @@ function ImigongoLoginPage() {
           </div>
         </div>
 
-        <p className="mt-8 text-center text-[10px] uppercase text-imigongo-black/40 max-w-xs mx-auto">
-          Authorized Personnel Only. <br /> Access logged and monitored.
+        <p className="mt-8 text-center text-[10px] uppercase text-imigongo-black/40 max-w-xs mx-auto tracking-widest">
+          Your Gateway to Adventure
         </p>
       </div>
     </main>

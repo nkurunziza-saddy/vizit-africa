@@ -1,5 +1,6 @@
-import { Search, Calendar, Users, MapPin, Plus } from "lucide-react";
+import { Search, Calendar, Users, MapPin } from "lucide-react";
 import { PatternZigZag } from "./ImigongoPatterns";
+import { motion } from "motion/react";
 
 export function ImigongoHero() {
   return (
@@ -13,49 +14,70 @@ export function ImigongoHero() {
         <div className="absolute inset-0 bg-imigongo-black/20 mix-blend-multiply" />
         <div className="absolute inset-0 bg-gradient-to-t from-imigongo-black/90 via-transparent to-transparent" />
 
-        <div className="absolute inset-x-4 md:inset-x-12 inset-y-8 border-l border-r border-white/10 pointer-events-none grid grid-cols-1 md:grid-cols-4 lg:grid-cols-12 gap-4">
-          {[...Array(12)].map((_, i) => (
-            <div
-              key={i}
-              className={`hidden ${
-                i % 4 === 0 || i === 11 ? "lg:block" : ""
-              } col-span-1 border-r border-white/5 h-full relative`}
-            >
-              <div className="absolute top-1/4 -right-1.5 w-3 h-3 text-white/30">
-                <Plus strokeWidth={1} className="w-full h-full" />
-              </div>
-              <div className="absolute bottom-1/4 -right-1.5 w-3 h-3 text-white/30">
-                <Plus strokeWidth={1} className="w-full h-full" />
-              </div>
-            </div>
-          ))}
-
-          <div className="absolute top-1/2 left-0 w-full border-t border-white/5" />
+        <div className="absolute inset-0 opacity-10 mix-blend-overlay pointer-events-none">
+          <PatternZigZag className="w-full h-full text-white scale-[2] rotate-3 opacity-30" />
         </div>
       </div>
 
       <div className="relative z-10 px-4 md:px-12 grid grid-cols-1 md:grid-cols-4 lg:grid-cols-12 gap-8 items-end">
         <div className="col-span-1 md:col-span-3 lg:col-span-7 mb-8 lg:mb-0">
-          <div className="inline-flex items-center gap-4 mb-8">
-            <span className="text-[10px] font-mono text-imigongo-ochre border border-imigongo-ochre/50 bg-black/50 backdrop-blur-sm px-2 py-1">
-              SECT.01 // HERO
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="inline-flex items-center gap-4 mb-8"
+          >
+            <span className="text-[10px] font-mono text-imigongo-ochre border border-imigongo-ochre/50 bg-black/50 backdrop-blur-sm px-3 py-1 uppercase tracking-widest">
+              Discover Rwanda
             </span>
             <span className="text-white/80 font-bold uppercase tracking-[0.3em] text-xs">
-              Experience The Wild
+              Beyond the Ordinary
             </span>
-          </div>
+          </motion.div>
 
-          <h1 className="text-6xl md:text-8xl lg:text-[10rem] leading-[0.8] font-black text-white uppercase tracking-tighter mb-8">
-            Raw <br />
-            <span className="text-imigongo-ochre">Nature</span>
+          <h1 className="text-6xl md:text-8xl lg:text-[10rem] leading-[0.8] font-black text-white uppercase tracking-tighter mb-8 overflow-hidden">
+            <motion.span
+              initial={{ y: "100%" }}
+              animate={{ y: 0 }}
+              transition={{
+                duration: 0.8,
+                ease: [0.21, 0.47, 0.32, 0.98],
+                delay: 0.4,
+              }}
+              className="block"
+            >
+              Raw
+            </motion.span>
+            <motion.span
+              initial={{ y: "100%" }}
+              animate={{ y: 0 }}
+              transition={{
+                duration: 0.8,
+                ease: [0.21, 0.47, 0.32, 0.98],
+                delay: 0.5,
+              }}
+              className="block text-imigongo-ochre"
+            >
+              Nature
+            </motion.span>
           </h1>
 
-          <p className="text-xl md:text-2xl text-white/90 font-light max-w-xl leading-relaxed pl-6 border-l-2 border-imigongo-ochre">
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1, delay: 0.8 }}
+            className="text-xl md:text-2xl text-white/90 font-light max-w-xl leading-relaxed pl-6 border-l-2 border-imigongo-ochre"
+          >
             Curated expeditions into the heart of the Land of a Thousand Hills.
-          </p>
+          </motion.p>
         </div>
 
-        <div className="col-span-1 md:col-span-4 lg:col-span-5 w-full">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.8, delay: 1 }}
+          className="col-span-1 md:col-span-4 lg:col-span-5 w-full"
+        >
           <div className="bg-white border-2 border-white p-0 shadow-2xl shadow-black/50 relative">
             <div className="absolute -bottom-2 -right-2 w-full h-full bg-imigongo-ochre -z-10" />
 
@@ -73,11 +95,11 @@ export function ImigongoHero() {
 
             <div className="grid gap-px bg-imigongo-black/10 border-b border-imigongo-black/10">
               <div className="group relative bg-white hover:bg-imigongo-black/5 transition-colors p-6 cursor-pointer">
-                <label className="text-[9px] font-mono text-imigongo-black/40 uppercase tracking-wider mb-2 block font-bold">
-                  01 // Destination
+                <label className="text-[10px] text-imigongo-black/60 uppercase tracking-widest mb-1 block font-medium">
+                  Where to?
                 </label>
                 <div className="flex items-center justify-between">
-                  <span className="text-2xl text-imigongo-black font-bold tracking-tight">
+                  <span className="text-2xl text-imigongo-black font-serif italic tracking-wide">
                     Kigali
                   </span>
                   <MapPin className="w-5 h-5 text-imigongo-black/30 group-hover:text-imigongo-ochre transition-colors" />
@@ -86,19 +108,19 @@ export function ImigongoHero() {
 
               <div className="grid grid-cols-2 gap-px bg-imigongo-black/10">
                 <div className="group relative bg-white hover:bg-imigongo-black/5 transition-colors p-6 cursor-pointer">
-                  <label className="text-[9px] font-mono text-imigongo-black/40 uppercase tracking-wider mb-2 block font-bold">
-                    02 // Date
+                  <label className="text-[10px] text-imigongo-black/60 uppercase tracking-widest mb-1 block font-medium">
+                    When?
                   </label>
                   <div className="flex items-center justify-between">
-                    <span className="text-lg text-imigongo-black font-bold tracking-tight">
+                    <span className="text-lg text-imigongo-black font-serif italic">
                       Anytime
                     </span>
                     <Calendar className="w-4 h-4 text-imigongo-black/30 group-hover:text-imigongo-ochre transition-colors" />
                   </div>
                 </div>
                 <div className="group relative bg-white hover:bg-imigongo-black/5 transition-colors p-6 cursor-pointer">
-                  <label className="text-[9px] font-mono text-imigongo-black/40 uppercase tracking-wider mb-2 block font-bold">
-                    03 // Guests
+                  <label className="text-[10px] text-imigongo-black/60 uppercase tracking-widest mb-1 block font-medium">
+                    Who?
                   </label>
                   <div className="flex items-center justify-between">
                     <span className="text-lg text-imigongo-black font-bold tracking-tight">
@@ -117,7 +139,7 @@ export function ImigongoHero() {
               </span>
             </button>
           </div>
-        </div>
+        </motion.div>
       </div>
 
       <div className="absolute bottom-0 left-0 right-0 h-4 z-10 opacity-50 mix-blend-overlay">

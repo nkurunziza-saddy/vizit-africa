@@ -10,8 +10,9 @@ export function PatternZigZag({
   className,
   color = "currentColor",
   strokeWidth = 2,
+  animated = false,
   ...props
-}: PatternProps) {
+}: PatternProps & { animated?: boolean }) {
   return (
     <svg
       viewBox="0 0 100 20"
@@ -25,6 +26,7 @@ export function PatternZigZag({
         stroke={color}
         strokeWidth={strokeWidth}
         vectorEffect="non-scaling-stroke"
+        className={cn(animated && "animate-trace")}
       />
     </svg>
   );
