@@ -18,6 +18,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
+import { SectionTitle } from "@/components/landing/section-title";
 import { User, Shield, Camera, CheckCircle, AlertCircle } from "lucide-react";
 import {
   updateProfileSchema,
@@ -122,11 +123,15 @@ function ProfilePage() {
   }
 
   return (
-    <div className="container max-w-4xl mx-auto py-8 px-4">
+    <section className="py-8">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold">My Profile</h1>
-        <p className="text-muted-foreground">
+        <SectionTitle
+          subtitle="Account Settings"
+          title="My Profile"
+          className="mb-4"
+        />
+        <p className="text-muted-foreground max-w-2xl">
           Manage your account settings and preferences
         </p>
       </div>
@@ -150,11 +155,11 @@ function ProfilePage() {
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="md:col-span-1">
-          <Card>
+          <Card className="rounded border-[3px] border-foreground/10">
             <CardContent className="pt-6">
               <div className="flex flex-col items-center">
                 <div className="relative">
-                  <Avatar className="h-24 w-24">
+                  <Avatar className="h-24 w-24 rounded ring-2 ring-foreground ring-offset-2">
                     <AvatarImage
                       src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${user.email}`}
                     />
@@ -164,7 +169,7 @@ function ProfilePage() {
                   </Avatar>
                   <button
                     type="button"
-                    className="absolute bottom-0 right-0 p-1.5 bg-primary text-white rounded-full hover:bg-primary/90 transition-colors"
+                    className="absolute bottom-0 right-0 p-1.5 bg-foreground text-primary rounded hover:bg-foreground/90 transition-colors"
                   >
                     <Camera className="h-4 w-4" />
                   </button>
@@ -173,7 +178,10 @@ function ProfilePage() {
                 <h2 className="mt-4 text-xl font-semibold">{user.fullName}</h2>
                 <p className="text-sm text-muted-foreground">{user.email}</p>
 
-                <Badge className="mt-2" variant="secondary">
+                <Badge
+                  className="mt-2 rounded bg-foreground/10 text-foreground hover:bg-foreground/20"
+                  variant="secondary"
+                >
                   {user.role}
                 </Badge>
 
@@ -205,7 +213,7 @@ function ProfilePage() {
             </TabsList>
 
             <TabsContent value="profile">
-              <Card>
+              <Card className="rounded border-[3px] border-foreground/10">
                 <CardHeader>
                   <CardTitle>Profile Information</CardTitle>
                   <CardDescription>
@@ -259,7 +267,7 @@ function ProfilePage() {
                         <Label htmlFor="currency">Preferred Currency</Label>
                         <select
                           id="currency"
-                          className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                          className="flex h-10 w-full border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                           {...profileForm.register("preferredCurrency")}
                         >
                           <option value="USD">USD - US Dollar</option>
@@ -279,7 +287,7 @@ function ProfilePage() {
             </TabsContent>
 
             <TabsContent value="password">
-              <Card>
+              <Card className="rounded border-[3px] border-foreground/10">
                 <CardHeader>
                   <CardTitle>Change Password</CardTitle>
                   <CardDescription>
@@ -350,7 +358,7 @@ function ProfilePage() {
             </TabsContent>
 
             <TabsContent value="preferences">
-              <Card>
+              <Card className="rounded border-[3px] border-foreground/10">
                 <CardHeader>
                   <CardTitle>Preferences</CardTitle>
                   <CardDescription>
@@ -386,7 +394,7 @@ function ProfilePage() {
                       <label className="flex items-center gap-3">
                         <input
                           type="checkbox"
-                          className="rounded border-gray-300"
+                          className="border-gray-300 rounded accent-primary"
                         />
                         <span className="text-sm">
                           Newsletter and travel tips
@@ -406,7 +414,7 @@ function ProfilePage() {
                         <Label className="text-xs text-muted-foreground">
                           Language
                         </Label>
-                        <select className="mt-1 flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm">
+                        <select className="mt-1 flex h-10 w-full border border-input bg-background px-3 py-2 text-sm">
                           <option value="en">English</option>
                           <option value="fr">Français</option>
                           <option value="rw">Kinyarwanda</option>
@@ -416,7 +424,7 @@ function ProfilePage() {
                         <Label className="text-xs text-muted-foreground">
                           Timezone
                         </Label>
-                        <select className="mt-1 flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm">
+                        <select className="mt-1 flex h-10 w-full border border-input bg-background px-3 py-2 text-sm">
                           <option value="Africa/Kigali">
                             Africa/Kigali (GMT+2)
                           </option>
@@ -433,7 +441,7 @@ function ProfilePage() {
           </Tabs>
         </div>
       </div>
-    </div>
+    </section>
   );
 }
 

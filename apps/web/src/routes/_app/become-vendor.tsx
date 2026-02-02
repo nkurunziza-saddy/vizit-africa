@@ -11,6 +11,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { SectionTitle } from "@/components/landing/section-title";
 import { CheckCircle, AlertCircle, Building2 } from "lucide-react";
 import type {
   VendorRegistrationInput,
@@ -76,7 +77,7 @@ function BecomeVendorPage() {
       <div className="container max-w-2xl mx-auto py-12 px-4">
         <Card>
           <CardHeader className="text-center">
-            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <div className="w-16 h-16 bg-green-100  flex items-center justify-center mx-auto mb-4">
               <CheckCircle className="h-8 w-8 text-green-600" />
             </div>
             <CardTitle>Application Submitted!</CardTitle>
@@ -103,10 +104,14 @@ function BecomeVendorPage() {
   }
 
   return (
-    <div className="container max-w-4xl mx-auto py-12 px-4">
-      <div className="mb-8 text-center">
-        <h1 className="text-3xl font-bold mb-2">Become a Vendor</h1>
-        <p className="text-muted-foreground">
+    <div className="container mx-auto px-4 py-8 max-w-7xl">
+      <div className="mb-12">
+        <SectionTitle
+          subtitle="Join Vizit Africa"
+          title="Become a Vendor"
+          className="mb-4"
+        />
+        <p className="text-muted-foreground max-w-2xl">
           Join our network of trusted tourism providers and grow your business
         </p>
       </div>

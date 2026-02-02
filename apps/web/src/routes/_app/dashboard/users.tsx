@@ -44,22 +44,22 @@ function UsersPage() {
         {isLoading ? (
           <div className="space-y-4">
             <div className="flex gap-4">
-              <div className="h-10 w-64 bg-muted rounded animate-pulse" />
-              <div className="h-10 w-32 bg-muted rounded animate-pulse ml-auto" />
+              <div className="h-10 w-64 bg-muted animate-pulse rounded" />
+              <div className="h-10 w-32 bg-muted animate-pulse ml-auto rounded" />
             </div>
-            <div className="border rounded-lg">
+            <div className="border rounded">
               <div className="h-12 bg-muted/50 border-b" />
               {Array.from({ length: 5 }).map((_, i) => (
                 <div
                   key={i}
                   className="h-16 border-b last:border-0 flex items-center px-4 gap-4"
                 >
-                  <div className="h-4 w-4 bg-muted rounded animate-pulse" />
-                  <div className="h-4 w-32 bg-muted rounded animate-pulse" />
-                  <div className="h-4 w-48 bg-muted rounded animate-pulse" />
-                  <div className="h-4 w-20 bg-muted rounded animate-pulse" />
-                  <div className="h-4 w-16 bg-muted rounded animate-pulse" />
-                  <div className="h-8 w-8 bg-muted rounded animate-pulse ml-auto" />
+                  <div className="h-4 w-4 bg-muted animate-pulse rounded" />
+                  <div className="h-4 w-32 bg-muted animate-pulse rounded" />
+                  <div className="h-4 w-48 bg-muted animate-pulse rounded" />
+                  <div className="h-4 w-20 bg-muted animate-pulse rounded" />
+                  <div className="h-4 w-16 bg-muted animate-pulse rounded" />
+                  <div className="h-8 w-8 bg-muted animate-pulse ml-auto rounded" />
                 </div>
               ))}
             </div>

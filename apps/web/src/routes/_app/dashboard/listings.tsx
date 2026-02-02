@@ -80,7 +80,7 @@ function VendorListings() {
         ))}
       </div>
       {myListings.length === 0 && (
-        <div className="text-center text-sm text-muted-foreground mt-8 p-12 border border-dashed rounded-lg bg-muted/20">
+        <div className="text-center text-sm text-muted-foreground mt-8 p-12 border border-dashed rounded bg-muted/20">
           <p>No listings found.</p>
           <p className="text-xs mt-1">
             (Displaying demo listings if available. Add a listing to see your
@@ -100,8 +100,8 @@ function ListingItem({
   onDelete: () => void;
 }) {
   return (
-    <Card>
-      <div className="aspect-video w-full bg-muted relative overflow-hidden rounded-t-lg">
+    <Card className="rounded border-[3px] border-foreground/10 overflow-hidden">
+      <div className="aspect-video w-full bg-muted relative overflow-hidden rounded">
         <img
           src={
             listing.imageUrl ||
@@ -110,7 +110,10 @@ function ListingItem({
           alt={listing.title}
           className="object-cover w-full h-full hover:scale-105 transition-transform duration-300"
         />
-        <Badge className="absolute top-2 right-2 uppercase" variant="secondary">
+        <Badge
+          className="absolute top-2 right-2 uppercase rounded tracking-wide"
+          variant="secondary"
+        >
           {listing.listingType?.replace("_", " ")}
         </Badge>
       </div>
@@ -131,19 +134,28 @@ function ListingItem({
             {listing.basePrice}{" "}
             <span className="font-normal text-muted-foreground">/ night</span>
           </span>
-          <Badge variant={listing.status === "active" ? "default" : "outline"}>
+
+          <Badge
+            variant={listing.status === "active" ? "default" : "outline"}
+            className="rounded uppercase tracking-wide"
+          >
             {listing.status}
           </Badge>
         </div>
 
         <div className="flex gap-2">
-          <Button variant="outline" size="sm" className="flex-1" disabled>
+          <Button
+            variant="outline"
+            size="sm"
+            className="flex-1 rounded uppercase tracking-wider font-bold"
+            disabled
+          >
             <Edit className="h-3 w-3 mr-2" /> Edit
           </Button>
           <Button
             variant="outline"
             size="sm"
-            className="text-destructive hover:text-destructive hover:bg-destructive/10"
+            className="text-destructive hover:text-destructive hover:bg-destructive/10 rounded"
             onClick={onDelete}
           >
             <Trash2 className="h-4 w-4" />
@@ -201,7 +213,11 @@ function AddListingDialog({ vendorId }: { vendorId: number }) {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger render={<Button />}>
+      <DialogTrigger
+        render={
+          <Button className="rounded uppercase tracking-wider font-bold" />
+        }
+      >
         <Plus /> Add New Listing
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
@@ -220,7 +236,7 @@ function AddListingDialog({ vendorId }: { vendorId: number }) {
               id="title"
               name="title"
               placeholder="e.g. Ocean View Villa"
-              className="col-span-3"
+              className="col-span-3 rounded"
               required
             />
           </div>
@@ -230,7 +246,7 @@ function AddListingDialog({ vendorId }: { vendorId: number }) {
             </Label>
             <div className="col-span-3">
               <Select name="type" required defaultValue="hotel_room">
-                <SelectTrigger>
+                <SelectTrigger className="rounded">
                   <SelectValue placeholder="Select type" />
                 </SelectTrigger>
                 <SelectContent>
@@ -252,7 +268,7 @@ function AddListingDialog({ vendorId }: { vendorId: number }) {
               name="price"
               type="number"
               placeholder="100"
-              className="col-span-3"
+              className="col-span-3 rounded"
               required
             />
           </div>
@@ -264,12 +280,16 @@ function AddListingDialog({ vendorId }: { vendorId: number }) {
               id="description"
               name="description"
               placeholder="Describe your listing..."
-              className="col-span-3"
+              className="col-span-3 rounded"
               required
             />
           </div>
           <div className="flex justify-end gap-2">
-            <Button type="submit" disabled={isLoading}>
+            <Button
+              type="submit"
+              disabled={isLoading}
+              className="rounded uppercase tracking-wider font-bold"
+            >
               {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               Create Listing
             </Button>

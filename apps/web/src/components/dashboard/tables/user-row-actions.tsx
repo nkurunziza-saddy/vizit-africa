@@ -42,25 +42,40 @@ export function DataTableRowActions<TData>({
         <MoreHorizontal className="h-4 w-4" />
         <span className="sr-only">Open menu</span>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-[160px]">
-        <DropdownMenuItem>Edit</DropdownMenuItem>
-        <DropdownMenuItem>Make a copy</DropdownMenuItem>
-        <DropdownMenuItem>Favorite</DropdownMenuItem>
-        <DropdownMenuSeparator />
+      <DropdownMenuContent
+        align="end"
+        className="w-[160px] rounded border-foreground/20"
+      >
+        <DropdownMenuItem className="rounded focus:bg-foreground/5 cursor-pointer">
+          Edit
+        </DropdownMenuItem>
+        <DropdownMenuItem className="rounded focus:bg-foreground/5 cursor-pointer">
+          Make a copy
+        </DropdownMenuItem>
+        <DropdownMenuItem className="rounded focus:bg-foreground/5 cursor-pointer">
+          Favorite
+        </DropdownMenuItem>
+        <DropdownMenuSeparator className="bg-foreground/10" />
         <DropdownMenuSub>
-          <DropdownMenuSubTrigger>Labels</DropdownMenuSubTrigger>
-          <DropdownMenuSubContent>
+          <DropdownMenuSubTrigger className="rounded focus:bg-foreground/5 cursor-pointer">
+            Labels
+          </DropdownMenuSubTrigger>
+          <DropdownMenuSubContent className="rounded border-foreground/20">
             <DropdownMenuRadioGroup value={user.role}>
               {["tourist", "vendor", "admin"].map((role) => (
-                <DropdownMenuRadioItem key={role} value={role}>
+                <DropdownMenuRadioItem
+                  key={role}
+                  value={role}
+                  className="rounded focus:bg-foreground/5 cursor-pointer"
+                >
                   {role}
                 </DropdownMenuRadioItem>
               ))}
             </DropdownMenuRadioGroup>
           </DropdownMenuSubContent>
         </DropdownMenuSub>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem>
+        <DropdownMenuSeparator className="bg-foreground/10" />
+        <DropdownMenuItem className="rounded text-red-600 focus:text-red-700 focus:bg-red-50 cursor-pointer">
           Delete
           <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
         </DropdownMenuItem>

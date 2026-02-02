@@ -25,6 +25,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
+import { PatternZigZag } from "@/components/ui/patterns";
 
 interface TicketSelectionModalProps {
   open: boolean;
@@ -103,15 +104,15 @@ export function TicketSelectionModal({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-3xl p-0 overflow-hidden bg-background border-none shadow-2xl">
-        <div className="px-6 py-6 pb-2 bg-muted/20">
+      <DialogContent className="sm:max-w-3xl p-0 overflow-hidden bg-background border-2 border-foreground shadow-none rounded">
+        <div className="px-6 py-6 pb-2 bg-foreground text-white rounded">
           <DialogHeader>
-            <DialogTitle className="text-xl font-bold tracking-tight">
+            <DialogTitle className="text-xl font-black uppercase tracking-tight text-primary font-heading">
               {step === "search" && "Search Flights"}
               {step === "results" && "Select Flight"}
               {step === "success" && "Ticket Added"}
             </DialogTitle>
-            <DialogDescription>
+            <DialogDescription className="text-white/70 font-serif italic">
               {step === "search" &&
                 `Find the best deals from ${fromLocation} to Kigali.`}
               {step === "results" &&
@@ -121,32 +122,37 @@ export function TicketSelectionModal({
             </DialogDescription>
           </DialogHeader>
         </div>
+        <div className="h-2 w-full bg-primary overflow-hidden relative">
+          <PatternZigZag className="w-[100%] h-full text-foreground/20" />
+        </div>
 
-        <div className="px-6 pb-8 min-h-[350px] flex flex-col justify-center">
+        <div className="px-6 pb-8 min-h-[350px] flex flex-col justify-center bg-zinc-50">
           {step === "search" && (
             <div className="flex flex-col items-center justify-center space-y-8 py-8 animate-in fade-in zoom-in-95 duration-500">
               <div className="relative">
                 <div
                   className={cn(
-                    "h-24 w-24 bg-primary/10 rounded-full flex items-center justify-center transition-all duration-500",
-                    isSearching ? "scale-110 bg-primary/20" : "",
+                    "h-24 w-24 bg-foreground rounded rotate-45 flex items-center justify-center transition-all duration-500 border-4 border-double border-primary",
+                    isSearching ? "scale-110 bg-foreground/90" : "",
                   )}
                 >
-                  {isSearching ? (
-                    <Loader2 className="h-10 w-10 text-primary animate-spin" />
-                  ) : (
-                    <Plane className="h-10 w-10 text-primary" />
-                  )}
+                  <div className="-rotate-45">
+                    {isSearching ? (
+                      <Loader2 className="h-10 w-10 text-primary animate-spin" />
+                    ) : (
+                      <Plane className="h-10 w-10 text-primary" />
+                    )}
+                  </div>
                 </div>
               </div>
 
               <div className="text-center space-y-2 max-w-sm">
-                <h3 className="font-semibold text-lg text-foreground">
+                <h3 className="font-bold text-lg text-foreground uppercase tracking-wider">
                   {isSearching
                     ? "Finding best connections..."
                     : "Start your journey"}
                 </h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">
+                <p className="text-sm text-muted-foreground leading-relaxed font-serif">
                   {isSearching
                     ? "We're scanning major airlines for the best routes and prices."
                     : `Search for flights from ${fromLocation} to Kigali International Airport.`}
@@ -157,7 +163,7 @@ export function TicketSelectionModal({
                 <Button
                   onClick={handleSearch}
                   size="lg"
-                  className="w-full max-w-[200px] rounded-full font-medium"
+                  className="w-full max-w-[200px] rounded font-bold uppercase tracking-widest bg-foreground hover:bg-foreground/90 text-primary"
                 >
                   Search Flights
                 </Button>
@@ -168,7 +174,7 @@ export function TicketSelectionModal({
           {step === "results" && (
             <div className="space-y-4 animate-in slide-in-from-bottom-4 duration-500">
               <Card
-                className="group relative overflow-hidden border-2 border-border hover:border-primary/20 transition-colors cursor-pointer"
+                className="group relative overflow-hidden border-2 border-foreground rounded hover:shadow-lg transition-all cursor-pointer bg-white"
                 onClick={handleSelectTicket}
                 role="button"
                 tabIndex={0}
@@ -176,8 +182,8 @@ export function TicketSelectionModal({
               >
                 <div className="absolute top-0 right-0 p-4">
                   <Badge
-                    variant="secondary"
-                    className="bg-emerald-500/15 text-emerald-700 hover:bg-emerald-500/25 border-emerald-200"
+                    variant="default"
+                    className="bg-primary text-foreground hover:bg-primary rounded uppercase tracking-widest font-bold border-none"
                   >
                     Best Value
                   </Badge>
@@ -186,14 +192,14 @@ export function TicketSelectionModal({
                 <CardContent className="p-6">
                   <div className="flex flex-col gap-6">
                     <div className="flex items-center gap-4 sm:w-48 shrink-0">
-                      <div className="h-12 w-12 bg-muted rounded-full flex items-center justify-center shrink-0 border">
-                        <span className="font-bold text-xs text-muted-foreground">
-                          WB
-                        </span>
+                      <div className="h-12 w-12 bg-foreground text-white rounded flex items-center justify-center shrink-0 border border-primary">
+                        <span className="font-bold text-xs">WB</span>
                       </div>
                       <div>
-                        <h4 className="font-semibold text-base">RwandAir</h4>
-                        <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                        <h4 className="font-bold text-base uppercase tracking-tight">
+                          RwandAir
+                        </h4>
+                        <div className="flex items-center gap-2 text-xs text-muted-foreground font-mono">
                           <span className="font-medium">Economy</span>
                           <span>•</span>
                           <span>Direct</span>
@@ -204,52 +210,52 @@ export function TicketSelectionModal({
                     <div className="flex-1 flex flex-col justify-center min-w-0">
                       <div className="flex items-end justify-between mb-2">
                         <div className="text-left">
-                          <div className="text-2xl font-bold leading-none">
+                          <div className="text-2xl font-black leading-none font-heading">
                             08:00
                           </div>
-                          <div className="text-[10px] font-semibold text-muted-foreground uppercase pt-1">
+                          <div className="text-[10px] font-bold text-muted-foreground uppercase pt-1 tracking-wider">
                             {fromLocation}
                           </div>
                         </div>
 
                         <div className="flex-1 px-4 pb-1.5 flex flex-col items-center">
-                          <div className="text-[10px] text-muted-foreground mb-1 font-medium">
+                          <div className="text-[10px] text-muted-foreground mb-1 font-bold">
                             8h 30m
                           </div>
                           <div className="relative w-full flex items-center">
-                            <Separator className="bg-border" />
-                            <Plane className="h-3 w-3 text-muted-foreground absolute left-1/2 -translate-x-1/2 bg-card px-0.5" />
+                            <Separator className="bg-foreground/20" />
+                            <Plane className="h-3 w-3 text-foreground absolute left-1/2 -translate-x-1/2 bg-white px-0.5" />
                           </div>
                         </div>
 
                         <div className="text-right">
-                          <div className="text-2xl font-bold leading-none">
+                          <div className="text-2xl font-black leading-none font-heading">
                             16:30
                           </div>
-                          <div className="text-[10px] font-semibold text-muted-foreground uppercase pt-1">
+                          <div className="text-[10px] font-bold text-muted-foreground uppercase pt-1 tracking-wider">
                             KGL
                           </div>
                         </div>
                       </div>
 
                       <div className="flex items-center gap-4 text-xs text-muted-foreground mt-2">
-                        <div className="flex items-center gap-1.5 bg-muted/50 px-2 py-1 rounded-md">
+                        <div className="flex items-center gap-1.5 bg-muted/50 px-2 py-1 rounded border border-border">
                           <Luggage className="h-3 w-3" />
                           <span>2 x 23kg</span>
                         </div>
-                        <div className="flex items-center gap-1.5 bg-muted/50 px-2 py-1 rounded-md">
+                        <div className="flex items-center gap-1.5 bg-muted/50 px-2 py-1 rounded border border-border">
                           <Utensils className="h-3 w-3" />
                           <span>Meals</span>
                         </div>
                       </div>
                     </div>
 
-                    <div className="sm:border-l sm:pl-6 flex flex-row sm:flex-col gap-2 shrink-0 pt-4 sm:pt-0 border-t sm:border-t-0">
+                    <div className="sm:border-l sm:border-foreground/10 sm:pl-6 flex flex-row sm:flex-col gap-2 shrink-0 pt-4 sm:pt-0 border-t sm:border-t-0 border-foreground/10">
                       <div className="text-right sm:text-left">
-                        <span className="text-2xl font-bold text-foreground block">
+                        <span className="text-2xl font-black text-foreground block font-heading">
                           ${ticketListing.basePrice}
                         </span>
-                        <span className="text-[10px] text-muted-foreground">
+                        <span className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider">
                           per person
                         </span>
                       </div>
@@ -258,7 +264,7 @@ export function TicketSelectionModal({
                 </CardContent>
               </Card>
 
-              <p className="text-xs text-center text-muted-foreground">
+              <p className="text-xs text-center text-muted-foreground font-serif italic">
                 Final price includes all taxes and fees. No hidden charges.
               </p>
             </div>
@@ -266,13 +272,17 @@ export function TicketSelectionModal({
 
           {step === "success" && (
             <div className="flex flex-col items-center justify-center space-y-8 py-6 animate-in zoom-in-95 duration-500">
-              <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center">
-                <Check className="h-10 w-10 text-green-600" />
+              <div className="w-20 h-20 bg-green-50 border-2 border-green-500 rounded flex items-center justify-center rotate-45 transform">
+                <div className="-rotate-45">
+                  <Check className="h-10 w-10 text-green-600" />
+                </div>
               </div>
 
               <div className="text-center space-y-2">
-                <h3 className="font-bold text-2xl">Flight Added!</h3>
-                <p className="text-muted-foreground text-sm max-w-[300px] mx-auto">
+                <h3 className="font-black text-2xl uppercase tracking-tighter">
+                  Flight Added!
+                </h3>
+                <p className="text-muted-foreground text-sm max-w-[300px] mx-auto font-serif">
                   Your flight to Kigali has been added to your cart.
                 </p>
               </div>
@@ -281,11 +291,14 @@ export function TicketSelectionModal({
                 <Button
                   variant="outline"
                   onClick={handleContinueShopping}
-                  className="h-11 border-2"
+                  className="h-11 border-2 border-foreground rounded uppercase tracking-wider font-bold hover:bg-foreground hover:text-white"
                 >
                   Browse Hotels
                 </Button>
-                <Button onClick={handleCheckout} className="h-11 gap-2">
+                <Button
+                  onClick={handleCheckout}
+                  className="h-11 gap-2 rounded bg-primary text-foreground hover:bg-primary/90 uppercase tracking-wider font-bold font-heading"
+                >
                   Go to Cart <ArrowRight className="h-4 w-4" />
                 </Button>
               </div>

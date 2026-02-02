@@ -327,7 +327,7 @@ export function VendorRegistrationForm({
           <div className="space-y-6">
             <div>
               <h3 className="font-semibold mb-2">Business Information</h3>
-              <div className="bg-muted p-4 rounded-lg space-y-2 text-sm">
+              <div className="bg-muted p-4 space-y-2 text-sm">
                 <p>
                   <strong>Name:</strong>{" "}
                   {registrationForm.getValues("businessName")}
@@ -352,7 +352,7 @@ export function VendorRegistrationForm({
 
             <div>
               <h3 className="font-semibold mb-2">Bank Details</h3>
-              <div className="bg-muted p-4 rounded-lg space-y-2 text-sm">
+              <div className="bg-muted p-4 space-y-2 text-sm">
                 <p>
                   <strong>Account Name:</strong>{" "}
                   {bankForm.getValues("bankAccountName")}

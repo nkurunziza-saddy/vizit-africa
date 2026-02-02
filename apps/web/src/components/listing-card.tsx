@@ -113,15 +113,11 @@ export default function ListingCard({
   };
 
   return (
-    <Link to="/listings/$id" params={{ id }} className="block h-full">
-      <motion.div
-        className="h-full flex flex-col group"
-        initial="rest"
-        whileHover="hover"
-        animate="rest"
-      >
-        <div className="relative aspect-[4/3] rounded-2xl overflow-hidden bg-muted/30 isolate">
-          <motion.img
+    <Link to="/listings/$id" params={{ id }} className="block h-full group">
+      <div className="h-full flex flex-col bg-background border border-border/50 hover:border-foreground transition-all duration-300 relative overflow-hidden">
+        {/* Image Section */}
+        <div className="relative aspect-4/3 w-full overflow-hidden bg-muted">
+          <img
             src={imgSrc}
             alt={title}
             onError={() =>
@@ -129,111 +125,134 @@ export default function ListingCard({
                 "https://placehold.co/600x400/f1f5f9/cbd5e1?text=Image+Unavailable",
               )
             }
-            className="w-full h-full object-cover"
-            variants={{
-              rest: { scale: 1 },
-              hover: { scale: 1.03 },
-            }}
-            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+            className="w-full h-full object-cover grayscale transition-all duration-700 group-hover:grayscale-0 group-hover:scale-105"
             loading="lazy"
           />
-
-          <motion.div
-            className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent z-10"
-            variants={{
-              rest: { opacity: 0 },
-              hover: { opacity: 1 },
-            }}
-            transition={{ duration: 0.3 }}
-          />
-
-          <div className="absolute top-3 right-3 z-20">
-            <motion.div
-              variants={{
-                rest: { opacity: isSaved ? 1 : 0, y: -5 },
-                hover: { opacity: 1, y: 0 },
-              }}
-              transition={{ duration: 0.2, ease: "easeOut" }}
-              className="flex items-center gap-2"
-            >
-              <Button
-                variant="ghost"
-                size="icon-sm"
-                className={cn(
-                  "rounded-full backdrop-blur-md transition-all duration-300 border border-transparent",
-                  isSaved
-                    ? "bg-black/20 text-rose-500 hover:text-rose-600"
-                    : "bg-black/20 text-white hover:text-rose-500",
-                )}
-                onClick={handleWishlistClick}
-              >
-                <Heart
-                  className={cn("h-3.5 w-3.5", isSaved && "fill-current")}
-                />
-              </Button>
-              <Button
-                size="icon-sm"
-                className={cn(
-                  "rounded-full transition-all duration-300 border-transparent",
-                  isInCart
-                    ? "bg-emerald-500 hover:bg-emerald-600 text-white shadow-md"
-                    : "bg-white text-slate-700 hover:bg-slate-50 hover:text-slate-900",
-                  pendingConfirm && "bg-rose-500 hover:bg-rose-600 text-white",
-                )}
-                onClick={handleQuickAdd}
-              >
-                <AnimatePresence mode="wait">
-                  {isInCart ? (
-                    <motion.div
-                      key="check"
-                      initial={{ scale: 0, rotate: -90 }}
-                      animate={{ scale: 1, rotate: 0 }}
-                      exit={{ scale: 0, rotate: 90 }}
-                      transition={{ duration: 0.2 }}
-                    >
-                      <Check className="h-4 w-4" />
-                    </motion.div>
-                  ) : (
-                    <motion.div
-                      key="plus"
-                      initial={{ scale: 0, rotate: -90 }}
-                      animate={{ scale: 1, rotate: 0 }}
-                      exit={{ scale: 0, rotate: 90 }}
-                      transition={{ duration: 0.2 }}
-                    >
-                      <Plus className="h-4 w-4" />
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </Button>
-            </motion.div>
+          {/* New "Badge" style label */}
+          <div className="absolute left-0 top-4 z-10 bg-primary px-3 py-1 text-xs font-bold uppercase tracking-widest text-white shadow-md">
+            {listing.listingType?.replace("_", " ")}
           </div>
+
+          {/* Action Buttons */}
+          <div className="absolute top-2 right-2 z-20 flex flex-col gap-2">
+            <Button
+              variant="ghost"
+              size="icon"
+              className={cn(
+                "rounded h-8 w-8 backdrop-blur-md transition-all duration-300 border border-transparent",
+                isSaved
+                  ? "bg-foreground text-primary hover:text-white"
+                  : "bg-black/20 text-white hover:bg-foreground hover:text-primary",
+              )}
+              onClick={handleWishlistClick}
+            >
+              <Heart className={cn("h-4 w-4", isSaved && "fill-current")} />
+            </Button>
+          </div>
+
+          <AnimatePresence>
+            {pendingConfirm && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="absolute inset-0 z-30 flex items-center justify-center bg-foreground/80 p-4 text-center text-white"
+              >
+                <div>
+                  <AlertCircle className="mx-auto mb-2 h-8 w-8 text-primary" />
+                  <p className="text-sm font-bold uppercase tracking-wider">
+                    Already in cart
+                  </p>
+                  <p className="mt-1 text-xs opacity-70 font-mono">
+                    Click + again to confirm
+                  </p>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
 
-        <div className="pt-3 space-y-1.5 px-0.5">
-          <div className="flex justify-between items-start gap-2">
-            <h3 className="font-medium text-sm leading-tight line-clamp-1 text-foreground">
+        {/* Decorative Strip */}
+        <div className="h-1 w-full bg-foreground/10 group-hover:bg-primary transition-colors duration-300" />
+
+        {/* Content Section */}
+        <div className="p-4 flex flex-col flex-grow relative bg-white group-hover:bg-zinc-50 transition-colors duration-300">
+          <div className="flex flex-col gap-2 mb-4">
+            <div className="flex justify-between items-center border-b border-dashed border-foreground/10 pb-2">
+              <div className="flex items-center gap-1 text-foreground">
+                <Star className="w-3 h-3 fill-primary text-primary" />
+                <span className="text-xs font-bold font-mono">
+                  {rating.toFixed(1)}
+                </span>
+                <span className="text-[10px] text-muted-foreground">(60)</span>
+              </div>
+              <p className="text-[10px] uppercase tracking-wider font-bold text-foreground/60 truncate max-w-[50%]">
+                {location}
+              </p>
+            </div>
+
+            <h3 className="text-lg font-black uppercase tracking-tight text-foreground leading-none group-hover:text-primary transition-colors line-clamp-2 mt-1">
               {title}
             </h3>
-            <div className="flex items-center gap-0.5 shrink-0">
-              <Star className="h-3 w-3 fill-foreground text-foreground" />
-              <span className="text-xs font-medium">{rating}</span>
-            </div>
           </div>
 
-          <div className="flex items-center justify-between">
-            <p className="text-muted-foreground text-xs line-clamp-1 truncate">
-              {location}
-            </p>
-            <div className="flex items-baseline gap-0.5 shrink-0">
-              <span className="text-sm font-semibold text-foreground">
-                ${price}
-              </span>
-              <span className="text-[10px] text-muted-foreground">/nt</span>
+          <div className="mt-auto pt-3 flex items-end justify-between">
+            <div>
+              <div className="flex items-baseline gap-1">
+                <span className="text-xl font-bold text-foreground">
+                  {new Intl.NumberFormat("en-US", {
+                    style: "currency",
+                    currency: _currency,
+                  }).format(price)}
+                </span>
+                {(listing as any).perUnit && (
+                  <span className="text-[10px] text-muted-foreground uppercase font-bold">
+                    / {(listing as any).perUnit}
+                  </span>
+                )}
+              </div>
             </div>
+
+            <Button
+              size="sm"
+              variant={isInCart ? "destructive" : "outline"}
+              className={cn(
+                "h-9 px-4 rounded uppercase tracking-wider font-bold text-[10px] gap-2 transition-all duration-300 border-2",
+                isInCart
+                  ? "bg-destructive hover:bg-destructive/90 text-white border-transparent"
+                  : "border-foreground text-foreground hover:bg-foreground hover:text-white",
+              )}
+              onClick={handleQuickAdd}
+            >
+              <AnimatePresence mode="wait">
+                {isInCart ? (
+                  <motion.div
+                    key="check"
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    exit={{ scale: 0 }}
+                    className="flex items-center gap-2"
+                  >
+                    <Check className="h-3 w-3" />
+                    <span>Remove</span>
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="plus"
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    exit={{ scale: 0 }}
+                    className="flex items-center gap-2"
+                  >
+                    <Plus className="h-3 w-3" />
+                    <span>Add</span>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </Button>
           </div>
         </div>
-      </motion.div>
+      </div>
     </Link>
   );
 }

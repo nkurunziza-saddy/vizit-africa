@@ -40,7 +40,7 @@ function DashboardIndex() {
   return (
     <div className="space-y-6">
       <div>
-        <p className="text-muted-foreground uppercase text-sm">
+        <p className="text-muted-foreground uppercase text-sm font-medium tracking-wide">
           Manage your trips, profile, and account settings here.
         </p>
       </div>
@@ -61,17 +61,17 @@ function TouristDashboard() {
   if (isLoading)
     return (
       <div className="space-y-6">
-        <Skeleton className="h-4 w-64" />
+        <Skeleton className="h-4 w-64 rounded" />
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-          <Skeleton className="h-32 rounded-lg" />
-          <Skeleton className="h-32 rounded-lg" />
-          <Skeleton className="h-32 rounded-lg" />
-          <Skeleton className="h-32 rounded-lg" />
+          <Skeleton className="h-32 rounded" />
+          <Skeleton className="h-32 rounded" />
+          <Skeleton className="h-32 rounded" />
+          <Skeleton className="h-32 rounded" />
         </div>
-        <Skeleton className="h-10 w-64" />
+        <Skeleton className="h-10 w-64 rounded" />
         <div className="space-y-4">
-          <Skeleton className="h-40 rounded-lg" />
-          <Skeleton className="h-40 rounded-lg" />
+          <Skeleton className="h-40 rounded" />
+          <Skeleton className="h-40 rounded" />
         </div>
       </div>
     );
@@ -89,8 +89,10 @@ function TouristDashboard() {
   return (
     <Tabs defaultValue="upcoming" className="w-full">
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-4">
-        <h3 className="text-xl font-semibold">Your Trips</h3>
-        <TabsList className="grid w-full sm:w-[400px] grid-cols-2">
+        <h3 className="text-xl font-bold uppercase tracking-tight">
+          Your Trips
+        </h3>
+        <TabsList className="grid w-full sm:w-[400px] grid-cols-2 rounded">
           <TabsTrigger value="upcoming">
             Upcoming ({upcomingBookings.length})
           </TabsTrigger>
@@ -102,8 +104,8 @@ function TouristDashboard() {
 
       <TabsContent value="upcoming" className="space-y-4">
         {upcomingBookings.length === 0 ? (
-          <div className="text-center py-16 border-2 border-dashed rounded-xl bg-muted/20">
-            <div className="mx-auto w-16 h-16 bg-muted rounded-full flex items-center justify-center mb-4">
+          <div className="text-center py-16 border-2 border-dashed border-muted rounded bg-muted/20">
+            <div className="mx-auto w-16 h-16 bg-muted  flex items-center justify-center mb-4">
               <CalendarDays className="h-8 w-8 text-muted-foreground/50" />
             </div>
             <h3 className="text-lg font-semibold">No upcoming trips</h3>
@@ -112,7 +114,10 @@ function TouristDashboard() {
               stays and tours.
             </p>
             <Link to="/listings">
-              <Button size="lg" className="px-8 shadow-md">
+              <Button
+                size="lg"
+                className="px-8 shadow-md rounded uppercase tracking-widest font-bold"
+              >
                 Explore Destinations
               </Button>
             </Link>
@@ -126,7 +131,7 @@ function TouristDashboard() {
 
       <TabsContent value="past" className="space-y-4">
         {pastBookings.length === 0 ? (
-          <div className="text-center py-16 border-2 border-dashed rounded-xl bg-muted/20">
+          <div className="text-center py-16 border-2 border-dashed border-muted rounded bg-muted/20">
             <p className="text-muted-foreground">No past bookings found.</p>
           </div>
         ) : (
@@ -141,7 +146,7 @@ function TouristDashboard() {
 
 function BookingCard({ booking }: { booking: any }) {
   return (
-    <div className="group relative flex flex-col sm:flex-row border rounded-xl overflow-hidden bg-card hover:shadow-lg transition-all duration-300">
+    <div className="group relative flex flex-col sm:flex-row border border-border rounded overflow-hidden bg-card hover:shadow-lg transition-all duration-300">
       <div
         className="h-40 sm:w-64 bg-muted bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
         style={{
@@ -150,7 +155,7 @@ function BookingCard({ booking }: { booking: any }) {
         }}
       >
         <div className="absolute top-2 left-2">
-          <Badge className="bg-background/80 backdrop-blur-sm text-foreground hover:bg-background/90 border-none shadow-sm">
+          <Badge className="bg-background/80 backdrop-blur-sm text-foreground hover:bg-background/90 border-none shadow-sm rounded uppercase tracking-wider text-xs">
             Hotel
           </Badge>
         </div>
@@ -174,7 +179,7 @@ function BookingCard({ booking }: { booking: any }) {
                     ? "destructive"
                     : "secondary"
               }
-              className="capitalize px-3 py-0.5 rounded-full"
+              className="capitalize px-3 py-0.5 rounded uppercase tracking-wide"
             >
               {booking.status}
             </Badge>
@@ -208,7 +213,11 @@ function BookingDetailsModal({ booking }: { booking: any }) {
   return (
     <Dialog>
       <DialogTrigger>
-        <Button variant="outline" size="sm" className="gap-2">
+        <Button
+          variant="outline"
+          size="sm"
+          className="gap-2 rounded uppercase tracking-wider font-bold"
+        >
           <Info className="h-4 w-4" /> View Details
         </Button>
       </DialogTrigger>
@@ -219,7 +228,7 @@ function BookingDetailsModal({ booking }: { booking: any }) {
         <div className="space-y-6 py-4">
           <div className="flex gap-4">
             <div
-              className="h-20 w-20 rounded-lg bg-muted bg-cover bg-center shrink-0"
+              className="h-20 w-20 rounded bg-muted bg-cover bg-center shrink-0"
               style={{
                 backgroundImage:
                   "url(https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=200&q=80)",
@@ -230,7 +239,10 @@ function BookingDetailsModal({ booking }: { booking: any }) {
               <p className="text-sm text-muted-foreground">
                 Reference: #BK-{booking.id}
               </p>
-              <Badge variant="outline" className="mt-2">
+              <Badge
+                variant="outline"
+                className="mt-2 rounded uppercase tracking-wide"
+              >
                 Confirmed
               </Badge>
             </div>
@@ -283,10 +295,13 @@ function BookingDetailsModal({ booking }: { booking: any }) {
           </div>
 
           <div className="pt-4 flex gap-3">
-            <Button className="flex-1 gap-2">
+            <Button className="flex-1 gap-2 rounded uppercase tracking-wide font-bold">
               <Receipt className="h-4 w-4" /> Download Invoice
             </Button>
-            <Button variant="outline" className="gap-2">
+            <Button
+              variant="outline"
+              className="gap-2 rounded uppercase tracking-wide font-bold"
+            >
               <ExternalLink className="h-4 w-4" /> Contact Vendor
             </Button>
           </div>
@@ -300,13 +315,16 @@ function TicketModal({ booking }: { booking: any }) {
   return (
     <Dialog>
       <DialogTrigger>
-        <Button size="sm" className="gap-2 shadow-sm">
+        <Button
+          size="sm"
+          className="gap-2 shadow-sm rounded uppercase tracking-wide font-bold"
+        >
           <QrCode className="h-4 w-4" /> Digital Ticket
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">
         <div className="flex flex-col items-center justify-center p-6 space-y-6 text-center">
-          <div className="rounded-full bg-green-100 p-4 text-green-600 dark:bg-green-900/30 dark:text-green-400 animate-bounce">
+          <div className=" bg-green-100 p-4 text-green-600 dark:bg-green-900/30 dark:text-green-400 animate-bounce">
             <CheckCircle2 className="h-10 w-10" />
           </div>
           <div className="space-y-1">
@@ -316,11 +334,11 @@ function TicketModal({ booking }: { booking: any }) {
             </p>
           </div>
 
-          <div className="p-4 bg-white rounded-xl shadow-lg border-2 border-primary/5">
+          <div className="p-4 bg-white rounded shadow-lg border-[3px] border-foreground/10">
             <QRCode value={`VIZIT-BOOKING-${booking.id}`} size={200} />
           </div>
 
-          <div className="w-full text-left space-y-2 bg-muted/50 p-4 rounded-xl text-sm border border-border/50">
+          <div className="w-full text-left space-y-2 bg-muted/50 p-4 rounded text-sm border border-border/50">
             <div className="flex justify-between">
               <span className="text-muted-foreground">Booking ID</span>
               <span className="font-mono font-bold">#{booking.id}</span>
@@ -338,7 +356,7 @@ function TicketModal({ booking }: { booking: any }) {
           </div>
 
           <Button
-            className="w-full py-6 text-base"
+            className="w-full py-6 text-base rounded uppercase tracking-widest font-bold"
             onClick={() => window.print()}
           >
             Download Ticket (PDF)
@@ -352,9 +370,11 @@ function TicketModal({ booking }: { booking: any }) {
 function VendorDashboard() {
   return (
     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-      <Card className="shadow-sm">
+      <Card className="shadow-sm rounded border-[3px] border-foreground/10">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
+          <CardTitle className="text-sm font-medium uppercase tracking-wider">
+            Total Revenue
+          </CardTitle>
           <div className="text-muted-foreground font-bold">$</div>
         </CardHeader>
         <CardContent>
@@ -364,9 +384,11 @@ function VendorDashboard() {
           </p>
         </CardContent>
       </Card>
-      <Card className="shadow-sm">
+      <Card className="shadow-sm rounded border-[3px] border-foreground/10">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">Active Listings</CardTitle>
+          <CardTitle className="text-sm font-medium uppercase tracking-wider">
+            Active Listings
+          </CardTitle>
           <Hotel className="h-4 w-4 text-muted-foreground" />
         </CardHeader>
         <CardContent>
@@ -470,7 +492,7 @@ function AdminDashboard() {
             <Button
               variant="ghost"
               size="sm"
-              className="p-0 w-6 h-6"
+              className="p-0 w-6 h-6 rounded"
               onClick={row.getToggleExpandedHandler()}
             >
               {row.getIsExpanded() ? (
@@ -495,7 +517,7 @@ function AdminDashboard() {
               <DropdownMenuTrigger>
                 <Button
                   variant="ghost"
-                  className="flex h-8 w-8 p-0 data-[state=open]:bg-muted"
+                  className="flex h-8 w-8 p-0 data-[state=open]:bg-muted rounded"
                 >
                   <MoreHorizontal className="h-4 w-4" />
                   <span className="sr-only">Open menu</span>
@@ -524,9 +546,11 @@ function AdminDashboard() {
   return (
     <div className="space-y-8">
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-        <Card className="shadow-sm">
+        <Card className="shadow-sm rounded border-[3px] border-foreground/10">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Users</CardTitle>
+            <CardTitle className="text-sm font-medium uppercase tracking-wider">
+              Total Users
+            </CardTitle>
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -536,13 +560,13 @@ function AdminDashboard() {
             </p>
           </CardContent>
         </Card>
-        <Card className="shadow-sm border-2 border-primary/10">
+        <Card className="shadow-sm border-[3px] border-primary/10 rounded">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
+            <CardTitle className="text-sm font-medium uppercase tracking-wider">
               Pending Vendors
             </CardTitle>
             {pendingVendors.length > 0 && (
-              <Badge variant="destructive" className="animate-pulse">
+              <Badge variant="destructive" className="animate-pulse rounded">
                 {pendingVendors.length}
               </Badge>
             )}
@@ -563,22 +587,22 @@ function AdminDashboard() {
         {isLoading ? (
           <div className="space-y-4">
             <div className="flex gap-4">
-              <div className="h-10 w-64 bg-muted rounded animate-pulse" />
-              <div className="h-10 w-32 bg-muted rounded animate-pulse ml-auto" />
+              <div className="h-10 w-64 bg-muted animate-pulse" />
+              <div className="h-10 w-32 bg-muted animate-pulse ml-auto" />
             </div>
-            <div className="border rounded-lg">
+            <div className="border rounded">
               <div className="h-12 bg-muted/50 border-b" />
               {Array.from({ length: 5 }).map((_, i) => (
                 <div
                   key={i}
                   className="h-16 border-b last:border-0 flex items-center px-4 gap-4"
                 >
-                  <div className="h-4 w-4 bg-muted rounded animate-pulse" />
-                  <div className="h-4 w-32 bg-muted rounded animate-pulse" />
-                  <div className="h-4 w-48 bg-muted rounded animate-pulse" />
-                  <div className="h-4 w-20 bg-muted rounded animate-pulse" />
-                  <div className="h-4 w-16 bg-muted rounded animate-pulse" />
-                  <div className="h-8 w-8 bg-muted rounded animate-pulse ml-auto" />
+                  <div className="h-4 w-4 bg-muted animate-pulse" />
+                  <div className="h-4 w-32 bg-muted animate-pulse" />
+                  <div className="h-4 w-48 bg-muted animate-pulse" />
+                  <div className="h-4 w-20 bg-muted animate-pulse" />
+                  <div className="h-4 w-16 bg-muted animate-pulse" />
+                  <div className="h-8 w-8 bg-muted animate-pulse ml-auto" />
                 </div>
               ))}
             </div>

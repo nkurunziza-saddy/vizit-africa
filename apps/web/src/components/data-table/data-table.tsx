@@ -104,14 +104,21 @@ export function DataTable<TData, TValue>({
         searchPlaceholder={searchPlaceholder}
         filters={filters}
       />
-      <div className="rounded-md border">
+      <div className="border border-foreground/10 rounded bg-white">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
+              <TableRow
+                key={headerGroup.id}
+                className="border-b border-foreground/10 hover:bg-transparent"
+              >
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead key={header.id} colSpan={header.colSpan}>
+                    <TableHead
+                      key={header.id}
+                      colSpan={header.colSpan}
+                      className="font-bold text-foreground uppercase text-xs tracking-wider h-12"
+                    >
                       {header.isPlaceholder
                         ? null
                         : flexRender(
@@ -132,13 +139,14 @@ export function DataTable<TData, TValue>({
                     key={row.id}
                     data-state={row.getIsSelected() && "selected"}
                     className={cn(
+                      "border-b border-foreground/5 hover:bg-foreground/5 transition-colors data-[state=selected]:bg-primary/10",
                       rowSize === "sm" && "h-8",
                       rowSize === "md" && "h-16",
                       rowSize === "lg" && "h-24",
                     )}
                   >
                     {row.getVisibleCells().map((cell) => (
-                      <TableCell key={cell.id}>
+                      <TableCell key={cell.id} className="font-medium text-sm">
                         {flexRender(
                           cell.column.columnDef.cell,
                           cell.getContext(),
@@ -147,7 +155,7 @@ export function DataTable<TData, TValue>({
                     ))}
                   </TableRow>
                   {row.getIsExpanded() && renderSubComponent && (
-                    <TableRow>
+                    <TableRow className="hover:bg-transparent bg-zinc-50">
                       <TableCell colSpan={row.getVisibleCells().length}>
                         {renderSubComponent({ row })}
                       </TableCell>
@@ -159,7 +167,7 @@ export function DataTable<TData, TValue>({
               <TableRow>
                 <TableCell
                   colSpan={columns.length}
-                  className="h-24 text-center"
+                  className="h-24 text-center text-muted-foreground font-serif italic"
                 >
                   No results.
                 </TableCell>

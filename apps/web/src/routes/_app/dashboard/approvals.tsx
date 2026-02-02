@@ -177,7 +177,7 @@ function ApprovalsPage() {
               <DropdownMenuTrigger>
                 <Button
                   variant="ghost"
-                  className="flex h-8 w-8 p-0 data-[state=open]:bg-muted"
+                  className="flex h-8 w-8 p-0 data-[state=open]:bg-muted rounded"
                 >
                   <MoreHorizontal className="h-4 w-4" />
                   <span className="sr-only">Open menu</span>
@@ -218,7 +218,7 @@ function ApprovalsPage() {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="bg-yellow-50 p-4 rounded-lg border border-yellow-100">
+        <div className="bg-yellow-50 p-4 rounded border border-yellow-100">
           <div className="flex items-center gap-2 text-yellow-700 mb-1">
             <Clock className="h-4 w-4" />
             <span className="text-sm font-medium">Pending</span>
@@ -226,7 +226,7 @@ function ApprovalsPage() {
           <p className="text-2xl font-bold text-yellow-800">{counts.pending}</p>
         </div>
 
-        <div className="bg-blue-50 p-4 rounded-lg border border-blue-100">
+        <div className="bg-blue-50 p-4 rounded border border-blue-100">
           <div className="flex items-center gap-2 text-blue-700 mb-1">
             <Users className="h-4 w-4" />
             <span className="text-sm font-medium">Under Review</span>
@@ -236,7 +236,7 @@ function ApprovalsPage() {
           </p>
         </div>
 
-        <div className="bg-green-50 p-4 rounded-lg border border-green-100">
+        <div className="bg-green-50 p-4 rounded border border-green-100">
           <div className="flex items-center gap-2 text-green-700 mb-1">
             <CheckCircle className="h-4 w-4" />
             <span className="text-sm font-medium">Approved</span>
@@ -244,7 +244,7 @@ function ApprovalsPage() {
           <p className="text-2xl font-bold text-green-800">{counts.approved}</p>
         </div>
 
-        <div className="bg-red-50 p-4 rounded-lg border border-red-100">
+        <div className="bg-red-50 p-4 rounded border border-red-100">
           <div className="flex items-center gap-2 text-red-700 mb-1">
             <XCircle className="h-4 w-4" />
             <span className="text-sm font-medium">Rejected</span>

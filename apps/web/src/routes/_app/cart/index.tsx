@@ -11,7 +11,7 @@ import {
   CardFooter,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { PageWrapper } from "@/components/layouts/page-wrapper";
+import { SectionTitle } from "@/components/landing/section-title";
 import { Calendar } from "@/components/ui/calendar";
 import {
   Popover,
@@ -59,7 +59,7 @@ function CartItemThumbnail({
     <img
       src={imgSrc}
       alt={title}
-      className="h-24 w-32 object-cover rounded-md flex-shrink-0 bg-muted"
+      className="h-24 w-32 object-cover rounded flex-shrink-0 bg-muted border border-border"
       onError={() =>
         setImgSrc(
           "https://placehold.co/600x400/f1f5f9/cbd5e1?text=Image+Unavailable",
@@ -98,8 +98,8 @@ function CartPage() {
 
   if (cart.length === 0) {
     return (
-      <PageWrapper>
-        <Empty className="min-h-[60vh]">
+      <section>
+        <Empty className="min-h-[60vh] border-2 border-dashed border-muted rounded">
           <EmptyHeader>
             <EmptyMedia variant="icon">
               <Trash2 className="h-6 w-6" />
@@ -113,10 +113,14 @@ function CartPage() {
           <EmptyContent>
             <Button
               size="lg"
+              className="rounded uppercase tracking-widest font-bold"
               onClick={() =>
                 navigate({
                   to: "/listings",
-                  search: (prev: any) => ({ ...prev, page: 1 }),
+                  search: (prev: Record<string, unknown>) => ({
+                    ...prev,
+                    page: 1,
+                  }),
                 })
               }
             >
@@ -124,17 +128,23 @@ function CartPage() {
             </Button>
           </EmptyContent>
         </Empty>
-      </PageWrapper>
+      </section>
     );
   }
 
   return (
     <div className="min-h-screen bg-muted/30">
-      <PageWrapper className="py-8">
-        <h1 className="text-3xl font-bold mb-2">Shopping Cart</h1>
-        <p className="text-muted-foreground mb-8">
-          Review and customize your booking details.
-        </p>
+      <section className="py-8">
+        <div className="mb-8">
+          <SectionTitle
+            title="Shopping Cart"
+            subtitle="Your Booking"
+            className="mb-8"
+          />
+          <p className="text-muted-foreground mb-8 max-w-2xl">
+            Review and customize your booking details.
+          </p>
+        </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           {/* Left Column: Cart Items */}
@@ -153,7 +163,10 @@ function CartPage() {
                 ) || [];
 
               return (
-                <Card key={item.id} className="overflow-hidden">
+                <Card
+                  key={item.id}
+                  className="overflow-hidden rounded border-[3px] border-foreground/10"
+                >
                   <CardHeader className="bg-muted/20 pb-4">
                     <div className="flex justify-between items-start">
                       <div className="flex gap-4">
@@ -205,7 +218,7 @@ function CartPage() {
                             <Button
                               variant={"outline"}
                               className={cn(
-                                "w-full justify-start text-left font-normal",
+                                "w-full justify-start text-left font-normal rounded",
                                 !item.dateRange && "text-muted-foreground",
                               )}
                             >
@@ -215,7 +228,7 @@ function CartPage() {
                                   <>
                                     {format(item.dateRange.from, "LLL dd")} -{" "}
                                     {format(item.dateRange.to, "LLL dd, y")}
-                                    <span className="ml-auto text-xs text-muted-foreground bg-secondary px-2 py-0.5 rounded-full">
+                                    <span className="ml-auto text-xs text-muted-foreground bg-secondary px-2 py-0.5 ">
                                       {nights} nights
                                     </span>
                                   </>
@@ -262,7 +275,7 @@ function CartPage() {
                           >
                             <Minus className="h-4 w-4" />
                           </Button>
-                          <span className="flex-1 text-center font-medium border rounded-md h-10 flex items-center justify-center">
+                          <span className="flex-1 text-center font-medium border h-10 flex items-center justify-center">
                             {item.guests} Guest{item.guests !== 1 && "s"}
                           </span>
                           <Button
@@ -299,7 +312,7 @@ function CartPage() {
                         {item.selectedAddons.map((addonItem) => (
                           <div
                             key={addonItem.addon.id}
-                            className="flex items-center justify-between bg-accent/30 p-3 rounded-lg border"
+                            className="flex items-center justify-between bg-accent/30 p-3 border rounded"
                           >
                             <div className="flex-1">
                               <div className="font-medium text-sm">
@@ -312,7 +325,7 @@ function CartPage() {
                             </div>
 
                             <div className="flex items-center gap-3">
-                              <div className="flex items-center gap-2 bg-background rounded-md border p-0.5">
+                              <div className="flex items-center gap-2 bg-background border p-0.5 rounded">
                                 <Button
                                   variant="ghost"
                                   size="icon"
@@ -369,7 +382,7 @@ function CartPage() {
                               <Badge
                                 key={addon.id}
                                 variant="outline"
-                                className="cursor-pointer hover:bg-accent hover:text-accent-foreground py-1.5 px-3 transition-colors border-dashed"
+                                className="cursor-pointer hover:bg-accent hover:text-accent-foreground py-1.5 px-3 transition-colors border-dashed rounded"
                                 onClick={() => updateAddon(item.id, addon, 1)}
                               >
                                 <Plus className="h-3 w-3 mr-1.5" />
@@ -417,7 +430,7 @@ function CartPage() {
 
           {/* Right Column: Order Summary */}
           <div className="lg:col-span-4 space-y-6">
-            <Card className="sticky top-24 shadow-sm border-2 border-primary/10 py-0 pb-3">
+            <Card className="sticky top-24 shadow-sm border-2 border-primary/10 py-0 pb-3 rounded border-[3px] border-foreground/10">
               <CardHeader className="bg-primary/5 py-4">
                 <CardTitle>Order Summary</CardTitle>
               </CardHeader>
@@ -443,7 +456,7 @@ function CartPage() {
                 </div>
 
                 <Button
-                  className="w-full text-base py-6 shadow-md hover:shadow-lg transition-all"
+                  className="w-full text-base py-6 shadow-md hover:shadow-lg transition-all rounded font-bold uppercase tracking-widest bg-foreground text-primary hover:bg-foreground/90"
                   size="lg"
                   onClick={handleProceed}
                 >
@@ -463,7 +476,7 @@ function CartPage() {
             </Card>
           </div>
         </div>
-      </PageWrapper>
+      </section>
     </div>
   );
 }

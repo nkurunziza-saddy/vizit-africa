@@ -28,7 +28,7 @@ function PaginationContent({
   return (
     <ul
       data-slot="pagination-content"
-      className={cn("gap-1 flex items-center", className)}
+      className={cn("flex flex-wrap items-center gap-2", className)}
       {...props}
     />
   );
@@ -51,9 +51,14 @@ function PaginationLink({
 }: PaginationLinkProps) {
   return (
     <Button
-      variant={isActive ? "outline" : "ghost"}
+      variant={isActive ? "default" : "outline"}
       size={size}
-      className={cn(className)}
+      className={cn(
+        isActive && "bg-foreground text-white hover:bg-foreground/90",
+        !isActive &&
+          "border-transparent bg-transparent hover:border-foreground hover:bg-transparent text-foreground",
+        className,
+      )}
       render={
         <a
           aria-current={isActive ? "page" : undefined}
@@ -74,13 +79,13 @@ function PaginationPrevious({
     <PaginationLink
       aria-label="Go to previous page"
       size="default"
-      className={cn("pl-2!", className)}
+      className={cn("gap-1 px-4", className)}
       {...props}
     >
       <HugeiconsIcon
         icon={ArrowLeft01Icon}
         strokeWidth={2}
-        data-icon="inline-start"
+        className="h-4 w-4"
       />
       <span className="hidden sm:block">Previous</span>
     </PaginationLink>
@@ -95,14 +100,14 @@ function PaginationNext({
     <PaginationLink
       aria-label="Go to next page"
       size="default"
-      className={cn("pr-2!", className)}
+      className={cn("gap-1 px-4", className)}
       {...props}
     >
       <span className="hidden sm:block">Next</span>
       <HugeiconsIcon
         icon={ArrowRight01Icon}
         strokeWidth={2}
-        data-icon="inline-end"
+        className="h-4 w-4"
       />
     </PaginationLink>
   );
@@ -117,12 +122,16 @@ function PaginationEllipsis({
       aria-hidden
       data-slot="pagination-ellipsis"
       className={cn(
-        "size-9 items-center justify-center [&_svg:not([class*='size-'])]:size-4 flex items-center justify-center",
+        "flex h-9 w-9 items-center justify-center opacity-50",
         className,
       )}
       {...props}
     >
-      <HugeiconsIcon icon={MoreHorizontalCircle01Icon} strokeWidth={2} />
+      <HugeiconsIcon
+        icon={MoreHorizontalCircle01Icon}
+        strokeWidth={2}
+        className="h-4 w-4"
+      />
       <span className="sr-only">More pages</span>
     </span>
   );

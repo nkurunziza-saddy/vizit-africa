@@ -7,23 +7,27 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import { Tick02Icon } from "@hugeicons/core-free-icons";
 
 function Checkbox({ className, ...props }: CheckboxPrimitive.Root.Props) {
-	return (
-		<CheckboxPrimitive.Root
-			data-slot="checkbox"
-			className={cn(
-				"border-input dark:bg-input/30 data-checked:bg-primary data-checked:text-primary-foreground dark:data-checked:bg-primary data-checked:border-primary aria-invalid:aria-checked:border-primary aria-invalid:border-destructive dark:aria-invalid:border-destructive/50 focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 flex size-4 items-center justify-center rounded-[4px] border shadow-xs transition-shadow group-has-disabled/field:opacity-50 focus-visible:ring-[3px] aria-invalid:ring-[3px] peer relative shrink-0 outline-none after:absolute after:-inset-x-3 after:-inset-y-2 disabled:cursor-not-allowed disabled:opacity-50",
-				className,
-			)}
-			{...props}
-		>
-			<CheckboxPrimitive.Indicator
-				data-slot="checkbox-indicator"
-				className="[&>svg]:size-3.5 grid place-content-center text-current transition-none"
-			>
-				<HugeiconsIcon icon={Tick02Icon} strokeWidth={2} />
-			</CheckboxPrimitive.Indicator>
-		</CheckboxPrimitive.Root>
-	);
+  return (
+    <CheckboxPrimitive.Root
+      data-slot="checkbox"
+      className={cn(
+        "peer h-5 w-5 shrink-0 border-2 border-foreground ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-foreground data-[state=checked]:text-white transition-colors",
+        className,
+      )}
+      {...props}
+    >
+      <CheckboxPrimitive.Indicator
+        data-slot="checkbox-indicator"
+        className={cn("flex items-center justify-center text-current")}
+      >
+        <HugeiconsIcon
+          icon={Tick02Icon}
+          strokeWidth={3}
+          className="h-3.5 w-3.5"
+        />
+      </CheckboxPrimitive.Indicator>
+    </CheckboxPrimitive.Root>
+  );
 }
 
 export { Checkbox };

@@ -148,7 +148,6 @@ const styles = StyleSheet.create({
     marginTop: 30,
     padding: 15,
     backgroundColor: "#f9fafb",
-    borderRadius: 4,
   },
   termsTitle: {
     fontSize: 10,

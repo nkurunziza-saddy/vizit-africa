@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,6 +8,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { MoreHorizontal } from "lucide-react";
 import type { Row } from "@tanstack/react-table";
+import { Button } from "@/components/ui/button";
 
 interface ActionMenuProps<TData> {
   row: Row<TData>;
@@ -23,18 +23,26 @@ export function ActionMenu<TData>({
 }: ActionMenuProps<TData>) {
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger>
-        <Button
-          variant="ghost"
-          className="flex h-8 w-8 p-0 data-[state=open]:bg-muted"
-        >
-          <MoreHorizontal className="h-4 w-4" />
-          <span className="sr-only">Open menu</span>
-        </Button>
+      <DropdownMenuTrigger
+        render={
+          <Button
+            variant="ghost"
+            className="flex h-8 w-8 p-0 data-[state=open]:bg-muted"
+          />
+        }
+      >
+        <MoreHorizontal className="h-4 w-4" />
+        <span className="sr-only">Open menu</span>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-[160px]">
+      <DropdownMenuContent
+        align="end"
+        className="w-[160px] rounded border-foreground/20"
+      >
         {onEdit && (
-          <DropdownMenuItem onClick={() => onEdit(row.original)}>
+          <DropdownMenuItem
+            onClick={() => onEdit(row.original)}
+            className="rounded focus:bg-foreground/5 cursor-pointer"
+          >
             Edit
           </DropdownMenuItem>
         )}
@@ -42,12 +50,16 @@ export function ActionMenu<TData>({
           onClick={() =>
             navigator.clipboard.writeText(JSON.stringify(row.original))
           }
+          className="rounded focus:bg-foreground/5 cursor-pointer"
         >
           Copy Details
         </DropdownMenuItem>
-        <DropdownMenuSeparator />
+        <DropdownMenuSeparator className="bg-foreground/10" />
         {onDelete && (
-          <DropdownMenuItem onClick={() => onDelete(row.original)}>
+          <DropdownMenuItem
+            onClick={() => onDelete(row.original)}
+            variant="destructive"
+          >
             Delete
             <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
           </DropdownMenuItem>

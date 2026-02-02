@@ -24,7 +24,7 @@ export const approvalColumns: ColumnDef<Vendor>[] = [
         checked={table.getIsAllPageRowsSelected()}
         onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
         aria-label="Select all"
-        className="translate-y-[2px]"
+        className="translate-y-[2px] rounded data-[state=checked]:bg-foreground"
       />
     ),
     cell: ({ row }) => (
@@ -32,7 +32,7 @@ export const approvalColumns: ColumnDef<Vendor>[] = [
         checked={row.getIsSelected()}
         onCheckedChange={(value) => row.toggleSelected(!!value)}
         aria-label="Select row"
-        className="translate-y-[2px]"
+        className="translate-y-[2px] rounded data-[state=checked]:bg-foreground"
       />
     ),
     enableSorting: false,
@@ -46,8 +46,10 @@ export const approvalColumns: ColumnDef<Vendor>[] = [
     cell: ({ row }) => {
       return (
         <div className="flex flex-col">
-          <span className="font-medium">{row.getValue("businessName")}</span>
-          <span className="text-xs text-muted-foreground truncate max-w-[200px]">
+          <span className="font-bold text-foreground">
+            {row.getValue("businessName")}
+          </span>
+          <span className="text-xs text-muted-foreground truncate max-w-[200px] font-serif italic">
             {row.original.bio}
           </span>
         </div>
@@ -61,7 +63,10 @@ export const approvalColumns: ColumnDef<Vendor>[] = [
     ),
     cell: ({ row }) => {
       return (
-        <Badge variant="outline" className="capitalize">
+        <Badge
+          variant="outline"
+          className="capitalize rounded font-bold tracking-wider text-[10px] border-foreground/20"
+        >
           {((row.getValue("vendorType") as string) || "").replace("_", " ")}
         </Badge>
       );
@@ -75,7 +80,7 @@ export const approvalColumns: ColumnDef<Vendor>[] = [
     header: "Contact",
     cell: ({ row }) => {
       return (
-        <div className="flex flex-col text-sm">
+        <div className="flex flex-col text-sm font-mono text-xs">
           <span>{row.original.email}</span>
           <span className="text-muted-foreground">{row.original.phone}</span>
         </div>
@@ -98,7 +103,10 @@ export const approvalColumns: ColumnDef<Vendor>[] = [
 
       return (
         <div className="flex w-[100px] items-center">
-          <Badge variant={variant} className="capitalize">
+          <Badge
+            variant={variant}
+            className="capitalize rounded font-bold text-[10px] tracking-wider"
+          >
             {status.replace("_", " ")}
           </Badge>
         </div>

@@ -103,11 +103,11 @@ function VendorBookingsPage() {
   if (isLoading) {
     return (
       <div className="space-y-6">
-        <Skeleton className="h-4 w-64" />
+        <Skeleton className="h-4 w-64 rounded" />
         <div className="space-y-4">
-          <Skeleton className="h-40 rounded-lg" />
-          <Skeleton className="h-40 rounded-lg" />
-          <Skeleton className="h-40 rounded-lg" />
+          <Skeleton className="h-40 rounded" />
+          <Skeleton className="h-40 rounded" />
+          <Skeleton className="h-40 rounded" />
         </div>
       </div>
     );
@@ -129,7 +129,10 @@ function VendorBookingsPage() {
           </div>
         ) : (
           bookings?.map((booking: any) => (
-            <Card key={booking.id}>
+            <Card
+              key={booking.id}
+              className="rounded border-[3px] border-foreground/10"
+            >
               <CardHeader className="pb-2">
                 <div className="flex justify-between items-start">
                   <div>
@@ -153,6 +156,7 @@ function VendorBookingsPage() {
                           ? "destructive"
                           : "secondary"
                     }
+                    className="rounded uppercase tracking-wide"
                   >
                     {booking.status}
                   </Badge>
@@ -181,7 +185,7 @@ function VendorBookingsPage() {
               {booking.status === "pending" && (
                 <CardFooter className="flex gap-2 pt-0">
                   <Button
-                    className="flex-1 bg-green-600 hover:bg-green-700"
+                    className="flex-1 bg-green-600 hover:bg-green-700 rounded uppercase tracking-wider font-bold"
                     onClick={() =>
                       handleStatusUpdate(booking.booking_id, "confirmed")
                     }
@@ -190,7 +194,7 @@ function VendorBookingsPage() {
                   </Button>
                   <Button
                     variant="outline"
-                    className="flex-1 border-red-200 text-red-600 hover:bg-red-50 hover:text-red-700"
+                    className="flex-1 border-red-200 text-red-600 hover:bg-red-50 hover:text-red-700 rounded uppercase tracking-wider font-bold"
                     onClick={() =>
                       handleStatusUpdate(booking.booking_id, "cancelled")
                     }

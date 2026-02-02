@@ -16,7 +16,6 @@ import {
 import { toast } from "sonner";
 import { differenceInDays, format } from "date-fns";
 import { Loader2, AlertCircle } from "lucide-react";
-import { PageWrapper } from "@/components/layouts/page-wrapper";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 export const Route = createFileRoute("/_app/cart/checkout")({
@@ -73,10 +72,13 @@ function CheckoutPage() {
 
   if (cart.length === 0) {
     return (
-      <PageWrapper>
+      <section>
         <div className="flex flex-col items-center justify-center min-h-[50vh] gap-4">
-          <h2 className="text-2xl font-bold">Your cart is empty</h2>
+          <h2 className="text-2xl font-bold uppercase tracking-tight">
+            Your cart is empty
+          </h2>
           <Button
+            className="rounded uppercase tracking-widest font-bold"
             onClick={() =>
               navigate({
                 to: "/listings",
@@ -87,34 +89,43 @@ function CheckoutPage() {
             Browse Listings
           </Button>
         </div>
-      </PageWrapper>
+      </section>
     );
   }
 
   if (!isAuthenticated || !user) {
     return (
-      <PageWrapper>
+      <section>
         <div className="flex flex-col items-center justify-center min-h-[50vh] gap-4">
-          <h2 className="text-2xl font-bold">Please log in</h2>
+          <h2 className="text-2xl font-bold uppercase tracking-tight">
+            Please log in
+          </h2>
           <p className="text-muted-foreground">
             You need to be logged in to complete your booking
           </p>
-          <Button onClick={() => navigate({ to: "/login" })}>Log In</Button>
+          <Button
+            className="rounded uppercase tracking-widest font-bold"
+            onClick={() => navigate({ to: "/login" })}
+          >
+            Log In
+          </Button>
         </div>
-      </PageWrapper>
+      </section>
     );
   }
 
   return (
     <div className="min-h-screen bg-muted/30">
-      <PageWrapper className="py-8">
-        <h1 className="text-3xl font-bold mb-8">Checkout</h1>
+      <section className="py-8">
+        <h1 className="text-3xl font-bold mb-8 uppercase tracking-tight">
+          Checkout
+        </h1>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           {/* Left Column: Order Review & Payment Form */}
           <div className="lg:col-span-8 space-y-8">
             {/* 1. Review Items */}
-            <Card>
+            <Card className="rounded border-[3px] border-foreground/10">
               <CardHeader>
                 <CardTitle>Review Your Trip</CardTitle>
                 <CardDescription>
@@ -188,7 +199,7 @@ function CheckoutPage() {
             </Card>
 
             {/* 2. Payment Section - UI Only */}
-            <Card>
+            <Card className="rounded border-[3px] border-foreground/10">
               <CardHeader>
                 <CardTitle>Payment</CardTitle>
                 <CardDescription>
@@ -203,7 +214,7 @@ function CheckoutPage() {
                   </p>
                   <Button
                     onClick={handleCheckout}
-                    className="w-full"
+                    className="w-full rounded font-bold uppercase tracking-widest bg-foreground text-primary hover:bg-foreground/90"
                     size="lg"
                     disabled={isProcessing}
                   >
@@ -223,7 +234,7 @@ function CheckoutPage() {
 
           {/* Right Column: Order Summary */}
           <div className="lg:col-span-4 space-y-6">
-            <Card className="sticky top-24">
+            <Card className="sticky top-24 rounded border-[3px] border-foreground/10">
               <CardHeader>
                 <CardTitle>Order Summary</CardTitle>
               </CardHeader>
@@ -255,7 +266,7 @@ function CheckoutPage() {
             </Card>
           </div>
         </div>
-      </PageWrapper>
+      </section>
     </div>
   );
 }

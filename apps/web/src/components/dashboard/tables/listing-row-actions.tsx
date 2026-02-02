@@ -3,7 +3,6 @@
 import { MoreHorizontal, Edit, Trash2 } from "lucide-react";
 import { Row } from "@tanstack/react-table";
 
-import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,6 +13,7 @@ import {
 import { type Listing } from "@/schemas";
 import { DB_KEYS } from "@/utils/mock-db";
 import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
 
 interface ListingRowActionsProps<TData> {
   row: Row<TData>;
@@ -55,10 +55,10 @@ export function ListingRowActions<TData>({
           <Edit className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
           Edit
         </DropdownMenuItem>
-        <DropdownMenuSeparator />
+        <DropdownMenuSeparator className="bg-foreground/10" />
         <DropdownMenuItem
           onClick={handleDelete}
-          className="text-red-600 focus:text-red-600 focus:bg-red-50"
+          className="text-red-600 focus:text-red-600 focus:bg-red-50 rounded cursor-pointer"
         >
           <Trash2 className="mr-2 h-3.5 w-3.5" />
           Delete

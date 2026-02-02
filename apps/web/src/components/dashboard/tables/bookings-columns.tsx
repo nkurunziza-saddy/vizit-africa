@@ -32,7 +32,7 @@ export const bookingColumns: ColumnDef<BookingData>[] = [
         }
         onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
         aria-label="Select all"
-        className="translate-y-[2px]"
+        className="translate-y-[2px] rounded data-[state=checked]:bg-foreground"
       />
     ),
     cell: ({ row }) => (
@@ -40,7 +40,7 @@ export const bookingColumns: ColumnDef<BookingData>[] = [
         checked={row.getIsSelected()}
         onCheckedChange={(value) => row.toggleSelected(!!value)}
         aria-label="Select row"
-        className="translate-y-[2px]"
+        className="translate-y-[2px] rounded data-[state=checked]:bg-foreground"
       />
     ),
     enableSorting: false,
@@ -52,7 +52,11 @@ export const bookingColumns: ColumnDef<BookingData>[] = [
       <DataTableColumnHeader column={column} title="Listing" />
     ),
     cell: ({ row }) => {
-      return <div className="font-medium">{row.getValue("listing_title")}</div>;
+      return (
+        <div className="font-bold text-foreground">
+          {row.getValue("listing_title")}
+        </div>
+      );
     },
   },
   {
@@ -63,8 +67,10 @@ export const bookingColumns: ColumnDef<BookingData>[] = [
     cell: ({ row }) => {
       return (
         <div className="flex flex-col">
-          <span className="font-medium">{row.original.customer_name}</span>
-          <span className="text-xs text-muted-foreground">
+          <span className="font-bold text-foreground">
+            {row.original.customer_name}
+          </span>
+          <span className="text-xs text-muted-foreground font-mono">
             {row.original.customer_email}
           </span>
         </div>
@@ -77,11 +83,11 @@ export const bookingColumns: ColumnDef<BookingData>[] = [
     header: "Dates",
     cell: ({ row }) => {
       return (
-        <div className="flex flex-col text-sm">
+        <div className="flex flex-col text-sm font-mono text-xs">
           <span>
             {format(new Date(row.original.start_date), "MMM d, yyyy")}
           </span>
-          <span className="text-muted-foreground text-xs">
+          <span className="text-muted-foreground text-[10px]">
             to {format(new Date(row.original.end_date), "MMM d, yyyy")}
           </span>
         </div>
@@ -99,7 +105,11 @@ export const bookingColumns: ColumnDef<BookingData>[] = [
         style: "currency",
         currency: "USD",
       }).format(price);
-      return <div className="font-medium">{formatted}</div>;
+      return (
+        <div className="font-bold font-mono text-foreground">
+          {formatted}
+        </div>
+      );
     },
   },
   {
@@ -116,7 +126,10 @@ export const bookingColumns: ColumnDef<BookingData>[] = [
       if (status === "cancelled") variant = "destructive";
 
       return (
-        <Badge variant={variant} className="capitalize">
+        <Badge
+          variant={variant}
+          className="capitalize rounded font-bold text-[10px] tracking-wider"
+        >
           {status}
         </Badge>
       );
