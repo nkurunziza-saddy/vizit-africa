@@ -64,7 +64,7 @@ export function Services() {
                 <img
                   src={service.image}
                   alt={service.title}
-                  className="w-full h-full object-cover grayscale contrast-125 transition-transform duration-700 group-hover:scale-105"
+                  className="w-full h-full object-cover grayscale contrast-125 transition-transform duration-700 group-hover:scale-[1.02]"
                 />
                 <div className="absolute inset-0 bg-primary/0 group-hover:bg-primary/10 transition-colors mix-blend-multiply" />
                 <div className="absolute bottom-4 right-4 text-white opacity-0 group-hover:opacity-100 transition-opacity">

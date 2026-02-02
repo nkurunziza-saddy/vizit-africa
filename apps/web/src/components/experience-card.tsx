@@ -30,7 +30,7 @@ export function ExperienceCard({
   return (
     <Card
       className={cn(
-        "group h-full p-0 overflow-hidden border-2 border-foreground bg-card gap-0 shadow-none hover:shadow-[8px_8px_0px_0px_currentColor] transition-all duration-300",
+        "group h-full p-0 overflow-hidden border-2 border-foreground bg-card gap-0 shadow-none hover:shadow-none transition-all duration-300",
         className,
       )}
       {...props}
@@ -39,7 +39,7 @@ export function ExperienceCard({
         <img
           src={imageSrc}
           alt={title}
-          className="h-full w-full object-cover grayscale-50 group-hover:grayscale-0 transition-all duration-700 group-hover:scale-105"
+          className="h-full w-full object-cover grayscale-50 group-hover:grayscale-0 transition-all duration-700 group-hover:scale-[1.02]"
         />
         <div className="absolute inset-0 border-[3px] border-white/20 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10" />
 
@@ -53,45 +53,33 @@ export function ExperienceCard({
         <PatternZigZag className="w-[200%] h-full text-background animate-pulse relative z-10 mix-blend-overlay" />
       </div>
 
-      <div className="p-6 md:p-8 flex flex-col grow relative group-hover:bg-foreground/5 transition-colors duration-500">
-        <div className="flex flex-col gap-2 mb-6">
-          <span className="text-primary font-mono font-bold text-sm border-b border-primary/20 w-fit pb-1">
-            {price} / Person
+      <div className="p-4 md:p-6 flex flex-col grow relative z-10">
+        <div className="flex justify-between items-start mb-4">
+          <span className="text-primary font-mono font-bold text-xs uppercase tracking-widest border border-primary/20 bg-primary/5 px-2 py-1">
+            {price}
           </span>
-          <h3 className="text-2xl font-black uppercase tracking-tighter text-foreground leading-[0.9]">
-            {title}
-          </h3>
+          <div className="flex items-center gap-1 text-foreground/60 text-xs font-bold">
+            <Star className="w-3 h-3 fill-primary text-primary" /> {rating} (
+            {reviews})
+          </div>
         </div>
 
+        <h3 className="text-xl md:text-2xl font-black uppercase tracking-tighter text-foreground mb-3 group-hover:text-primary transition-colors duration-300">
+          {title}
+        </h3>
+
         {children && (
-          <p className="text-muted-foreground text-sm font-light leading-relaxed mb-8 line-clamp-3">
+          <p className="text-muted-foreground text-sm font-light leading-relaxed mb-6 line-clamp-3">
             {children}
           </p>
         )}
 
-        <div className="mt-auto grid grid-cols-3 border-t border-foreground/10 pt-4 text-xs font-bold uppercase tracking-wider text-muted-foreground">
-          <div className="flex flex-col gap-1">
-            <span className="text-[10px] text-primary">Rating</span>
-            <div className="flex items-center gap-1 text-foreground">
-              <Star className="w-3 h-3 fill-current" /> {rating}
-            </div>
-          </div>
-          <div className="flex flex-col gap-1 pl-4 border-l border-foreground/10">
-            <span className="text-[10px] text-primary">Time</span>
-            <span className="text-foreground">{duration}</span>
-          </div>
-          <div className="flex flex-col gap-1 pl-4 border-l border-foreground/10">
-            <span className="text-[10px] text-primary">Place</span>
-            <span className="text-foreground truncate">{location}</span>
-          </div>
+        <div className="mt-auto pt-4 border-t border-foreground/10 flex justify-between items-center text-xs font-bold uppercase tracking-wider text-muted-foreground group-hover:text-foreground transition-colors">
+          <span>
+            {duration} — {location}
+          </span>
+          <ArrowRight className="w-4 h-4 -translate-x-2 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-300 text-primary" />
         </div>
-      </div>
-
-      <div className="p-6 pt-0">
-        <Button className="w-full h-auto py-5 bg-foreground hover:bg-primary text-background hover:text-foreground font-bold uppercase tracking-[0.2em] text-[10px] transition-all duration-300 flex items-center justify-center gap-3 rounded-none shadow-none border-transparent">
-          <span>Book Experience</span>
-          <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
-        </Button>
       </div>
     </Card>
   );

@@ -1,12 +1,11 @@
-import { useRef } from "react";
+import { useRef, useState, useMemo } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { SectionTitle } from "@/components/landing/section-title";
-import {
-  PatternDiamond,
-  PatternZigZag,
-} from "@/components/ui/patterns";
+import { PatternDiamond, PatternZigZag } from "@/components/ui/patterns";
 import { Reveal } from "@/components/ui/reveal";
-import { motion, useScroll, useTransform } from "motion/react";
+import { motion, useScroll, useTransform, AnimatePresence } from "motion/react";
+import { cn } from "@/lib/utils";
+import { ArrowUpRight } from "lucide-react";
 
 export const Route = createFileRoute("/_app/gallery")({
   component: GalleryPage,
@@ -49,10 +48,38 @@ const galleryItems = [
     location: "Rubavu",
     category: "Landscape",
   },
+  {
+    src: "https://images.unsplash.com/photo-1493246507139-91e8fad9978e?q=80&w=2070&auto=format&fit=crop",
+    title: "Canopy Walkway",
+    location: "Nyungwe",
+    category: "Nature",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1600093463592-8e36ae95ef56?q=80&w=2070&auto=format&fit=crop",
+    title: "Coffee Harvest",
+    location: "Huye",
+    category: "Culture",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1516426122078-c23e76319801?q=80&w=2068&auto=format&fit=crop",
+    title: "Akagera Savanna",
+    location: "Akagera",
+    category: "Wildlife",
+  },
+];
+
+const categories = [
+  "All",
+  "Landscape",
+  "Wildlife",
+  "Nature",
+  "Culture",
+  "City",
 ];
 
 function GalleryPage() {
   const containerRef = useRef(null);
+  const [activeCategory, setActiveCategory] = useState("All");
 
   // Parallax header effect
   const { scrollYProgress } = useScroll({
@@ -61,6 +88,11 @@ function GalleryPage() {
   });
   const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
   const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
+
+  const filteredItems = useMemo(() => {
+    if (activeCategory === "All") return galleryItems;
+    return galleryItems.filter((item) => item.category === activeCategory);
+  }, [activeCategory]);
 
   return (
     <div className="bg-background min-h-screen relative flex flex-col">
@@ -100,40 +132,83 @@ function GalleryPage() {
           subtitle="Captured in time, preserved in memory."
         />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {galleryItems.map((item, index) => (
-            <Reveal
-              key={index}
-              delay={index * 0.1}
-              className="group cursor-pointer"
+        {/* Filter Tabs */}
+        <div className="flex flex-wrap justify-center gap-4 mb-16">
+          {categories.map((cat) => (
+            <button
+              type="button"
+              key={cat}
+              onClick={() => setActiveCategory(cat)}
+              className={cn(
+                "text-xs font-bold uppercase tracking-[0.2em] px-4 py-2 border transition-all duration-300",
+                activeCategory === cat
+                  ? "border-primary text-primary bg-primary/5"
+                  : "border-transparent text-muted-foreground hover:text-foreground hover:border-foreground/20",
+              )}
             >
-              <div className="relative overflow-hidden aspect-[3/4] border-2 border-transparent hover:border-primary transition-colors duration-500 bg-foreground/5">
-                <div className="absolute inset-0 p-2">
-                  <div className="w-full h-full relative overflow-hidden">
-                    <img
-                      src={item.src}
-                      alt={item.title}
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 grayscale group-hover:grayscale-0"
-                    />
-                    <div className="absolute inset-0 bg-foreground/20 group-hover:opacity-0 transition-opacity duration-500" />
-                  </div>
-                </div>
-
-                <div className="absolute bottom-0 left-0 right-0 p-6 translate-y-full group-hover:translate-y-0 transition-transform duration-500 bg-foreground text-white z-20">
-                  <span className="text-primary text-xs font-bold uppercase tracking-widest block mb-1">
-                    {item.category}
-                  </span>
-                  <h3 className="text-xl font-bold uppercase tracking-wide">
-                    {item.title}
-                  </h3>
-                  <div className="flex items-center gap-2 mt-2 text-white/60 text-sm">
-                    <PatternZigZag className="w-4 h-2" />
-                    {item.location}
-                  </div>
-                </div>
-              </div>
-            </Reveal>
+              {cat}
+            </button>
           ))}
+        </div>
+
+        <motion.div
+          layout
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+        >
+          <AnimatePresence mode="popLayout">
+            {filteredItems.map((item) => (
+              <motion.div
+                layout
+                key={item.src}
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.9 }}
+                transition={{ duration: 0.3 }}
+                className="group cursor-pointer"
+              >
+                <div className="relative overflow-hidden aspect-[3/4] border-2 border-transparent hover:border-primary transition-colors duration-500 bg-foreground/5">
+                  <div className="absolute inset-0 p-2">
+                    <div className="w-full h-full relative overflow-hidden">
+                      <img
+                        src={item.src}
+                        alt={item.title}
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 grayscale group-hover:grayscale-0"
+                      />
+                      <div className="absolute inset-0 bg-foreground/20 group-hover:opacity-0 transition-opacity duration-500" />
+                    </div>
+                  </div>
+
+                  <div className="absolute bottom-0 left-0 right-0 p-6 translate-y-full group-hover:translate-y-0 transition-transform duration-500 bg-foreground text-white z-20">
+                    <span className="text-primary text-xs font-bold uppercase tracking-widest block mb-1">
+                      {item.category}
+                    </span>
+                    <h3 className="text-xl font-bold uppercase tracking-wide">
+                      {item.title}
+                    </h3>
+                    <div className="flex items-center justify-between mt-2 text-white/60 text-sm">
+                      <div className="flex items-center gap-2">
+                        <PatternZigZag className="w-4 h-2" />
+                        {item.location}
+                      </div>
+                      <ArrowUpRight className="w-4 h-4 text-primary" />
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        </motion.div>
+
+        <div className="mt-24 text-center">
+          <p className="text-muted-foreground font-serif italic mb-6">
+            Have your own story to tell?
+          </p>
+          <button
+            type="button"
+            className="text-xs font-bold uppercase tracking-widest border-b border-primary text-primary hover:text-foreground hover:border-foreground transition-colors pb-1"
+          >
+            Share your experience
+          </button>
         </div>
       </main>
     </div>

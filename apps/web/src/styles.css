@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Outfit:wght@300..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap");
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
@@ -17,6 +17,7 @@
   --popover-foreground: oklch(0.145 0 0);
   --primary: oklch(0.48 0.17 40); /* Imigongo Ochre */
   --primary-foreground: oklch(0.98 0.005 50);
+  --primary-green: oklch(0.45 0.15 140); /* Nature Green */
   --secondary: oklch(0.145 0 0); /* Black as secondary */
   --secondary-foreground: oklch(0.98 0.005 50);
   --muted: oklch(0.92 0.005 50);
@@ -40,6 +41,7 @@
   --popover-foreground: oklch(0.98 0.005 50);
   --primary: oklch(0.48 0.17 40); /* Keep Ochre in dark mode */
   --primary-foreground: oklch(0.98 0.005 50);
+  --primary-green: oklch(0.45 0.15 140);
   --secondary: oklch(0.98 0.005 50);
   --secondary-foreground: oklch(0.145 0 0);
   --muted: oklch(0.25 0 0);
@@ -54,7 +56,8 @@
 }
 
 @theme inline {
-  --font-sans: "Inter Variable", sans-serif;
+  --font-sans: "Outfit", sans-serif;
+  --font-serif: "Playfair Display", serif;
   --font-handwriting: "Caveat", cursive;
   --color-ring: var(--ring);
   --color-input: var(--input);
@@ -93,6 +96,7 @@
 
   html {
     @apply scroll-smooth font-sans;
+    font-size: 14px;
   }
 
   body {

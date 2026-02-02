@@ -31,7 +31,7 @@ export function SectionTitle({
   const PatternIcon = (
     <PatternHorizontalDiamonds
       className={cn(
-        "w-12 h-6 shrink-0 hidden md:block transition-transform hover:scale-110",
+        "w-12 h-6 shrink-0 hidden md:block transition-transform hover:scale-105",
         isDark ? "text-primary" : "text-primary",
         tooltip ? "cursor-help" : "",
       )}

@@ -5,6 +5,9 @@ import { PatternDecoder } from "@/components/landing/pattern-decoder";
 import { PatternZigZag } from "@/components/ui/patterns";
 import { StorySection } from "@/components/landing/story-section";
 import { Timeline } from "@/components/landing/timeline";
+import { CountingStats } from "@/components/landing/counting-stats";
+import { TextRevealScroll } from "@/components/landing/text-reveal-scroll";
+import { DramaticQuote } from "@/components/landing/dramatic-quote";
 import { createFileRoute } from "@tanstack/react-router";
 import { motion, useScroll, useTransform } from "motion/react";
 import { Button } from "@/components/ui/button";
@@ -112,7 +115,14 @@ function RwandaStoryPage() {
           </div>
         </div>
 
+        <TextRevealScroll
+          text="In the heart of Africa, a transformation has taken place. From the ashes of history, a green, vibrant, and unified nation has emerged. This is not just a story of survival, but a masterclass in resilience."
+          className="bg-background"
+        />
+
         <FactGrid />
+
+        <CountingStats />
 
         {/* 1. arrival timeline */}
         <Timeline />
@@ -159,6 +169,12 @@ function RwandaStoryPage() {
 
         {/* 5. pattern decoder */}
         <PatternDecoder />
+
+        <DramaticQuote
+          quote="In Rwanda, we have decided to define ourselves not by our past, but by our potential."
+          author="Paul Kagame"
+          subAuthor="President of the Republic of Rwanda"
+        />
 
         {/* people & culture section */}
         <StorySection

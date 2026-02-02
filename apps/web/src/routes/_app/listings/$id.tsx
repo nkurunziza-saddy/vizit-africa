@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useParams } from "@tanstack/react-router";
-import { Star, MapPin, ArrowLeft } from "lucide-react";
+import { Star, MapPin, ArrowLeft, Share2, Heart } from "lucide-react";
 import { format } from "date-fns";
 import {
   Popover,
@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { PageWrapper } from "@/components/layouts/page-wrapper";
@@ -19,6 +19,8 @@ import { useState } from "react";
 import { useCart } from "@/context/cart-context";
 import { AddonSelector } from "@/components/booking/addon-selector";
 import type { DateRange } from "react-day-picker";
+import { Reveal } from "@/components/ui/reveal";
+import { PatternDiamond } from "@/components/ui/patterns";
 
 export const Route = createFileRoute("/_app/listings/$id")({
   component: ListingDetail,
@@ -40,38 +42,28 @@ function ListingDetail() {
 
   if (isListingLoading || !data) {
     return (
-      <div className="min-h-screen bg-background flex flex-col">
-        <PageWrapper className="flex-1 py-8">
-          <Skeleton className="h-4 w-32 mb-8" />
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-            <div className="lg:col-span-8 space-y-8">
-              <div className="space-y-4">
-                <Skeleton className="h-4 w-24" />
-                <Skeleton className="h-8 w-3/4" />
-              </div>
-              <Skeleton className="h-px w-full" />
-              <div className="space-y-4">
-                <Skeleton className="h-6 w-32" />
-                <Skeleton className="h-4 w-full" />
-                <Skeleton className="h-4 w-5/6" />
-                <Skeleton className="h-4 w-4/6" />
-              </div>
-              <Skeleton className="h-px w-full" />
-              <div className="space-y-4">
-                <Skeleton className="h-6 w-32" />
-                <div className="flex flex-wrap gap-2">
-                  <Skeleton className="h-8 w-20" />
-                  <Skeleton className="h-8 w-24" />
-                  <Skeleton className="h-8 w-16" />
-                  <Skeleton className="h-8 w-28" />
+      <div className="min-h-screen bg-background flex flex-col pb-20">
+        <Skeleton className="h-[60vh] w-full" />
+        <div className="container mx-auto px-4 -mt-20 relative z-10">
+          <Card className="border-0 shadow-lg bg-background/95 backdrop-blur-sm">
+            <div className="p-8">
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+                <div className="lg:col-span-8 space-y-8">
+                  <Skeleton className="h-12 w-3/4" />
+                  <Skeleton className="h-6 w-1/2" />
+                  <div className="space-y-4 pt-8">
+                    <Skeleton className="h-4 w-full" />
+                    <Skeleton className="h-4 w-full" />
+                    <Skeleton className="h-4 w-2/3" />
+                  </div>
+                </div>
+                <div className="lg:col-span-4">
+                  <Skeleton className="h-96 w-full" />
                 </div>
               </div>
             </div>
-            <div className="lg:col-span-4">
-              <Skeleton className="h-96 w-full rounded-lg" />
-            </div>
-          </div>
-        </PageWrapper>
+          </Card>
+        </div>
       </div>
     );
   }
@@ -122,116 +114,169 @@ function ListingDetail() {
     });
   };
 
-  return (
-    <div className="min-h-screen bg-background flex flex-col">
-      <PageWrapper className="flex-1">
-        <Link
-          to="/listings"
-          className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-8 transition-colors"
-        >
-          <ArrowLeft className="h-4 w-4" />
-          Back to listings
-        </Link>
+  const imageUrl =
+    listing.imageUrl ||
+    "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1920&q=80";
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-          <div className="lg:col-span-8 space-y-8">
-            <div className="space-y-4">
-              <div className="flex flex-col gap-2">
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <span className="flex items-center gap-1.5">
-                    <MapPin className="h-3 w-3" /> {listing.locationId}
-                  </span>
-                  <span>•</span>
-                  <div className="flex items-center gap-1">
-                    <Star className="h-3 w-3 fill-foreground text-foreground" />
-                    <span className="font-semibold text-foreground">4.8</span>
-                    <span>(12)</span>
-                  </div>
+  return (
+    <div className="min-h-screen bg-background flex flex-col pb-32">
+      {/* Full Bleed Hero */}
+      <div className="relative h-[60vh] min-h-[500px] w-full overflow-hidden">
+        <img
+          src={imageUrl}
+          alt={listing.title}
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/20 to-transparent" />
+
+        <div className="absolute top-8 left-0 right-0 container mx-auto px-4 z-20 flex justify-between items-center">
+          <Link
+            to="/listings"
+            className="inline-flex items-center gap-2 text-sm text-white/90 hover:text-white bg-black/20 hover:bg-black/40 backdrop-blur-sm px-4 py-2 rounded-full transition-all duration-300"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Back to Collection
+          </Link>
+
+          <div className="flex gap-2">
+            <Button
+              size="icon"
+              variant="ghost"
+              className="rounded-full bg-black/20 text-white hover:bg-black/40 hover:text-white"
+            >
+              <Share2 className="h-4 w-4" />
+            </Button>
+            <Button
+              size="icon"
+              variant="ghost"
+              className="rounded-full bg-black/20 text-white hover:bg-black/40 hover:text-white"
+            >
+              <Heart className="h-4 w-4" />
+            </Button>
+          </div>
+        </div>
+      </div>
+
+      <div className="container mx-auto px-4 -mt-32 relative z-10">
+        <Reveal>
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+            {/* Main Content */}
+            <div className="lg:col-span-8 space-y-12">
+              {/* Title Section */}
+              <div className="space-y-4">
+                <div className="flex items-center gap-2 text-primary font-mono text-xs uppercase tracking-widest bg-primary/10 w-fit px-3 py-1 rounded-full border border-primary/20">
+                  <PatternDiamond className="w-2 h-2" />
+                  <span>Premier Stay</span>
                 </div>
-                <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-foreground">
+                <h1 className="text-4xl md:text-5xl lg:text-6xl font-black uppercase tracking-tighter text-foreground leading-[0.9]">
                   {listing.title}
                 </h1>
+                <div className="flex items-center gap-6 text-sm text-muted-foreground font-medium pt-2">
+                  <span className="flex items-center gap-1.5 hover:text-primary transition-colors cursor-pointer">
+                    <MapPin className="h-4 w-4" /> {listing.locationId}
+                  </span>
+                  <span className="flex items-center gap-1.5">
+                    <Star className="h-4 w-4 fill-primary text-primary" />
+                    <span className="font-bold text-foreground">4.98</span>
+                    <span className="underline cursor-pointer hover:text-foreground transition-colors">
+                      (128 reviews)
+                    </span>
+                  </span>
+                </div>
               </div>
-            </div>
 
-            <div className="w-full h-px bg-border/50" />
+              {/* Divider */}
+              <div className="h-px w-full bg-border/40" />
 
-            <div className="prose prose-gray prose-sm max-w-none">
-              <h3 className="text-lg font-semibold float-none mb-2 tracking-tight text-foreground">
-                About
-              </h3>
-              <p className="text-muted-foreground leading-bg">
-                {listing.description}
-              </p>
-            </div>
+              {/* Description */}
+              <div className="prose prose-lg prose-gray max-w-none">
+                <h3 className="font-serif text-2xl italic text-foreground mb-6">
+                  The Experience
+                </h3>
+                <p className="text-muted-foreground leading-relaxed text-lg">
+                  {listing.description}
+                  {listing.description}{" "}
+                  {/* Doubling for visual length if short */}
+                </p>
+              </div>
 
-            <div className="w-full h-px bg-border/50" />
-
-            <div>
-              <h3 className="text-lg font-semibold mb-4 tracking-tight text-foreground">
-                Amenities
-              </h3>
-              <div className="flex flex-wrap gap-2">
-                {["Wifi", "Parking", "Pool", "Kitchen", "Air conditioning"].map(
-                  (item) => (
+              {/* Amenities */}
+              <div>
+                <h3 className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-6">
+                  Amenities
+                </h3>
+                <div className="flex flex-wrap gap-3">
+                  {[
+                    "Wifi",
+                    "Parking",
+                    "Pool",
+                    "Kitchen",
+                    "Air conditioning",
+                    "Private Patrol",
+                    "Butler Service",
+                  ].map((item) => (
                     <Badge
                       key={item}
                       variant="outline"
-                      className="px-2.5 py-1 text-xs font-normal border-border/50 text-muted-foreground"
+                      className="px-4 py-2 text-xs font-medium border-border/50 text-foreground/80 hover:bg-muted transition-colors rounded-sm"
                     >
                       {item}
                     </Badge>
-                  ),
-                )}
-              </div>
-            </div>
-
-            <div className="w-full h-px bg-border/50" />
-
-            {/* Addons Section */}
-            {listing.addons && listing.addons.length > 0 && (
-              <div>
-                <h3 className="text-lg font-semibold mb-4 tracking-tight text-foreground">
-                  Enhance your trip
-                </h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {listing.addons.map((addon) => (
-                    <AddonSelector
-                      key={addon.id}
-                      addon={addon}
-                      onSelect={(qty) => handleAddonSelect(addon, qty)}
-                    />
                   ))}
                 </div>
               </div>
-            )}
-          </div>
 
-          <div className="lg:col-span-4">
-            <div className="sticky top-24">
-              <Card className="shadow-none border border-border/50 bg-transparent">
-                <CardHeader className="pb-4 pt-6 px-6">
-                  <CardTitle className="flex justify-between items-baseline">
-                    <span className="text-xl font-bold">
-                      ${listing.basePrice}{" "}
-                      <span className="text-sm font-normal text-muted-foreground">
-                        / night
+              {/* Addons Section */}
+              {listing.addons && listing.addons.length > 0 && (
+                <div className="bg-muted/10 p-8 border border-border/50 rounded-sm">
+                  <h3 className="text-xl font-bold uppercase tracking-tight text-foreground mb-6 flex items-center gap-3">
+                    <PatternDiamond className="w-4 h-4 text-primary" />
+                    Enhance your stay
+                  </h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {listing.addons.map((addon) => (
+                      <AddonSelector
+                        key={addon.id}
+                        addon={addon}
+                        onSelect={(qty) => handleAddonSelect(addon, qty)}
+                      />
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Sticky Sidebar */}
+            <div className="lg:col-span-4">
+              <div className="sticky top-28 bg-background border border-border shadow-2xl shadow-primary/5 rounded-xl overflow-hidden">
+                <div className="bg-primary/5 p-6 border-b border-border/50">
+                  <div className="flex justify-between items-baseline">
+                    <div className="flex flex-col">
+                      <span className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-1">
+                        Starting from
                       </span>
+                      <span className="text-3xl font-black tracking-tight text-foreground">
+                        ${listing.basePrice}
+                      </span>
+                    </div>
+                    <span className="text-sm font-medium text-muted-foreground">
+                      / night
                     </span>
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4 px-6 pb-6">
-                  <div className="grid grid-cols-2 gap-2">
+                  </div>
+                </div>
+
+                <div className="p-6 space-y-6">
+                  <div className="grid grid-cols-2 gap-3">
                     <Popover>
-                      <PopoverTrigger>
-                        <div className="border border-border/50 rounded p-2 hover:border-border transition-colors cursor-pointer flex-1 cursor-pointer">
-                          <div className="text-[10px] uppercase font-medium text-muted-foreground mb-1">
+                      <PopoverTrigger className="w-full">
+                        <div className="border border-input rounded-lg p-3 hover:border-primary/50 hover:bg-accent/50 transition-all cursor-pointer text-left h-full">
+                          <div className="text-[10px] uppercase font-bold text-muted-foreground mb-1.5">
                             Check-in
                           </div>
-                          <div className="text-sm">
+                          <div className="text-sm font-medium truncate">
                             {date?.from
-                              ? format(date.from, "PPP")
-                              : "Select date"}
+                              ? format(date.from, "MMM dd, yyyy")
+                              : "Add date"}
                           </div>
                         </div>
                       </PopoverTrigger>
@@ -247,17 +292,19 @@ function ListingDetail() {
                       </PopoverContent>
                     </Popover>
                     <Popover>
-                      <PopoverTrigger>
-                        <div className="border border-border/50 rounded p-2 hover:border-border transition-colors cursor-pointer flex-1 cursor-pointer">
-                          <div className="text-[10px] uppercase font-medium text-muted-foreground mb-1">
+                      <PopoverTrigger className="w-full">
+                        <div className="border border-input rounded-lg p-3 hover:border-primary/50 hover:bg-accent/50 transition-all cursor-pointer text-left h-full">
+                          <div className="text-[10px] uppercase font-bold text-muted-foreground mb-1.5">
                             Check-out
                           </div>
-                          <div className="text-sm">
-                            {date?.to ? format(date.to, "PPP") : "Select date"}
+                          <div className="text-sm font-medium truncate">
+                            {date?.to
+                              ? format(date.to, "MMM dd, yyyy")
+                              : "Add date"}
                           </div>
                         </div>
                       </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0" align="start">
+                      <PopoverContent className="w-auto p-0" align="end">
                         <Calendar
                           initialFocus
                           mode="range"
@@ -271,19 +318,21 @@ function ListingDetail() {
                   </div>
 
                   {nights > 0 && (
-                    <div className="space-y-3 py-2">
+                    <div className="space-y-4 py-4 border-t border-border/50 border-b">
                       <div className="flex justify-between text-sm">
-                        <span className="text-muted-foreground underline decoration-dashed">
+                        <span className="text-muted-foreground underline decoration-dotted decoration-border">
                           ${listing.basePrice} x {nights} nights
                         </span>
-                        <span>${listing.basePrice * nights}</span>
+                        <span className="font-medium">
+                          ${listing.basePrice * nights}
+                        </span>
                       </div>
                       {selectedAddons.length > 0 && (
                         <div className="flex justify-between text-sm">
-                          <span className="text-muted-foreground underline decoration-dashed">
+                          <span className="text-muted-foreground underline decoration-dotted decoration-border">
                             Add-ons
                           </span>
-                          <span>
+                          <span className="font-medium">
                             +$
                             {selectedAddons.reduce((acc, curr) => {
                               const multiplier =
@@ -298,8 +347,7 @@ function ListingDetail() {
                           </span>
                         </div>
                       )}
-                      <div className="w-full h-px bg-border/50" />
-                      <div className="flex justify-between font-semibold text-base">
+                      <div className="flex justify-between font-bold text-lg pt-2">
                         <span>Total</span>
                         <span>${estimatedTotal}</span>
                       </div>
@@ -307,21 +355,22 @@ function ListingDetail() {
                   )}
 
                   <Button
-                    className="w-full"
+                    className="w-full h-12 text-sm uppercase tracking-widest font-bold shadow-lg shadow-primary/20"
                     size="lg"
                     onClick={handleBookClick}
                   >
-                    {nights > 0 ? "Reserve" : "Check Availability"}
+                    {nights > 0 ? "Reserve Journey" : "Check Availability"}
                   </Button>
-                  <div className="flex items-center justify-center gap-2 text-xs text-muted-foreground">
-                    <span>You won't be charged yet</span>
-                  </div>
-                </CardContent>
-              </Card>
+
+                  <p className="text-center text-xs text-muted-foreground font-serif italic">
+                    You won't be charged yet
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      </PageWrapper>
+        </Reveal>
+      </div>
     </div>
   );
 }

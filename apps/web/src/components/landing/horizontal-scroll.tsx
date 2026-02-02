@@ -110,7 +110,7 @@ export function HorizontalScroll() {
                 <img
                   src={park.image}
                   alt={park.title}
-                  className="h-full w-full object-cover transition-transform duration-1000 ease-out group-hover:scale-110 grayscale group-hover:grayscale-0"
+                  className="h-full w-full object-cover transition-transform duration-1000 ease-out group-hover:scale-[1.02] grayscale group-hover:grayscale-0"
                 />
                 <div className="absolute inset-0 bg-black/50 group-hover:bg-black/30 transition-colors duration-500" />
               </div>

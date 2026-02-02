@@ -136,7 +136,7 @@ export function Timeline() {
                     <img
                       src={event.image}
                       alt={event.title}
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 filter grayscale group-hover:grayscale-0"
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.02] filter grayscale group-hover:grayscale-0"
                     />
                   </div>
                 </div>

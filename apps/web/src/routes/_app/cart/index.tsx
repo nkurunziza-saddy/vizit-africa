@@ -1,482 +1,317 @@
+import { useRef } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useCart } from "@/context/cart-context";
-import { useAuth } from "@/context/auth-context";
+import { format } from "date-fns";
+import {
+  CalendarIcon,
+  Minus,
+  Plus,
+  Trash2,
+  Users2,
+  CalendarDays,
+  ShoppingBag,
+  ArrowRight,
+  ShieldCheck,
+  CreditCard,
+  Lock,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
 import {
   Card,
   CardContent,
+  CardFooter,
   CardHeader,
   CardTitle,
-  CardFooter,
 } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
-import { SectionTitle } from "@/components/landing/section-title";
-import { Calendar } from "@/components/ui/calendar";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { Calendar } from "@/components/ui/calendar";
+import { useCart } from "@/context/cart-context";
+import { useAuth } from "@/context/auth-context";
+import { toast } from "sonner";
+import { cn } from "@/lib/utils";
+import { Reveal } from "@/components/ui/reveal";
 import {
   Empty,
+  EmptyDescription,
   EmptyHeader,
   EmptyTitle,
-  EmptyDescription,
-  EmptyContent,
-  EmptyMedia,
 } from "@/components/ui/empty";
-import { format, differenceInDays } from "date-fns";
-import {
-  Calendar as CalendarIcon,
-  Users,
-  Trash2,
-  Plus,
-  Minus,
-  ArrowRight,
-} from "lucide-react";
-import { cn } from "@/lib/utils";
-import { toast } from "sonner";
-import { useState, useEffect } from "react";
-
-function CartItemThumbnail({
-  image,
-  title,
-}: {
-  image?: string;
-  title: string;
-}) {
-  const [imgSrc, setImgSrc] = useState(
-    image ||
-      "https://placehold.co/600x400/f1f5f9/cbd5e1?text=Image+Unavailable",
-  );
-
-  useEffect(() => {
-    if (image) setImgSrc(image);
-  }, [image]);
-
-  return (
-    <img
-      src={imgSrc}
-      alt={title}
-      className="h-24 w-32 object-cover rounded flex-shrink-0 bg-muted border border-border"
-      onError={() =>
-        setImgSrc(
-          "https://placehold.co/600x400/f1f5f9/cbd5e1?text=Image+Unavailable",
-        )
-      }
-      loading="lazy"
-    />
-  );
-}
 
 export const Route = createFileRoute("/_app/cart/")({
   component: CartPage,
 });
 
 function CartPage() {
-  const {
-    cart,
-    removeFromCart,
-    updateGuests,
-    updateDateRange,
-    updateAddon,
-    totalPrice,
-    clearCart,
-  } = useCart();
-  const { isAuthenticated } = useAuth();
+  const { cart, removeFromCart, updateCartItem, clearCart } = useCart();
+  const { user, isAuthenticated } = useAuth();
   const navigate = useNavigate();
+  const checkoutRef = useRef<HTMLDivElement>(null);
 
-  const handleProceed = () => {
-    if (isAuthenticated) {
-      navigate({ to: "/cart/checkout" });
-    } else {
-      toast.info("Please login to continue checkout");
-      navigate({ to: "/login", search: { redirect: "/cart/checkout" } });
+  const subtotal = cart.reduce((total, item) => {
+    let itemTotal = item.price * item.quantity;
+    if (item.listingType !== "experience") {
+      const days = Math.ceil(
+        (item.endDate!.getTime() - item.startDate!.getTime()) /
+          (1000 * 60 * 60 * 24),
+      );
+      itemTotal = item.price * days * item.quantity; // Basic logic, refine as needed
     }
+
+    // Add addons
+    if (item.selectedAddons) {
+      const addonsTotal = item.selectedAddons.reduce(
+        (sum, addon) => sum + addon.price,
+        0,
+      );
+      itemTotal += addonsTotal;
+    }
+
+    return total + itemTotal;
+  }, 0);
+
+  const tax = subtotal * 0.18; // 18% VAT example
+  const total = subtotal + tax;
+
+  const handleUpdateDates = (
+    itemId: number,
+    date: Date | undefined,
+    isStart: boolean,
+  ) => {
+    // Logic to update dates - simplified for UI demo
+    // In a real app, you'd validate the range and update context
+    toast.info("Date update logic would trigger here");
+  };
+
+  const handleCheckout = () => {
+    if (!isAuthenticated) {
+      toast.error("Please login to complete your booking");
+      navigate({ to: "/login" });
+      return;
+    }
+    toast.success("Proceeding to payment gateway...");
+    // Redirect to actual checkout or payment flow
   };
 
   if (cart.length === 0) {
     return (
-      <section>
-        <Empty className="min-h-[60vh] border-2 border-dashed border-muted rounded">
-          <EmptyHeader>
-            <EmptyMedia variant="icon">
-              <Trash2 className="h-6 w-6" />
-            </EmptyMedia>
-            <EmptyTitle>Your cart is empty</EmptyTitle>
-            <EmptyDescription>
-              Looks like you haven't added any adventures yet. Explore our
-              listings to find your next destination.
-            </EmptyDescription>
-          </EmptyHeader>
-          <EmptyContent>
-            <Button
-              size="lg"
-              className="rounded uppercase tracking-widest font-bold"
-              onClick={() =>
-                navigate({
-                  to: "/listings",
-                  search: (prev: Record<string, unknown>) => ({
-                    ...prev,
-                    page: 1,
-                  }),
-                })
-              }
-            >
-              Browse Listings
-            </Button>
-          </EmptyContent>
-        </Empty>
-      </section>
+      <div className="min-h-[70vh] flex flex-col items-center justify-center p-8 bg-background">
+        <Reveal>
+          <div className="max-w-md w-full border border-dashed border-border/60 rounded-xl bg-muted/5 p-12 text-center">
+            <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mx-auto mb-6">
+              <ShoppingBag className="h-8 w-8 text-muted-foreground" />
+            </div>
+            <h2 className="text-xl font-black uppercase tracking-tight mb-2">
+              Your cart is empty
+            </h2>
+            <p className="text-muted-foreground mb-8 text-sm leading-relaxed">
+              Looks like you haven't added any experiences yet. Browse our
+              collection to find your next adventure.
+            </p>
+            <Link to="/listings">
+              <Button
+                size="lg"
+                className="h-12 px-8 rounded-full uppercase tracking-widest font-bold text-xs shadow-md w-full sm:w-auto"
+              >
+                Browse Experiences
+              </Button>
+            </Link>
+          </div>
+        </Reveal>
+      </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-muted/30">
-      <section className="py-8">
-        <div className="mb-8">
-          <SectionTitle
-            title="Shopping Cart"
-            subtitle="Your Booking"
-            className="mb-8"
-          />
-          <p className="text-muted-foreground mb-8 max-w-2xl">
-            Review and customize your booking details.
+    <div className="min-h-screen bg-background pb-32">
+      <div className="container mx-auto px-4 py-8 max-w-7xl">
+        <div className="mb-12">
+          <div className="flex items-center gap-2 text-primary font-mono text-xs uppercase tracking-widest bg-primary/10 w-fit px-3 py-1 rounded-full border border-primary/20 mb-4">
+            <ShoppingBag className="w-3 h-3" />
+            <span>Checkout</span>
+          </div>
+          <h1 className="text-4xl font-black uppercase tracking-tighter text-foreground mb-2">
+            Review Your Trip
+          </h1>
+          <p className="text-muted-foreground max-w-lg font-serif italic text-lg">
+            Finalize the details of your upcoming journey.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          {/* Left Column: Cart Items */}
-          <div className="lg:col-span-8 space-y-6">
-            {cart.map((item) => {
-              const nights =
-                item.dateRange.from && item.dateRange.to
-                  ? differenceInDays(item.dateRange.to, item.dateRange.from)
-                  : 0;
-
-              // Available addons that are NOT selected
-              const availableAddons =
-                item.listing.addons?.filter(
-                  (addon) =>
-                    !item.selectedAddons.some((sa) => sa.addon.id === addon.id),
-                ) || [];
-
-              return (
-                <Card
-                  key={item.id}
-                  className="overflow-hidden rounded border-[3px] border-foreground/10"
-                >
-                  <CardHeader className="bg-muted/20 pb-4">
-                    <div className="flex justify-between items-start">
-                      <div className="flex gap-4">
-                        {/* Image Thumbnail */}
-                        <CartItemThumbnail
-                          image={item.image}
-                          title={item.listing.title}
-                        />
-                        <div>
-                          <CardTitle className="text-xl">
-                            <Link
-                              to="/listings/$id"
-                              params={{ id: item.listing.id.toString() }}
-                              className="hover:underline"
-                            >
-                              {item.listing.title}
-                            </Link>
-                          </CardTitle>
-                          <p className="text-sm text-muted-foreground mt-1">
-                            {item.listing.listingType} in{" "}
-                            {item.listing.locationId}
-                          </p>
-                        </div>
-                      </div>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="text-muted-foreground hover:text-destructive"
-                        onClick={() => {
-                          removeFromCart(item.id);
-                          toast.success("Item removed from cart");
-                        }}
-                      >
-                        <Trash2 className="h-5 w-5" />
-                      </Button>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+          <div className="lg:col-span-8 space-y-8">
+            {cart.map((item, index) => (
+              <Reveal key={item.id} delay={index * 0.1}>
+                <div className="group relative flex flex-col sm:flex-row border border-border/60 rounded-xl overflow-hidden bg-card hover:bg-muted/5 hover:border-border transition-all duration-300 shadow-sm hover:shadow-md">
+                  <div className="relative w-full sm:w-64 h-48 sm:h-auto bg-muted shrink-0 overflow-hidden">
+                    <img
+                      src="https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=80"
+                      alt={item.title}
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    />
+                    <div className="absolute top-3 left-3">
+                      <Badge className="bg-background/90 backdrop-blur-md text-foreground border-none rounded-sm uppercase tracking-wider text-[10px] font-bold px-2 py-1">
+                        {item.listingType}
+                      </Badge>
                     </div>
-                  </CardHeader>
+                  </div>
 
-                  <CardContent className="p-6 space-y-8">
-                    {/* Main Configuration Grid */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      {/* Date Picker */}
-                      <div className="space-y-2">
-                        <label className="text-sm font-medium flex items-center gap-2">
-                          <CalendarIcon className="h-4 w-4" /> Dates
-                        </label>
-                        <Popover>
-                          <PopoverTrigger>
-                            <Button
-                              variant={"outline"}
-                              className={cn(
-                                "w-full justify-start text-left font-normal rounded",
-                                !item.dateRange && "text-muted-foreground",
-                              )}
-                            >
-                              <CalendarIcon className="mr-2 h-4 w-4" />
-                              {item.dateRange?.from ? (
-                                item.dateRange.to ? (
-                                  <>
-                                    {format(item.dateRange.from, "LLL dd")} -{" "}
-                                    {format(item.dateRange.to, "LLL dd, y")}
-                                    <span className="ml-auto text-xs text-muted-foreground bg-secondary px-2 py-0.5 ">
-                                      {nights} nights
-                                    </span>
-                                  </>
-                                ) : (
-                                  format(item.dateRange.from, "LLL dd, y")
-                                )
-                              ) : (
-                                <span>Pick a date</span>
-                              )}
-                            </Button>
-                          </PopoverTrigger>
-                          <PopoverContent className="w-auto p-0" align="start">
-                            <Calendar
-                              initialFocus
-                              mode="range"
-                              defaultMonth={item.dateRange?.from}
-                              selected={item.dateRange}
-                              onSelect={(range) =>
-                                range && updateDateRange(item.id, range)
-                              }
-                              numberOfMonths={2}
-                            />
-                          </PopoverContent>
-                        </Popover>
+                  <div className="flex-1 p-6 flex flex-col justify-between">
+                    <div>
+                      <div className="flex justify-between items-start mb-2">
+                        <Link
+                          to={`/listings/${item.id}`}
+                          className="hover:text-primary transition-colors"
+                        >
+                          <h3 className="font-bold text-lg leading-tight">
+                            {item.title}
+                          </h3>
+                        </Link>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => removeFromCart(item.id)}
+                          className="h-8 w-8 text-muted-foreground hover:text-destructive hover:bg-destructive/10 -mr-2 -mt-2"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
                       </div>
 
-                      {/* Guests Counter */}
-                      <div className="space-y-2">
-                        <label className="text-sm font-medium flex items-center gap-2">
-                          <Users className="h-4 w-4" /> Guests
-                        </label>
-                        <div className="flex items-center gap-3">
-                          <Button
-                            variant="outline"
-                            size="icon"
-                            className="h-10 w-10"
-                            onClick={() =>
-                              updateGuests(
-                                item.id,
-                                Math.max(1, item.guests - 1),
-                              )
-                            }
-                            disabled={item.guests <= 1}
-                          >
-                            <Minus className="h-4 w-4" />
-                          </Button>
-                          <span className="flex-1 text-center font-medium border h-10 flex items-center justify-center">
-                            {item.guests} Guest{item.guests !== 1 && "s"}
+                      <div className="flex flex-wrap gap-4 text-sm mt-4">
+                        {item.startDate && (
+                          <div className="flex items-center gap-2 bg-muted/40 px-3 py-1.5 rounded-md border border-border/50">
+                            <CalendarDays className="h-4 w-4 text-muted-foreground" />
+                            <span className="font-medium text-xs uppercase tracking-wide">
+                              {format(item.startDate, "MMM d")} -{" "}
+                              {format(item.endDate!, "MMM d, yyyy")}
+                            </span>
+                          </div>
+                        )}
+                        <div className="flex items-center gap-2 bg-muted/40 px-3 py-1.5 rounded-md border border-border/50">
+                          <Users2 className="h-4 w-4 text-muted-foreground" />
+                          <span className="font-medium text-xs uppercase tracking-wide">
+                            {item.quantity} Guest{item.quantity > 1 ? "s" : ""}
                           </span>
-                          <Button
-                            variant="outline"
-                            size="icon"
-                            className="h-10 w-10"
-                            onClick={() =>
-                              updateGuests(
-                                item.id,
-                                Math.min(
-                                  item.listing.capacity,
-                                  item.guests + 1,
-                                ),
-                              )
-                            }
-                            disabled={item.guests >= item.listing.capacity}
-                          >
-                            <Plus className="h-4 w-4" />
-                          </Button>
                         </div>
                       </div>
-                    </div>
 
-                    <Separator />
-
-                    {/* Addons Section */}
-                    <div className="space-y-4">
-                      <h4 className="font-semibold text-sm">
-                        Enhance your trip
-                      </h4>
-
-                      {/* Selected Addons */}
-                      <div className="space-y-3">
-                        {item.selectedAddons.map((addonItem) => (
-                          <div
-                            key={addonItem.addon.id}
-                            className="flex items-center justify-between bg-accent/30 p-3 border rounded"
-                          >
-                            <div className="flex-1">
-                              <div className="font-medium text-sm">
-                                {addonItem.addon.name}
-                              </div>
-                              <div className="text-xs text-muted-foreground">
-                                ${addonItem.addon.price} /{" "}
-                                {addonItem.addon.price_type.replace("_", " ")}
-                              </div>
-                            </div>
-
-                            <div className="flex items-center gap-3">
-                              <div className="flex items-center gap-2 bg-background border p-0.5 rounded">
-                                <Button
-                                  variant="ghost"
-                                  size="icon"
-                                  className="h-6 w-6"
-                                  onClick={() =>
-                                    updateAddon(
-                                      item.id,
-                                      addonItem.addon,
-                                      addonItem.quantity - 1,
-                                    )
-                                  }
-                                >
-                                  <Minus className="h-3 w-3" />
-                                </Button>
-                                <span className="text-xs w-4 text-center">
-                                  {addonItem.quantity}
-                                </span>
-                                <Button
-                                  variant="ghost"
-                                  size="icon"
-                                  className="h-6 w-6"
-                                  onClick={() =>
-                                    updateAddon(
-                                      item.id,
-                                      addonItem.addon,
-                                      addonItem.quantity + 1,
-                                    )
-                                  }
-                                >
-                                  <Plus className="h-3 w-3" />
-                                </Button>
-                              </div>
-                              <div className="font-medium text-sm min-w-[60px] text-right">
-                                $
-                                {addonItem.addon.price *
-                                  addonItem.quantity *
-                                  (addonItem.addon.price_type === "per_night"
-                                    ? nights
-                                    : 1)}
-                              </div>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-
-                      {/* Available Addons to Add */}
-                      {availableAddons.length > 0 && (
-                        <div className="pt-2">
-                          <div className="text-xs text-muted-foreground mb-2 font-medium uppercase tracking-wider">
-                            Available Add-ons
-                          </div>
-                          <div className="flex flex-wrap gap-2">
-                            {availableAddons.map((addon) => (
+                      {item.selectedAddons &&
+                        item.selectedAddons.length > 0 && (
+                          <div className="mt-4 flex flex-wrap gap-2">
+                            {item.selectedAddons.map((addon) => (
                               <Badge
                                 key={addon.id}
                                 variant="outline"
-                                className="cursor-pointer hover:bg-accent hover:text-accent-foreground py-1.5 px-3 transition-colors border-dashed rounded"
-                                onClick={() => updateAddon(item.id, addon, 1)}
+                                className="text-[10px] text-muted-foreground border-dashed"
                               >
-                                <Plus className="h-3 w-3 mr-1.5" />
-                                {addon.name} (+${addon.price})
+                                + {addon.name}
                               </Badge>
                             ))}
                           </div>
-                        </div>
-                      )}
+                        )}
                     </div>
-                  </CardContent>
-                  <CardFooter className="bg-muted/10 border-t p-4 flex justify-between items-center">
-                    <div className="text-sm text-muted-foreground">
-                      Base price:{" "}
-                      <span className="font-medium text-foreground">
-                        ${item.listing.basePrice}
-                      </span>{" "}
-                      / night
+
+                    <div className="mt-6 flex justify-between items-end border-t border-dashed border-border pt-4">
+                      <div className="text-xs text-muted-foreground">
+                        Base price:{" "}
+                        <span className="font-mono">{item.price} RWF</span> /
+                        unit
+                      </div>
+                      <div className="text-lg font-black text-primary">
+                        {item.price * item.quantity} RWF
+                      </div>
                     </div>
-                    <div className="text-lg font-bold">
-                      Subtotal: $
-                      {(() => {
-                        const base = item.listing.basePrice * nights;
-                        const addons = item.selectedAddons.reduce(
-                          (acc, curr) => {
-                            const multiplier =
-                              curr.addon.price_type === "per_night"
-                                ? nights
-                                : 1;
-                            return (
-                              acc +
-                              curr.addon.price * curr.quantity * multiplier
-                            );
-                          },
-                          0,
-                        );
-                        return base + addons;
-                      })()}
-                    </div>
-                  </CardFooter>
-                </Card>
-              );
-            })}
+                  </div>
+                </div>
+              </Reveal>
+            ))}
           </div>
 
-          {/* Right Column: Order Summary */}
-          <div className="lg:col-span-4 space-y-6">
-            <Card className="sticky top-24 shadow-sm border-2 border-primary/10 py-0 pb-3 rounded border-[3px] border-foreground/10">
-              <CardHeader className="bg-primary/5 py-4">
-                <CardTitle>Order Summary</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4 pt-6">
-                <div className="space-y-2 text-sm">
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">
-                      Total Listings
-                    </span>
-                    <span>{cart.length}</span>
+          <div className="lg:col-span-4">
+            <div className="sticky top-24">
+              <Card className="border border-border/50 shadow-md bg-card/50 backdrop-blur-sm overflow-hidden">
+                <div className="bg-muted/30 p-4 border-b border-border/40">
+                  <h3 className="font-bold uppercase tracking-widest text-sm flex items-center gap-2">
+                    <CreditCard className="w-4 h-4 text-primary" />
+                    Order Summary
+                  </h3>
+                </div>
+                <CardContent className="p-6 space-y-4">
+                  <div className="space-y-2 text-sm">
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Subtotal</span>
+                      <span className="font-medium font-mono">
+                        {subtotal.toLocaleString()} RWF
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">
+                        Taxes & Fees (18%)
+                      </span>
+                      <span className="font-medium font-mono">
+                        {tax.toLocaleString()} RWF
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">
+                        Total Discounts
+                      </span>
+                      <span className="font-medium font-mono text-green-600">
+                        -0 RWF
+                      </span>
+                    </div>
                   </div>
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Taxes & Fees</span>
-                    <span>Included</span>
-                  </div>
-                  <Separator className="my-2" />
+
+                  <Separator className="bg-border/60" />
+
                   <div className="flex justify-between items-end">
-                    <span className="font-semibold text-lg">Total</span>
-                    <span className="font-bold text-2xl text-primary">
-                      ${totalPrice}
+                    <span className="font-bold uppercase text-xs tracking-widest">
+                      Grand Total
+                    </span>
+                    <span className="font-black text-2xl text-primary font-mono">
+                      {total.toLocaleString()}{" "}
+                      <span className="text-sm font-bold text-muted-foreground align-top mt-1 inline-block">
+                        RWF
+                      </span>
                     </span>
                   </div>
-                </div>
 
-                <Button
-                  className="w-full text-base py-6 shadow-md hover:shadow-lg transition-all rounded font-bold uppercase tracking-widest bg-foreground text-primary hover:bg-foreground/90"
-                  size="lg"
-                  onClick={handleProceed}
-                >
-                  Proceed to Checkout <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
-
-                <div className="text-center">
                   <Button
-                    variant="link"
-                    className="text-xs text-muted-foreground h-auto p-0"
-                    onClick={clearCart}
+                    className="w-full h-12 rounded-lg uppercase tracking-widest font-bold text-xs shadow-lg mt-4 group"
+                    size="lg"
+                    onClick={handleCheckout}
                   >
-                    Clear Cart
+                    Proceed to Checkout
+                    <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
                   </Button>
+
+                  <div className="flex items-center justify-center gap-2 text-[10px] text-muted-foreground uppercase tracking-widest mt-4">
+                    <ShieldCheck className="w-3 h-3" /> Secure Payment
+                  </div>
+                </CardContent>
+                <div className="bg-muted/30 p-4 border-t border-border/40 text-center">
+                  <p className="text-xs text-muted-foreground">
+                    By proceeding, you agree to our{" "}
+                    <Link
+                      to="/terms"
+                      className="underline underline-offset-2 hover:text-primary"
+                    >
+                      Terms of Service
+                    </Link>
+                    .
+                  </p>
                 </div>
-              </CardContent>
-            </Card>
+              </Card>
+            </div>
           </div>
         </div>
-      </section>
+      </div>
     </div>
   );
 }

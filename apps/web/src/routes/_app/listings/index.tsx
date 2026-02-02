@@ -38,6 +38,8 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
 import { SectionTitle } from "@/components/landing/section-title";
+import { PatternDiamond, PatternZigZag } from "@/components/ui/patterns";
+import { Reveal } from "@/components/ui/reveal";
 
 import ListingCard from "@/components/listing-card";
 import { useListings } from "@/hooks/use-listings";
@@ -98,108 +100,68 @@ const FilterContent = ({
   clearFilters,
   hasActiveFilters,
 }: FilterContentProps) => (
-  <div className="space-y-8">
-    <div className="space-y-3">
-      <h3 className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-2">
+  <div className="space-y-10">
+    <div className="space-y-4">
+      <h3 className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-4 border-b border-border pb-2">
         Search
       </h3>
-      <div className="relative">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
+      <div className="relative group">
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
         <Input
           placeholder="SEARCH DESTINATIONS..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="pl-9 h-9 bg-white border-border focus-visible:ring-1 focus-visible:ring-primary rounded shadow-none text-xs placeholder:text-[10px] placeholder:uppercase tracking-wide"
+          className="pl-10 h-10 bg-transparent border-border focus-visible:ring-0 focus-visible:border-primary rounded-none text-sm placeholder:text-xs placeholder:uppercase placeholder:tracking-wide shadow-none transition-colors"
         />
       </div>
     </div>
 
-    <div className="space-y-3">
-      <h3 className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-2">
+    <div className="space-y-4">
+      <h3 className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-4 border-b border-border pb-2">
         Categories
       </h3>
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-1">
         {categories.map((cat) => (
           <button
             key={cat.value}
             onClick={() => setCategory(cat.value)}
             className={cn(
-              "flex items-center justify-between w-full text-left group transition-colors",
+              "flex items-center justify-between w-full text-left group transition-all duration-300 py-2 px-2 hover:bg-muted/50 rounded-sm",
               selectedCategory === cat.value
-                ? "text-primary"
+                ? "text-primary font-bold pl-3 border-l-2 border-primary"
                 : "text-foreground hover:text-primary",
             )}
           >
-            <span className="text-xs font-medium uppercase tracking-wide">
+            <span className="text-sm font-serif group-hover:tracking-wide transition-all">
               {cat.label}
             </span>
-            <div
-              className={cn(
-                "h-1.5 w-1.5 rounded-full",
-                selectedCategory === cat.value
-                  ? "bg-primary"
-                  : "bg-border group-hover:bg-primary/50",
-              )}
-            />
-          </button>
-        ))}
-      </div>
-    </div>
-
-    <div className="space-y-3">
-      <h3 className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-2">
-        Budget
-      </h3>
-      <div className="flex flex-col gap-2">
-        {priceRanges.map((preset) => (
-          <button
-            type="button"
-            key={preset.label}
-            onClick={() => setPriceRange(preset.range)}
-            className={cn(
-              "flex items-center justify-between w-full text-left group transition-colors",
-              priceRange[0] === preset.range[0] &&
-                priceRange[1] === preset.range[1]
-                ? "text-primary"
-                : "text-foreground hover:text-primary",
+            {selectedCategory === cat.value && (
+              <PatternDiamond className="w-2 h-2 text-primary" />
             )}
-          >
-            <span className="text-xs font-medium uppercase tracking-wide">
-              {preset.label}
-            </span>
-            <div
-              className={cn(
-                "h-1.5 w-1.5 rounded-full",
-                priceRange[0] === preset.range[0] &&
-                  priceRange[1] === preset.range[1]
-                  ? "bg-primary"
-                  : "bg-border group-hover:bg-primary/50",
-              )}
-            />
           </button>
         ))}
       </div>
     </div>
 
-    <div className="space-y-3">
-      <h3 className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-2">
+    <div className="space-y-4">
+      <h3 className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-4 border-b border-border pb-2">
         Price Range
       </h3>
-      <div className="pt-2 pb-2">
+      <div className="pt-4 pb-2 px-2">
         <Slider
           defaultValue={[0, 1000]}
           max={1000}
           step={10}
           value={priceRange}
           onValueChange={(value) => setPriceRange(value as number[])}
-          className="mb-4"
+          className="mb-6"
         />
-        <div className="flex items-center justify-between">
-          <div className="text-[10px] font-bold text-foreground bg-muted px-2 py-1 rounded">
+        <div className="flex items-center justify-between font-mono text-xs">
+          <div className="bg-muted px-3 py-1.5 rounded-sm">
             ${priceRange[0]}
           </div>
-          <div className="h-px w-4 bg-border" />
-          <div className="text-[10px] font-bold text-foreground bg-muted px-2 py-1 rounded">
+          <div className="text-muted-foreground">-</div>
+          <div className="bg-muted px-3 py-1.5 rounded-sm">
             ${priceRange[1]}+
           </div>
         </div>
@@ -209,11 +171,11 @@ const FilterContent = ({
     {hasActiveFilters && (
       <Button
         variant="outline"
-        className="w-full gap-2 h-8 rounded border-border text-foreground hover:bg-foreground hover:text-white uppercase tracking-widest text-[10px] font-bold mt-4"
+        className="w-full gap-2 h-10 rounded-none border-border text-foreground hover:bg-foreground hover:text-white uppercase tracking-widest text-xs font-bold mt-6"
         onClick={clearFilters}
       >
-        <X className="h-3 w-3" />
-        Clear All Filters
+        <X className="h-4 w-4" />
+        Clear Filters
       </Button>
     )}
   </div>
@@ -278,49 +240,23 @@ function Listings() {
     return (
       <div className="min-h-screen bg-background pb-20">
         <div className="container mx-auto px-4 py-8">
-          <div className="flex flex-col lg:flex-row gap-8 items-start pt-4">
-            <aside className="hidden lg:block w-64 flex-none sticky top-24">
-              <div className="bg-white p-5 border border-border space-y-6 rounded-sm">
-                <Skeleton className="h-5 w-20" />
-                <div className="space-y-3">
-                  <Skeleton className="h-3 w-16" />
-                  <Skeleton className="h-9 w-full" />
-                </div>
-                <div className="space-y-3">
-                  <Skeleton className="h-3 w-20" />
-                  <div className="flex flex-wrap gap-2">
-                    <Skeleton className="h-7 w-16" />
-                    <Skeleton className="h-7 w-20" />
-                    <Skeleton className="h-7 w-24" />
-                    <Skeleton className="h-7 w-14" />
-                  </div>
-                </div>
-                <div className="space-y-3">
-                  <Skeleton className="h-3 w-24" />
-                  <Skeleton className="h-3 w-full" />
-                  <div className="flex justify-between">
-                    <Skeleton className="h-7 w-16" />
-                    <Skeleton className="h-7 w-16" />
-                  </div>
+          <Skeleton className="h-[40vh] w-full mb-12" />
+          <div className="flex flex-col lg:flex-row gap-12 items-start">
+            <aside className="hidden lg:block w-72 flex-none sticky top-24">
+              <div className="space-y-8">
+                <Skeleton className="h-8 w-32" />
+                <Skeleton className="h-10 w-full" />
+                <div className="space-y-4">
+                  <Skeleton className="h-6 w-full" />
+                  <Skeleton className="h-6 w-full" />
+                  <Skeleton className="h-6 w-full" />
                 </div>
               </div>
             </aside>
-            <main className="flex-1 w-full space-y-6">
-              <div className="flex justify-between items-center">
-                <div className="space-y-2">
-                  <Skeleton className="h-5 w-48" />
-                  <Skeleton className="h-3 w-24" />
-                </div>
-                <Skeleton className="h-9 w-32" />
-              </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                {Array.from({ length: 8 }).map((_, i) => (
-                  <div key={i} className="space-y-3">
-                    <Skeleton className="h-48 w-full" />
-                    <Skeleton className="h-5 w-3/4" />
-                    <Skeleton className="h-4 w-1/2" />
-                    <Skeleton className="h-6 w-24" />
-                  </div>
+            <main className="flex-1 w-full space-y-8">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                {Array.from({ length: 6 }).map((_, i) => (
+                  <Skeleton key={i} className="h-96 w-full" />
                 ))}
               </div>
             </main>
@@ -360,24 +296,48 @@ function Listings() {
   );
 
   return (
-    <div className="min-h-screen bg-background pb-20">
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex flex-col lg:flex-row gap-8 items-start pt-4">
-          <aside className="hidden lg:block w-64 flex-none sticky top-24">
-            <div className="bg-white p-5 border border-border rounded-sm shadow-sm">
-              <div className="flex items-center justify-between mb-6 border-b border-border pb-3">
-                <h2 className="text-sm font-black uppercase tracking-tighter text-foreground">
-                  Filters
-                </h2>
-                {hasActiveFilters && (
-                  <Badge
-                    variant="secondary"
-                    className="text-[9px] uppercase tracking-widest rounded bg-primary text-white hover:bg-primary/90"
-                  >
-                    Active
-                  </Badge>
-                )}
+    <div className="min-h-screen bg-background pb-32">
+      {/* Page Hero */}
+      <div className="relative h-[40vh] min-h-[400px] flex items-center justify-center bg-foreground overflow-hidden mb-16">
+        <div className="absolute inset-0 z-0 opacity-40">
+          <img
+            src="https://images.unsplash.com/photo-1516426122078-c23e76319801?q=80&w=2068&auto=format&fit=crop"
+            alt="Listings Hero"
+            className="w-full h-full object-cover"
+          />
+        </div>
+        <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent z-10" />
+
+        <div className="relative z-20 text-center container px-4 mt-12">
+          <Reveal>
+            <PatternDiamond className="w-12 h-12 text-primary mx-auto mb-6" />
+          </Reveal>
+          <Reveal delay={0.1}>
+            <h1 className="text-5xl md:text-7xl font-black uppercase tracking-tighter text-white mb-4">
+              Curated <span className="text-primary">Stays</span>
+            </h1>
+          </Reveal>
+          <Reveal delay={0.2}>
+            <p className="text-white/70 font-serif text-xl max-w-xl mx-auto">
+              Handpicked sanctuaries that connect you to the soul of the land.
+            </p>
+          </Reveal>
+        </div>
+      </div>
+
+      <div className="container mx-auto px-4">
+        <div className="flex flex-col lg:flex-row gap-16 items-start">
+          <aside className="hidden lg:block w-72 flex-none sticky top-28">
+            <div className="bg-background relative">
+              {/* Decorative heading */}
+              <div className="mb-8 flex items-center gap-4">
+                <div className="h-px bg-border flex-1" />
+                <span className="text-xs font-bold uppercase tracking-widest text-muted-foreground">
+                  Refine
+                </span>
+                <div className="h-px bg-border flex-1" />
               </div>
+
               <FilterContent
                 searchQuery={localSearchQuery}
                 setSearchQuery={setLocalSearchQuery}
@@ -391,55 +351,49 @@ function Listings() {
             </div>
           </aside>
 
-          <main className="flex-1 w-full space-y-6">
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-border pb-6">
+          <main className="flex-1 w-full space-y-8">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-6 border-b border-border pb-6">
               <div className="w-full">
-                <SectionTitle
-                  title="Explore Our Vendors"
-                  align="left"
-                  className="mb-1"
-                />
-                <p className="text-xs text-muted-foreground uppercase tracking-widest font-mono">
-                  {filteredListings.length}{" "}
-                  {filteredListings.length === 1 ? "result" : "results"} found
-                </p>
+                <span className="text-primary font-mono text-xs uppercase tracking-widest mb-2 block">
+                  Collection
+                </span>
+                <div className="flex items-baseline gap-4">
+                  <h2 className="text-3xl font-black uppercase tracking-tight text-foreground">
+                    Available Experiences
+                  </h2>
+                  <span className="text-sm font-serif italic text-muted-foreground">
+                    ({filteredListings.length} results)
+                  </span>
+                </div>
               </div>
 
-              <div className="flex items-center gap-2 w-full sm:w-auto">
+              <div className="flex items-center gap-3 w-full sm:w-auto">
                 <div className="lg:hidden flex-1 sm:flex-initial">
                   <Sheet>
                     <SheetTrigger
                       render={
                         <Button
                           variant="outline"
-                          className="w-full sm:w-auto gap-2 relative rounded h-9 uppercase tracking-widest text-[10px] font-bold border-border"
+                          className="w-full sm:w-auto gap-2 rounded-none h-10 uppercase tracking-widest text-[10px] font-bold border-foreground/20 hover:border-foreground transition-colors"
                         />
                       }
                     >
                       <Filter className="h-3.5 w-3.5" />
                       Filters
                       {hasActiveFilters && (
-                        <span className="absolute -top-1 -right-1 h-2.5 w-2.5 rounded-full bg-primary" />
+                        <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-primary" />
                       )}
                     </SheetTrigger>
                     <SheetContent
                       side="left"
                       className="w-full sm:w-[320px] p-0"
                     >
-                      <SheetHeader className="p-5 pb-4 border-b">
-                        <SheetTitle className="text-left text-lg font-black uppercase tracking-tighter flex items-center justify-between">
-                          <span>Filters</span>
-                          {hasActiveFilters && (
-                            <Badge
-                              variant="secondary"
-                              className="text-[9px] uppercase tracking-widest rounded bg-primary text-white"
-                            >
-                              Active
-                            </Badge>
-                          )}
+                      <SheetHeader className="p-6 border-b">
+                        <SheetTitle className="text-left text-xl font-black uppercase tracking-tighter flex items-center justify-between">
+                          <span>Refine</span>
                         </SheetTitle>
                       </SheetHeader>
-                      <div className="p-5 overflow-y-auto max-h-[calc(100vh-5rem)]">
+                      <div className="p-6 overflow-y-auto max-h-[calc(100vh-5rem)]">
                         <FilterContent
                           searchQuery={localSearchQuery}
                           setSearchQuery={setLocalSearchQuery}
@@ -457,31 +411,31 @@ function Listings() {
 
                 {/* Sort */}
                 <Select>
-                  <SelectTrigger className="w-full sm:w-[140px] h-9 rounded border-border uppercase tracking-widest text-[10px] font-bold shadow-none">
-                    <SelectValue placeholder="Sort" />
+                  <SelectTrigger className="w-full sm:w-[160px] h-10 rounded-none border-foreground/20 hover:border-foreground uppercase tracking-widest text-[10px] font-bold shadow-none transition-colors">
+                    <SelectValue placeholder="Sort By" />
                   </SelectTrigger>
-                  <SelectContent className="rounded border-border min-w-[140px]">
+                  <SelectContent className="rounded-none border-foreground/20 min-w-[160px]">
                     <SelectItem
                       value="popular"
-                      className="uppercase tracking-wider text-[10px] font-medium"
+                      className="uppercase tracking-wider text-[10px]"
                     >
                       Popular
                     </SelectItem>
                     <SelectItem
                       value="newest"
-                      className="uppercase tracking-wider text-[10px] font-medium"
+                      className="uppercase tracking-wider text-[10px]"
                     >
                       Newest
                     </SelectItem>
                     <SelectItem
                       value="price_low"
-                      className="uppercase tracking-wider text-[10px] font-medium"
+                      className="uppercase tracking-wider text-[10px]"
                     >
                       Price: Low
                     </SelectItem>
                     <SelectItem
                       value="price_high"
-                      className="uppercase tracking-wider text-[10px] font-medium"
+                      className="uppercase tracking-wider text-[10px]"
                     >
                       Price: High
                     </SelectItem>
@@ -492,38 +446,38 @@ function Listings() {
 
             {/* Active Filters Pills */}
             {hasActiveFilters && (
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap gap-2 animate-in fade-in slide-in-from-top-2 duration-300">
                 {selectedCategory !== "all" && (
                   <Badge
-                    variant="secondary"
-                    className="gap-1.5 pl-2.5 pr-1.5 py-1 cursor-pointer hover:bg-muted rounded bg-white border border-border text-foreground uppercase tracking-widest text-[9px]"
+                    variant="outline"
+                    className="gap-2 pl-3 pr-2 py-1.5 cursor-pointer hover:bg-muted rounded-full border-primary/50 text-foreground uppercase tracking-widest text-[10px] font-bold transition-all hover:pr-3"
                     onClick={() => setCategory("all")}
                   >
                     {
                       categories.find((c) => c.value === selectedCategory)
                         ?.label
                     }
-                    <X className="h-3 w-3" />
+                    <X className="h-3 w-3 text-muted-foreground hover:text-primary transition-colors" />
                   </Badge>
                 )}
                 {localSearchQuery && (
                   <Badge
-                    variant="secondary"
-                    className="gap-1.5 pl-2.5 pr-1.5 py-1 cursor-pointer hover:bg-muted rounded bg-white border border-border text-foreground uppercase tracking-widest text-[9px]"
+                    variant="outline"
+                    className="gap-2 pl-3 pr-2 py-1.5 cursor-pointer hover:bg-muted rounded-full border-primary/50 text-foreground uppercase tracking-widest text-[10px] font-bold transition-all hover:pr-3"
                     onClick={() => setLocalSearchQuery("")}
                   >
                     "{localSearchQuery}"
-                    <X className="h-3 w-3" />
+                    <X className="h-3 w-3 text-muted-foreground hover:text-primary transition-colors" />
                   </Badge>
                 )}
                 {(priceRange[0] !== 0 || priceRange[1] !== 1000) && (
                   <Badge
-                    variant="secondary"
-                    className="gap-1.5 pl-2.5 pr-1.5 py-1 cursor-pointer hover:bg-muted rounded bg-white border border-border text-foreground uppercase tracking-widest text-[9px]"
+                    variant="outline"
+                    className="gap-2 pl-3 pr-2 py-1.5 cursor-pointer hover:bg-muted rounded-full border-primary/50 text-foreground uppercase tracking-widest text-[10px] font-bold transition-all hover:pr-3"
                     onClick={() => setPriceRangeParam([0, 1000])}
                   >
                     ${priceRange[0]} - ${priceRange[1]}
-                    <X className="h-3 w-3" />
+                    <X className="h-3 w-3 text-muted-foreground hover:text-primary transition-colors" />
                   </Badge>
                 )}
               </div>
@@ -531,51 +485,53 @@ function Listings() {
 
             {/* Listings Grid */}
             {paginatedListings.length > 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                {paginatedListings.map((listing) => (
-                  <ListingCard
-                    key={listing.id}
-                    id={listing.id.toString()}
-                    title={listing.title}
-                    location={`Location ${listing.locationId}`}
-                    price={listing.basePrice}
-                    rating={4.8}
-                    reviewCount={12}
-                    image={
-                      listing.imageUrl ||
-                      "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=80"
-                    }
-                    category={
-                      listing.listingType.includes("hotel")
-                        ? "hotel"
-                        : listing.listingType.includes("car")
-                          ? "car"
-                          : "tour"
-                    }
-                    listing={listing}
-                  />
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-x-8 gap-y-12">
+                {paginatedListings.map((listing, i) => (
+                  <Reveal key={listing.id} delay={i * 0.05}>
+                    <ListingCard
+                      id={listing.id.toString()}
+                      title={listing.title}
+                      location={`Location ${listing.locationId}`}
+                      price={listing.basePrice}
+                      rating={4.8}
+                      reviewCount={12}
+                      image={
+                        listing.imageUrl ||
+                        "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=80"
+                      }
+                      category={
+                        listing.listingType.includes("hotel")
+                          ? "hotel"
+                          : listing.listingType.includes("car")
+                            ? "car"
+                            : "tour"
+                      }
+                      listing={listing}
+                    />
+                  </Reveal>
                 ))}
               </div>
             ) : (
-              <Empty className="py-24 border-2 border-dashed border-border/50 rounded-sm">
+              <Empty className="py-32 border border-dashed border-border/50 rounded-sm bg-muted/20">
                 <EmptyHeader>
                   <EmptyMedia
                     variant="icon"
-                    className="bg-muted text-muted-foreground"
+                    className="bg-background text-muted-foreground mx-auto"
                   >
                     <Search className="h-8 w-8" />
                   </EmptyMedia>
-                  <EmptyTitle className="text-foreground font-bold uppercase tracking-tighter text-lg mt-4">
+                  <EmptyTitle className="text-foreground font-black uppercase tracking-tighter text-2xl mt-6 mb-2">
                     No results found
                   </EmptyTitle>
-                  <EmptyDescription className="font-serif">
-                    Try adjusting your filters or search terms
+                  <EmptyDescription className="font-serif text-lg text-muted-foreground">
+                    Try adjusting your filters or search terms to find what
+                    you're looking for.
                   </EmptyDescription>
                 </EmptyHeader>
-                <EmptyContent>
+                <EmptyContent className="mt-8">
                   <Button
                     variant="default"
-                    className="rounded h-9 uppercase tracking-widest font-bold bg-foreground hover:bg-primary text-xs"
+                    className="rounded-none h-12 px-8 uppercase tracking-widest font-bold bg-foreground hover:bg-primary text-xs transition-colors"
                     onClick={clearFilters}
                   >
                     Clear all filters
@@ -586,7 +542,7 @@ function Listings() {
 
             {/* Pagination */}
             {filteredListings.length > ITEMS_PER_PAGE && (
-              <div className="flex justify-center pt-8 border-t border-border">
+              <div className="flex justify-center pt-16 border-t border-border">
                 <Pagination>
                   <PaginationContent>
                     <PaginationItem>
@@ -603,9 +559,9 @@ function Listings() {
                           }
                         }}
                         className={cn(
-                          "cursor-pointer rounded h-8 px-3 text-xs uppercase tracking-wider font-bold",
+                          "cursor-pointer rounded-none h-10 px-4 text-xs uppercase tracking-wider font-bold border border-transparent hover:border-foreground/20 transition-all",
                           currentPage === 1
-                            ? "pointer-events-none opacity-50"
+                            ? "pointer-events-none opacity-30"
                             : "hover:bg-muted",
                         )}
                         aria-disabled={currentPage === 1}
@@ -633,10 +589,10 @@ function Listings() {
                               });
                             }}
                             className={cn(
-                              "cursor-pointer rounded h-8 w-8 text-xs font-bold",
+                              "cursor-pointer rounded-none h-10 w-10 text-xs font-bold border border-transparent transition-all",
                               currentPage === p
-                                ? "bg-foreground text-white hover:bg-foreground"
-                                : "hover:bg-muted",
+                                ? "bg-foreground text-white hover:bg-foreground border-foreground"
+                                : "hover:bg-muted hover:border-foreground/20",
                             )}
                           >
                             {p}
@@ -658,9 +614,9 @@ function Listings() {
                           }
                         }}
                         className={cn(
-                          "cursor-pointer rounded h-8 px-3 text-xs uppercase tracking-wider font-bold",
+                          "cursor-pointer rounded-none h-10 px-4 text-xs uppercase tracking-wider font-bold border border-transparent hover:border-foreground/20 transition-all",
                           currentPage === totalPages
-                            ? "pointer-events-none opacity-50"
+                            ? "pointer-events-none opacity-30"
                             : "hover:bg-muted",
                         )}
                         aria-disabled={currentPage === totalPages}

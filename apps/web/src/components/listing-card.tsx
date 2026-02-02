@@ -125,7 +125,7 @@ export default function ListingCard({
                 "https://placehold.co/600x400/f1f5f9/cbd5e1?text=Image+Unavailable",
               )
             }
-            className="w-full h-full object-cover grayscale transition-all duration-700 group-hover:grayscale-0 group-hover:scale-105"
+            className="w-full h-full object-cover grayscale transition-all duration-700 group-hover:grayscale-0 group-hover:scale-[1.02]"
             loading="lazy"
           />
           {/* New "Badge" style label */}
@@ -176,7 +176,7 @@ export default function ListingCard({
         <div className="h-1 w-full bg-foreground/10 group-hover:bg-primary transition-colors duration-300" />
 
         {/* Content Section */}
-        <div className="p-4 flex flex-col flex-grow relative bg-white group-hover:bg-zinc-50 transition-colors duration-300">
+        <div className="p-3 flex flex-col flex-grow relative bg-white group-hover:bg-zinc-50 transition-colors duration-300">
           <div className="flex flex-col gap-2 mb-4">
             <div className="flex justify-between items-center border-b border-dashed border-foreground/10 pb-2">
               <div className="flex items-center gap-1 text-foreground">

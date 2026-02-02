@@ -32,7 +32,7 @@ export function FactGrid() {
               key={i}
               className="bg-white p-6 hover:bg-foreground/2 transition-colors group relative overflow-hidden"
             >
-              <div className="absolute -right-4 -bottom-4 w-16 h-16 bg-primary/5 blur-xl group-hover:scale-150 transition-transform duration-700" />
+              <div className="absolute -right-4 -bottom-4 w-16 h-16 bg-primary/5 blur-xl group-hover:scale-110 transition-transform duration-700" />
 
               <h3 className="text-[10px] uppercase font-bold tracking-widest text-primary mb-2">
                 {fact.label}
