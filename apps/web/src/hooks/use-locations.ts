@@ -16,7 +16,6 @@ export const useLocations = () => {
   });
 };
 
-// Hook to get a single location by ID
 export const useLocation = (id: number) => {
   return useQuery({
     queryKey: locationKeys.detail(id),
