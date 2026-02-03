@@ -86,7 +86,6 @@ export function TicketCard({
 
       <CardContent className="p-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Left Column - Details */}
           <div className="space-y-4">
             <div className="flex items-center gap-3">
               <Calendar className="h-4 w-4 text-muted-foreground" />
@@ -139,7 +138,6 @@ export function TicketCard({
             )}
           </div>
 
-          {/* Right Column - QR Code */}
           <div className="flex flex-col items-center justify-center p-4 bg-muted/50 rounded-lg">
             {ticket.qrCodeImage ? (
               <>

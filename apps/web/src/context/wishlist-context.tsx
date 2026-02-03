@@ -23,7 +23,6 @@ const WishlistContext = createContext<WishlistContextType | undefined>(
 export const WishlistProvider = ({ children }: { children: ReactNode }) => {
   const [wishlist, setWishlist] = useState<Listing[]>([]);
 
-  // Load from local storage on mount
   useEffect(() => {
     const stored = localStorage.getItem("vizit_wishlist");
     if (stored) {
@@ -35,7 +34,6 @@ export const WishlistProvider = ({ children }: { children: ReactNode }) => {
     }
   }, []);
 
-  // Save to local storage on change
   useEffect(() => {
     localStorage.setItem("vizit_wishlist", JSON.stringify(wishlist));
   }, [wishlist]);

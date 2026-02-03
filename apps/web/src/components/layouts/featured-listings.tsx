@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import ListingCard, { type ListingCardProps } from "../listing-card";
 import { SectionContainer } from "../ui/section";
 
-// Helper to create mock listing for the card
 import type { Listing } from "@/types";
 
 const featuredListings: (ListingCardProps & { listing: Listing })[] = [

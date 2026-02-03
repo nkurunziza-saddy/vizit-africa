@@ -42,7 +42,7 @@ export function CartSheet() {
   return (
     <Sheet open={openCart} onOpenChange={setOpenCart}>
       <SheetContent className="flex flex-col w-full sm:max-w-lg p-0 gap-0">
-        <SheetHeader className="px-6 pt-6 pb-4 border-b flex-shrink-0">
+        <SheetHeader className="px-6 pt-6 pb-4 border-b shrink-0">
           <SheetTitle className="text-xl">Your Trip</SheetTitle>
           <SheetDescription className="text-sm">
             {cart.length > 0
@@ -98,8 +98,8 @@ export function CartSheet() {
                         className="space-y-3 pb-6 border-b last:border-0"
                       >
                         <div className="flex gap-3">
-                          <div className="h-20 w-20 sm:h-24 sm:w-24 rounded-lg bg-muted overflow-hidden flex-shrink-0">
-                            <div className="w-full h-full bg-gradient-to-br from-gray-200 to-gray-300" />
+                          <div className="h-20 w-20 sm:h-24 sm:w-24 rounded-lg bg-muted overflow-hidden shrink-0">
+                            <div className="w-full h-full bg-linear-to-br from-gray-200 to-gray-300" />
                           </div>
 
                           <div className="flex-1 min-w-0">
@@ -110,7 +110,7 @@ export function CartSheet() {
                               <Button
                                 variant="ghost"
                                 size="icon"
-                                className="h-8 w-8 flex-shrink-0 text-muted-foreground hover:text-destructive"
+                                className="h-8 w-8 shrink-0 text-muted-foreground hover:text-destructive"
                                 onClick={() => removeFromCart(item.id)}
                               >
                                 <Trash2 className="h-4 w-4" />
@@ -164,7 +164,7 @@ export function CartSheet() {
                                 <span className="text-muted-foreground truncate pr-2">
                                   {addonItem.addon.name} ×{addonItem.quantity}
                                 </span>
-                                <span className="font-medium flex-shrink-0">
+                                <span className="font-medium shrink-0">
                                   ${addonTotal.toFixed(2)}
                                 </span>
                               </div>
@@ -187,7 +187,7 @@ export function CartSheet() {
               </ScrollArea>
             </div>
 
-            <SheetFooter className="px-6 py-4 border-t flex-shrink-0">
+            <SheetFooter className="px-6 py-4 border-t shrink-0">
               <div className="w-full space-y-4">
                 <div className="flex justify-between items-center">
                   <span className="text-base sm:text-lg font-semibold">
