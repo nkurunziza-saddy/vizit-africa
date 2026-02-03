@@ -1,180 +1,142 @@
-"use client";
-
-import {
-	FacebookIcon,
-	InstagramIcon,
-	TwitterIcon,
-	YoutubeIcon,
-} from "lucide-react";
-import { motion, useReducedMotion } from "framer-motion";
-import { Logo } from "@/components/logo";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Link } from "@tanstack/react-router";
-
-type FooterLink = {
-	title: string;
-	href: string;
-	icon?: React.ComponentType<{ className?: string }>;
-};
-type FooterLinkGroup = {
-	label: string;
-	links: FooterLink[];
-};
+import { Facebook, Instagram, Mail, MapPin, Phone, Send, Twitter } from "lucide-react";
 
 export function Footer() {
-	return (
-		<footer
-			className="relative h-[560px] w-full border-t"
-			style={{ clipPath: "polygon(0% 0, 100% 0%, 100% 100%, 0 100%)" }}
-		>
-			<div className="fixed bottom-0 h-[560px] w-full">
-				<div className="sticky top-[calc(100vh-560px)] h-full overflow-y-auto">
-					<div className="relative flex size-full flex-col justify-between gap-5 px-4">
-						<div
-							aria-hidden
-							className="absolute inset-0 isolate z-0 opacity-50 contain-strict dark:opacity-100"
-						>
-							<div className="-translate-y-87.5 -rotate-45 absolute top-0 left-0 h-320 w-140 rounded-full bg-[radial-gradient(68.54%_68.72%_at_55.02%_31.46%,--theme(--color-foreground/.06)_0,hsla(0,0%,55%,.02)_50%,--theme(--color-foreground/.01)_80%)]" />
-							<div className="-rotate-45 absolute top-0 left-0 h-320 w-60 rounded-full bg-[radial-gradient(50%_50%_at_50%_50%,--theme(--color-foreground/.04)_0,--theme(--color-foreground/.01)_80%,transparent_100%)] [translate:5%_-50%]" />
-							<div className="-translate-y-87.5 -rotate-45 absolute top-0 left-0 h-320 w-140 rounded-full bg-[radial-gradient(50%_50%_at_50%_50%,--theme(--color-foreground/.04)_0,--theme(--color-foreground/.01)_80%,transparent_100%)]" />
-						</div>
-						<div className="flex flex-col gap-8 pt-12 md:flex-row">
-							<AnimatedContainer className="w-full min-w-2xs max-w-sm space-y-4">
-								<div className="flex items-center gap-2 text-xl font-bold">
-									<div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-										<Logo className="size-4" />
-									</div>
-									Vizit Africa
-								</div>
-								<p className="mt-8 text-muted-foreground text-sm md:mt-0">
-									Your gateway to authentic African adventures. Discover
-									Rwanda's beauty with trusted accommodations, premium
-									transport, and expert local guides.
-								</p>
-								<div className="flex gap-2">
-									{socialLinks.map((link, index) => (
-										<a
-											key={`social-${link.href}-${index}`}
-											href={link.href}
-											className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground"
-										>
-											<link.icon className="size-4" />
-										</a>
-									))}
-								</div>
-							</AnimatedContainer>
-							{footerLinkGroups.map((group, index) => (
-								<AnimatedContainer
-									className="w-full"
-									delay={0.1 + index * 0.1}
-									key={group.label}
-								>
-									<div className="mb-10 md:mb-0">
-										<h3 className="text-sm uppercase font-semibold">
-											{group.label}
-										</h3>
-										<ul className="mt-4 space-y-2 text-muted-foreground text-sm md:text-xs lg:text-sm">
-											{group.links.map((link) => (
-												<li key={link.title}>
-													<Link
-														className="inline-flex items-center transition-all duration-300 hover:text-foreground"
-														to={link.href}
-													>
-														{link.icon && <link.icon className="me-1 size-4" />}
-														{link.title}
-													</Link>
-												</li>
-											))}
-										</ul>
-									</div>
-								</AnimatedContainer>
-							))}
-						</div>
-						<div className="flex flex-col items-center justify-between gap-2 border-t py-4 text-muted-foreground text-sm md:flex-row">
-							<p>
-								&copy; {new Date().getFullYear()} Vizit Africa, All rights
-								reserved.
-							</p>
-							<div className="flex gap-4">
-								<Link className="hover:text-foreground" to="/privacy">
-									Privacy Policy
-								</Link>
-								<Link className="hover:text-foreground" to="/terms">
-									Terms of Service
-								</Link>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</footer>
-	);
-}
+  return (
+    <footer className="bg-[#2C4A6E] pt-20 pb-10 text-white border-t border-white/10 mt-auto">
+      <div className="container mx-auto px-4 max-w-7xl">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
+          {/* Brand Column */}
+          <div className="flex flex-col gap-6">
+            <Link to="/" className="flex items-center gap-2">
+              <div className="h-10 w-10 relative">
+                {/* Logo Placeholder - Circle stroke with dot */}
+                 <svg viewBox="0 0 100 100" className="w-full h-full stroke-white fill-none stroke-2">
+                    <title>Logo</title>
+                    <circle cx="40" cy="50" r="30" />
+                    <path d="M 70 20 Q 80 50 70 80" className="opacity-50" />
+                 </svg>
+              </div>
+              <div className="flex flex-col">
+                <span className="text-xl font-bold tracking-tight">VIZIT AFRICA</span>
+                <span className="text-[10px] tracking-[0.2em] opacity-70">AND GO PLACES!</span>
+              </div>
+            </Link>
+            <p className="text-sm text-white/70 leading-relaxed max-w-xs">
+              Your Trusted Partner for making your trips ten time more fun and
+              enjoyable ,Book now your best ride , hotels , apartments .
+            </p>
+            <div className="flex flex-col gap-3 text-sm text-white/80">
+              <div className="flex items-center gap-3">
+                <div className="h-8 w-8 rounded-full bg-white/10 flex items-center justify-center">
+                  <Mail className="h-4 w-4" />
+                </div>
+                <span>Keely@vizit.africa</span>
+              </div>
+              <div className="flex items-center gap-3">
+                 <div className="h-8 w-8 rounded-full bg-white/10 flex items-center justify-center">
+                  <Phone className="h-4 w-4" />
+                </div>
+                <span>0780486847</span>
+              </div>
+              <div className="flex items-center gap-3">
+                 <div className="h-8 w-8 rounded-full bg-white/10 flex items-center justify-center">
+                  <MapPin className="h-4 w-4" />
+                </div>
+                <span>Keely@vizit.africa</span>
+              </div>
+            </div>
+          </div>
 
-const socialLinks = [
-	{ title: "Facebook", href: "#", icon: FacebookIcon },
-	{ title: "Instagram", href: "#", icon: InstagramIcon },
-	{ title: "Twitter", href: "#", icon: TwitterIcon },
-	{ title: "Youtube", href: "#", icon: YoutubeIcon },
-];
+          {/* Services Column */}
+          <div className="lg:pl-8">
+            <h3 className="text-lg font-semibold mb-6 text-[#7EB6FF]">Services</h3>
+            <ul className="flex flex-col gap-4 text-sm text-white/80">
+              <li>
+                <Link to="/listings" search={{ category: "flight" }} className="hover:text-white transition-colors">
+                  Flights
+                </Link>
+              </li>
+              <li>
+                <Link to="/listings" search={{ category: "hotel" }} className="hover:text-white transition-colors">
+                  Stays
+                </Link>
+              </li>
+              <li>
+                <Link to="/listings" search={{ category: "car" }} className="hover:text-white transition-colors">
+                  Cars
+                </Link>
+              </li>
+              <li>
+                <Link to="/listings" className="hover:text-white transition-colors">
+                  Book All
+                </Link>
+              </li>
+            </ul>
+          </div>
 
-const footerLinkGroups: FooterLinkGroup[] = [
-	{
-		label: "Explore",
-		links: [
-			{ title: "Hotels", href: "/listings?category=hotel" },
-			{ title: "Apartments", href: "/listings?category=bnb" },
-			{ title: "Car Rentals", href: "/listings?category=car" },
-			{ title: "Tours & Guides", href: "/listings?category=tour" },
-			{ title: "Packages", href: "/listings?category=package" },
-		],
-	},
-	{
-		label: "Support",
-		links: [
-			{ title: "Help Center", href: "/contact" },
-			{ title: "Safety Information", href: "/safety" },
-			{ title: "Cancellation Options", href: "/cancellations" },
-			{ title: "Report a Concern", href: "/contact" },
-			{ title: "Contact Us", href: "/contact" },
-		],
-	},
-	{
-		label: "Company",
-		links: [
-			{ title: "About Us", href: "/about" },
-			{ title: "Careers", href: "/careers" },
-			{ title: "Partners", href: "/partners" },
-			{ title: "Press", href: "/press" },
-			{ title: "Blog", href: "/blog" },
-		],
-	},
-];
+          {/* Gallery Column */}
+           <div>
+            <h3 className="text-lg font-semibold mb-6 text-[#7EB6FF]">Gallery</h3>
+            <div className="grid grid-cols-3 gap-2">
+              {[1, 2, 3, 4, 5, 6].map((i) => (
+                <div key={i} className="aspect-square rounded-md overflow-hidden bg-white/10">
+                  <img
+                    src={`https://images.unsplash.com/photo-${
+                      1500000000000 + i * 100000
+                    }?auto=format&fit=crop&w=100&q=80`}
+                    alt="Gallery thumbnail"
+                    className="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
 
-type AnimatedContainerProps = React.ComponentProps<typeof motion.div> & {
-	children?: React.ReactNode;
-	delay?: number;
-};
+          {/* Stay Connected Column */}
+          <div>
+            <h3 className="text-lg font-semibold mb-6 text-[#7EB6FF]">Stay Connected</h3>
+             <div className="flex gap-2 mb-6">
+              <div className="relative flex-1">
+                <Input 
+                   placeholder="Your Email" 
+                   className="bg-white text-black placeholder:text-muted-foreground border-none h-10 rounded-md pr-10" 
+                />
+                 <Button size="icon" className="absolute right-1 top-1 h-8 w-8 bg-[#2C4A6E] hover:bg-[#1a2c42] rounded-sm">
+                   <Send className="h-4 w-4" />
+                 </Button>
+              </div>
+            </div>
+            
+            <div className="flex flex-col gap-4">
+              <span className="text-xs text-white/60">Follow US</span>
+              <div className="flex gap-4">
+                <Link to="/" className="h-10 w-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-white/20 transition-colors">
+                  <Instagram className="h-5 w-5" />
+                </Link>
+                 <Link to="/" className="h-10 w-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-white/20 transition-colors">
+                  <Facebook className="h-5 w-5" />
+                </Link>
+                 <Link to="/" className="h-10 w-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-white/20 transition-colors">
+                  <Twitter className="h-5 w-5" />
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
 
-function AnimatedContainer({
-	delay = 0.1,
-	children,
-	...props
-}: AnimatedContainerProps) {
-	const shouldReduceMotion = useReducedMotion();
-
-	if (shouldReduceMotion) {
-		return children;
-	}
-
-	return (
-		<motion.div
-			initial={{ filter: "blur(4px)", translateY: -8, opacity: 0 }}
-			transition={{ delay, duration: 0.8 }}
-			viewport={{ once: true }}
-			whileInView={{ filter: "blur(0px)", translateY: 0, opacity: 1 }}
-			{...props}
-		>
-			{children}
-		</motion.div>
-	);
+        <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-white/50">
+          <p>2026@Copyright by VIZITAFRICA</p>
+          <div className="flex gap-8">
+            <Link to="/" className="hover:text-white transition-colors">Help Center</Link>
+            <Link to="/" className="hover:text-white transition-colors">FAQs</Link>
+            <Link to="/" className="hover:text-white transition-colors">Privacy policy</Link>
+            <Link to="/" className="hover:text-white transition-colors">Cookies Policy</Link>
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
 }

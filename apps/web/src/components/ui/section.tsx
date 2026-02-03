@@ -57,10 +57,10 @@ function SectionContainer({
 	);
 }
 
-function SectionTitle({ className, ...props }: React.ComponentProps<"p">) {
+function SectionTitle({ className, ...props }: React.ComponentProps<"h2">) {
 	return (
-		<p
-			className="text-sm font-semibold text-foreground/85 uppercase tracking-widest mb-1"
+		<h2
+			className="text-xl md:text-2xl font-bold text-[#2C4A6E] tracking-tight mb-2"
 			{...props}
 		/>
 	);
@@ -69,9 +69,9 @@ function SectionTitle({ className, ...props }: React.ComponentProps<"p">) {
 function SectionDescription({
 	className,
 	...props
-}: React.ComponentProps<"h2">) {
+}: React.ComponentProps<"p">) {
 	return (
-		<h2 className="text-sm text-muted-foreground tracking-tight" {...props} />
+		<p className="text-muted-foreground text-sm font-medium" {...props} />
 	);
 }
 

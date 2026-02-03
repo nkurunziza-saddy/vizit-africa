@@ -1,16 +1,14 @@
-import { createFileRoute } from '@tanstack/react-router'
-import { Footer } from '@/components/layouts/footer'
-import { ContactSection } from '@/components/layouts/contact/contact-section'
+import { createFileRoute } from "@tanstack/react-router";
+import { PageWrapper } from "@/components/layouts/page-wrapper";
 
-export const Route = createFileRoute('/_app/contact')({
+export const Route = createFileRoute("/_app/contact")({
   component: ContactPage,
-})
+});
 
-function ContactPage() {
+export function ContactPage() {
   return (
-    <div className="min-h-screen">
-      <ContactSection />
-      <Footer />
-    </div>
-  )
+    <PageWrapper>
+      <h1>Contact Page</h1>
+    </PageWrapper>
+  );
 }

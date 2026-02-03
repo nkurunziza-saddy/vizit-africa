@@ -1,97 +1,78 @@
+import { api } from "@/api";
+import { userColumns } from "@/components/dashboard/tables/users-columns";
+import { DataTable } from "@/components/data-table/data-table";
+import type { User } from "@/schemas";
 import { createFileRoute } from "@tanstack/react-router";
-import { DB_KEYS, User } from "@/utils/mock-db";
-import { useQuery } from "@tanstack/react-query";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
-import {
-	Table,
-	TableBody,
-	TableCell,
-	TableHead,
-	TableHeader,
-	TableRow,
-} from "@/components/ui/table";
+import { useEffect, useState } from "react";
 
 export const Route = createFileRoute("/_app/dashboard/users")({
-	component: UsersPage,
+  component: UsersPage,
 });
 
-const fetchUsers = async (): Promise<User[]> => {
-	const usersStr = localStorage.getItem(DB_KEYS.USERS);
-	return usersStr ? JSON.parse(usersStr) : [];
-};
-
 function UsersPage() {
-	const { data: users, isLoading } = useQuery({
-		queryKey: ["users"],
-		queryFn: fetchUsers,
-	});
+  const [users, setUsers] = useState<User[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-	if (isLoading) return <div>Loading users...</div>;
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        setIsLoading(true);
+        const data = await api.getAdminUsers();
+        const usersList = Array.isArray(data) ? data : [];
+        setUsers(usersList as User[]);
+      } catch (error) {
+        console.error("Failed to fetch users:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-	return (
-		<div className="space-y-6">
-			<div>
-				<p className="text-muted-foreground uppercase text-sm">
-					Manage system users and their roles.
-				</p>
-			</div>
+    fetchUsers();
+  }, []);
 
-			<Card>
-				<CardHeader>
-					<CardTitle>User Directory</CardTitle>
-				</CardHeader>
-				<CardContent>
-					<Table>
-						<TableHeader>
-							<TableRow>
-								<TableHead>User</TableHead>
-								<TableHead>Role</TableHead>
-								<TableHead>Email</TableHead>
-								<TableHead>Joined</TableHead>
-							</TableRow>
-						</TableHeader>
-						<TableBody>
-							{users?.map((user) => (
-								<TableRow key={user.id}>
-									<TableCell className="flex items-center gap-3">
-										<Avatar className="h-8 w-8">
-											<AvatarImage
-												src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${user.email}`}
-											/>
-											<AvatarFallback>
-												{user.full_name.charAt(0)}
-											</AvatarFallback>
-										</Avatar>
-										<span className="font-medium">{user.full_name}</span>
-									</TableCell>
-									<TableCell>
-										<Badge
-											variant="outline"
-											className={
-												user.role === "admin"
-													? "bg-red-50 text-red-700 border-red-200"
-													: user.role === "vendor"
-														? "bg-blue-50 text-blue-700 border-blue-200"
-														: "bg-gray-50 text-gray-700 border-gray-200"
-											}
-										>
-											{user.role}
-										</Badge>
-									</TableCell>
-									<TableCell className="text-muted-foreground">
-										{user.email}
-									</TableCell>
-									<TableCell className="text-muted-foreground text-xs">
-										{new Date(user.created_at).toLocaleDateString()}
-									</TableCell>
-								</TableRow>
-							))}
-						</TableBody>
-					</Table>
-				</CardContent>
-			</Card>
-		</div>
-	);
+  return (
+    <div className="space-y-4 p-8 pt-6">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <h2 className="text-2xl font-bold tracking-tight">Users</h2>
+          <p className="text-muted-foreground">
+            Manage system users and their roles.
+          </p>
+        </div>
+      </div>
+      <div className="hidden h-full flex-1 flex-col space-y-8 md:flex">
+        {isLoading ? (
+          <div className="space-y-4">
+            <div className="flex gap-4">
+              <div className="h-10 w-64 bg-muted rounded animate-pulse" />
+              <div className="h-10 w-32 bg-muted rounded animate-pulse ml-auto" />
+            </div>
+            <div className="border rounded-lg">
+              <div className="h-12 bg-muted/50 border-b" />
+              {Array.from({ length: 5 }).map((_, i) => (
+                <div
+                  key={i}
+                  className="h-16 border-b last:border-0 flex items-center px-4 gap-4"
+                >
+                  <div className="h-4 w-4 bg-muted rounded animate-pulse" />
+                  <div className="h-4 w-32 bg-muted rounded animate-pulse" />
+                  <div className="h-4 w-48 bg-muted rounded animate-pulse" />
+                  <div className="h-4 w-20 bg-muted rounded animate-pulse" />
+                  <div className="h-4 w-16 bg-muted rounded animate-pulse" />
+                  <div className="h-8 w-8 bg-muted rounded animate-pulse ml-auto" />
+                </div>
+              ))}
+            </div>
+          </div>
+        ) : (
+          <DataTable
+            data={users}
+            columns={userColumns}
+            searchKey="fullName"
+            searchPlaceholder="Filter users..."
+          />
+        )}
+      </div>
+    </div>
+  );
 }

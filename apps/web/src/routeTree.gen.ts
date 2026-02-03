@@ -13,10 +13,11 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as AppRouteImport } from './routes/_app'
 import { Route as AppIndexRouteImport } from './routes/_app/index'
 import { Route as AppSavedRouteImport } from './routes/_app/saved'
+import { Route as AppProfileRouteImport } from './routes/_app/profile'
 import { Route as AppGalleryRouteImport } from './routes/_app/gallery'
 import { Route as AppDashboardRouteImport } from './routes/_app/dashboard'
 import { Route as AppContactRouteImport } from './routes/_app/contact'
-import { Route as AppBlogRouteImport } from './routes/_app/blog'
+import { Route as AppBecomeVendorRouteImport } from './routes/_app/become-vendor'
 import { Route as AppAboutRouteImport } from './routes/_app/about'
 import { Route as AppListingsIndexRouteImport } from './routes/_app/listings/index'
 import { Route as AppDashboardIndexRouteImport } from './routes/_app/dashboard/index'
@@ -51,6 +52,11 @@ const AppSavedRoute = AppSavedRouteImport.update({
   path: '/saved',
   getParentRoute: () => AppRoute,
 } as any)
+const AppProfileRoute = AppProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppGalleryRoute = AppGalleryRouteImport.update({
   id: '/gallery',
   path: '/gallery',
@@ -66,9 +72,9 @@ const AppContactRoute = AppContactRouteImport.update({
   path: '/contact',
   getParentRoute: () => AppRoute,
 } as any)
-const AppBlogRoute = AppBlogRouteImport.update({
-  id: '/blog',
-  path: '/blog',
+const AppBecomeVendorRoute = AppBecomeVendorRouteImport.update({
+  id: '/become-vendor',
+  path: '/become-vendor',
   getParentRoute: () => AppRoute,
 } as any)
 const AppAboutRoute = AppAboutRouteImport.update({
@@ -147,10 +153,11 @@ export interface FileRoutesByFullPath {
   '/': typeof AppIndexRoute
   '/login': typeof LoginRoute
   '/about': typeof AppAboutRoute
-  '/blog': typeof AppBlogRoute
+  '/become-vendor': typeof AppBecomeVendorRoute
   '/contact': typeof AppContactRoute
   '/dashboard': typeof AppDashboardRouteWithChildren
   '/gallery': typeof AppGalleryRoute
+  '/profile': typeof AppProfileRoute
   '/saved': typeof AppSavedRoute
   '/cart/checkout': typeof AppCartCheckoutRoute
   '/cart/success': typeof AppCartSuccessRoute
@@ -169,9 +176,10 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/about': typeof AppAboutRoute
-  '/blog': typeof AppBlogRoute
+  '/become-vendor': typeof AppBecomeVendorRoute
   '/contact': typeof AppContactRoute
   '/gallery': typeof AppGalleryRoute
+  '/profile': typeof AppProfileRoute
   '/saved': typeof AppSavedRoute
   '/': typeof AppIndexRoute
   '/cart/checkout': typeof AppCartCheckoutRoute
@@ -193,10 +201,11 @@ export interface FileRoutesById {
   '/_app': typeof AppRouteWithChildren
   '/login': typeof LoginRoute
   '/_app/about': typeof AppAboutRoute
-  '/_app/blog': typeof AppBlogRoute
+  '/_app/become-vendor': typeof AppBecomeVendorRoute
   '/_app/contact': typeof AppContactRoute
   '/_app/dashboard': typeof AppDashboardRouteWithChildren
   '/_app/gallery': typeof AppGalleryRoute
+  '/_app/profile': typeof AppProfileRoute
   '/_app/saved': typeof AppSavedRoute
   '/_app/': typeof AppIndexRoute
   '/_app/cart/checkout': typeof AppCartCheckoutRoute
@@ -219,10 +228,11 @@ export interface FileRouteTypes {
     | '/'
     | '/login'
     | '/about'
-    | '/blog'
+    | '/become-vendor'
     | '/contact'
     | '/dashboard'
     | '/gallery'
+    | '/profile'
     | '/saved'
     | '/cart/checkout'
     | '/cart/success'
@@ -241,9 +251,10 @@ export interface FileRouteTypes {
   to:
     | '/login'
     | '/about'
-    | '/blog'
+    | '/become-vendor'
     | '/contact'
     | '/gallery'
+    | '/profile'
     | '/saved'
     | '/'
     | '/cart/checkout'
@@ -264,10 +275,11 @@ export interface FileRouteTypes {
     | '/_app'
     | '/login'
     | '/_app/about'
-    | '/_app/blog'
+    | '/_app/become-vendor'
     | '/_app/contact'
     | '/_app/dashboard'
     | '/_app/gallery'
+    | '/_app/profile'
     | '/_app/saved'
     | '/_app/'
     | '/_app/cart/checkout'
@@ -320,6 +332,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppSavedRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/profile': {
+      id: '/_app/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof AppProfileRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/gallery': {
       id: '/_app/gallery'
       path: '/gallery'
@@ -341,11 +360,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppContactRouteImport
       parentRoute: typeof AppRoute
     }
-    '/_app/blog': {
-      id: '/_app/blog'
-      path: '/blog'
-      fullPath: '/blog'
-      preLoaderRoute: typeof AppBlogRouteImport
+    '/_app/become-vendor': {
+      id: '/_app/become-vendor'
+      path: '/become-vendor'
+      fullPath: '/become-vendor'
+      preLoaderRoute: typeof AppBecomeVendorRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/about': {
@@ -473,10 +492,11 @@ const AppDashboardRouteWithChildren = AppDashboardRoute._addFileChildren(
 
 interface AppRouteChildren {
   AppAboutRoute: typeof AppAboutRoute
-  AppBlogRoute: typeof AppBlogRoute
+  AppBecomeVendorRoute: typeof AppBecomeVendorRoute
   AppContactRoute: typeof AppContactRoute
   AppDashboardRoute: typeof AppDashboardRouteWithChildren
   AppGalleryRoute: typeof AppGalleryRoute
+  AppProfileRoute: typeof AppProfileRoute
   AppSavedRoute: typeof AppSavedRoute
   AppIndexRoute: typeof AppIndexRoute
   AppCartCheckoutRoute: typeof AppCartCheckoutRoute
@@ -490,10 +510,11 @@ interface AppRouteChildren {
 
 const AppRouteChildren: AppRouteChildren = {
   AppAboutRoute: AppAboutRoute,
-  AppBlogRoute: AppBlogRoute,
+  AppBecomeVendorRoute: AppBecomeVendorRoute,
   AppContactRoute: AppContactRoute,
   AppDashboardRoute: AppDashboardRouteWithChildren,
   AppGalleryRoute: AppGalleryRoute,
+  AppProfileRoute: AppProfileRoute,
   AppSavedRoute: AppSavedRoute,
   AppIndexRoute: AppIndexRoute,
   AppCartCheckoutRoute: AppCartCheckoutRoute,
