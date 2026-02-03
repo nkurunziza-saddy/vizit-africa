@@ -17,6 +17,7 @@ import { Route as AppProfileRouteImport } from './routes/_app/profile'
 import { Route as AppGalleryRouteImport } from './routes/_app/gallery'
 import { Route as AppDashboardRouteImport } from './routes/_app/dashboard'
 import { Route as AppContactRouteImport } from './routes/_app/contact'
+import { Route as AppBlogRouteImport } from './routes/_app/blog'
 import { Route as AppBecomeVendorRouteImport } from './routes/_app/become-vendor'
 import { Route as AppAboutRouteImport } from './routes/_app/about'
 import { Route as AppListingsIndexRouteImport } from './routes/_app/listings/index'
@@ -70,6 +71,11 @@ const AppDashboardRoute = AppDashboardRouteImport.update({
 const AppContactRoute = AppContactRouteImport.update({
   id: '/contact',
   path: '/contact',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppBlogRoute = AppBlogRouteImport.update({
+  id: '/blog',
+  path: '/blog',
   getParentRoute: () => AppRoute,
 } as any)
 const AppBecomeVendorRoute = AppBecomeVendorRouteImport.update({
@@ -154,6 +160,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/about': typeof AppAboutRoute
   '/become-vendor': typeof AppBecomeVendorRoute
+  '/blog': typeof AppBlogRoute
   '/contact': typeof AppContactRoute
   '/dashboard': typeof AppDashboardRouteWithChildren
   '/gallery': typeof AppGalleryRoute
@@ -177,6 +184,7 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/about': typeof AppAboutRoute
   '/become-vendor': typeof AppBecomeVendorRoute
+  '/blog': typeof AppBlogRoute
   '/contact': typeof AppContactRoute
   '/gallery': typeof AppGalleryRoute
   '/profile': typeof AppProfileRoute
@@ -202,6 +210,7 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/_app/about': typeof AppAboutRoute
   '/_app/become-vendor': typeof AppBecomeVendorRoute
+  '/_app/blog': typeof AppBlogRoute
   '/_app/contact': typeof AppContactRoute
   '/_app/dashboard': typeof AppDashboardRouteWithChildren
   '/_app/gallery': typeof AppGalleryRoute
@@ -229,6 +238,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/about'
     | '/become-vendor'
+    | '/blog'
     | '/contact'
     | '/dashboard'
     | '/gallery'
@@ -252,6 +262,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/about'
     | '/become-vendor'
+    | '/blog'
     | '/contact'
     | '/gallery'
     | '/profile'
@@ -276,6 +287,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/_app/about'
     | '/_app/become-vendor'
+    | '/_app/blog'
     | '/_app/contact'
     | '/_app/dashboard'
     | '/_app/gallery'
@@ -358,6 +370,13 @@ declare module '@tanstack/react-router' {
       path: '/contact'
       fullPath: '/contact'
       preLoaderRoute: typeof AppContactRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/blog': {
+      id: '/_app/blog'
+      path: '/blog'
+      fullPath: '/blog'
+      preLoaderRoute: typeof AppBlogRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/become-vendor': {
@@ -493,6 +512,7 @@ const AppDashboardRouteWithChildren = AppDashboardRoute._addFileChildren(
 interface AppRouteChildren {
   AppAboutRoute: typeof AppAboutRoute
   AppBecomeVendorRoute: typeof AppBecomeVendorRoute
+  AppBlogRoute: typeof AppBlogRoute
   AppContactRoute: typeof AppContactRoute
   AppDashboardRoute: typeof AppDashboardRouteWithChildren
   AppGalleryRoute: typeof AppGalleryRoute
@@ -511,6 +531,7 @@ interface AppRouteChildren {
 const AppRouteChildren: AppRouteChildren = {
   AppAboutRoute: AppAboutRoute,
   AppBecomeVendorRoute: AppBecomeVendorRoute,
+  AppBlogRoute: AppBlogRoute,
   AppContactRoute: AppContactRoute,
   AppDashboardRoute: AppDashboardRouteWithChildren,
   AppGalleryRoute: AppGalleryRoute,
