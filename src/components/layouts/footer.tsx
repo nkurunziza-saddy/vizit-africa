@@ -36,13 +36,13 @@ export function Footer() {
                 <div className="h-8 w-8 rounded-full bg-white/10 flex items-center justify-center">
                   <Phone className="h-4 w-4" />
                 </div>
-                <span>0780486847</span>
+                <span>0780486847 </span>
               </div>
               <div className="flex items-center gap-3">
                 <div className="h-8 w-8 rounded-full bg-white/10 flex items-center justify-center">
                   <MapPin className="h-4 w-4" />
                 </div>
-                <span>Keely@vizit.africa</span>
+                <span>kesly@vizit.africa</span>
               </div>
             </div>
           </div>
