@@ -1,25 +1,17 @@
-import type { SVGProps } from "react";
+import type { HTMLAttributes } from "react";
+import { cn } from "@/lib/utils";
 
-export function Logo(props: SVGProps<SVGSVGElement>) {
-	return (
-		<svg
-			viewBox="0 0 160 40"
-			fill="none"
-			xmlns="http://www.w3.org/2000/svg"
-			{...props}
-		>
-			<title>Vizit Africa</title>
-			<text
-				x="0"
-				y="28"
-				fill="currentColor"
-				style={{
-					font: "700 24px system-ui, -apple-system, sans-serif",
-					letterSpacing: "-0.04em",
-				}}
-			>
-				Vizit Africa
-			</text>
-		</svg>
-	);
+interface LogoProps extends HTMLAttributes<HTMLImageElement> {
+  className?: string;
+}
+
+export function Logo({ className, ...props }: LogoProps) {
+  return (
+    <img
+      src="/logo.svg"
+      alt="Vizit Africa"
+      className={cn("h-8 w-auto", className)}
+      {...props}
+    />
+  );
 }

@@ -97,8 +97,8 @@ const FilterContent = ({
   clearFilters,
   hasActiveFilters,
 }: FilterContentProps) => (
-  <div className="space-y-6">
-    <div className="space-y-3">
+  <div className="space-y-8">
+    <div className="space-y-4">
       <h3 className="text-sm font-medium">Search</h3>
       <div className="relative">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -106,56 +106,35 @@ const FilterContent = ({
           placeholder="Search destinations..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="pl-9 h-11 bg-muted/30 border-0 focus-visible:ring-1"
+          className="pl-9 h-10 bg-background"
         />
       </div>
     </div>
 
-    <div className="space-y-3">
+    <div className="space-y-4">
       <h3 className="text-sm font-medium">Categories</h3>
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-col gap-2">
         {categories.map((cat) => (
           <Button
             key={cat.value}
-            variant={selectedCategory === cat.value ? "default" : "outline"}
+            variant={selectedCategory === cat.value ? "secondary" : "ghost"}
             size="sm"
             onClick={() => setCategory(cat.value)}
             className={cn(
-              "rounded-full transition-all",
+              "justify-start h-9 font-normal",
               selectedCategory === cat.value
-                ? "shadow-sm"
-                : "hover:bg-muted/50",
+                ? "bg-secondary text-secondary-foreground"
+                : "text-muted-foreground hover:text-foreground",
             )}
           >
+            <cat.icon className="mr-2 h-4 w-4" />
             {cat.label}
           </Button>
         ))}
       </div>
     </div>
 
-    <div className="space-y-3">
-      <h3 className="text-sm font-medium">Quick Filters</h3>
-      <div className="grid grid-cols-3 gap-2">
-        {priceRanges.map((preset) => (
-          <button
-            type="button"
-            key={preset.label}
-            onClick={() => setPriceRange(preset.range)}
-            className={cn(
-              "px-3 py-2 text-xs font-medium rounded-lg border transition-all",
-              priceRange[0] === preset.range[0] &&
-                priceRange[1] === preset.range[1]
-                ? "bg-primary text-primary-foreground border-primary"
-                : "bg-background hover:bg-muted border-border",
-            )}
-          >
-            {preset.label}
-          </button>
-        ))}
-      </div>
-    </div>
-
-    <div className="space-y-3">
+    <div className="space-y-4">
       <h3 className="text-sm font-medium">Price Range</h3>
       <div className="pt-2 pb-4">
         <Slider
@@ -167,11 +146,11 @@ const FilterContent = ({
           className="mb-4"
         />
         <div className="flex items-center justify-between">
-          <div className="text-sm font-medium bg-muted px-3 py-1.5 rounded-md">
+          <div className="text-sm font-medium border px-2 py-1 rounded">
             ${priceRange[0]}
           </div>
           <div className="h-px w-4 bg-border" />
-          <div className="text-sm font-medium bg-muted px-3 py-1.5 rounded-md">
+          <div className="text-sm font-medium border px-2 py-1 rounded">
             ${priceRange[1]}+
           </div>
         </div>
@@ -179,9 +158,13 @@ const FilterContent = ({
     </div>
 
     {hasActiveFilters && (
-      <Button variant="outline" className="w-full gap-2" onClick={clearFilters}>
+      <Button
+        variant="outline"
+        className="w-full gap-2 text-muted-foreground hover:text-foreground"
+        onClick={clearFilters}
+      >
         <X className="h-4 w-4" />
-        Clear All Filters
+        Clear Filters
       </Button>
     )}
   </div>

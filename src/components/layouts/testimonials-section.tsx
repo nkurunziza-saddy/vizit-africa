@@ -21,8 +21,8 @@ export const TestimonialsSection = () => {
             />
           </div>
           {/* Quote Icon Overlay - Top Right */}
-          <div className="absolute -top-4 -right-8 md:-right-12 text-[#2C4A6E]">
-            <Quote className="h-10 w-10 fill-[#2C4A6E] rotate-180" />
+          <div className="absolute -top-4 -right-8 md:-right-12 text-primary">
+            <Quote className="h-10 w-10 fill-primary rotate-180" />
           </div>
         </div>
 
@@ -37,8 +37,10 @@ export const TestimonialsSection = () => {
               <AvatarFallback>JL</AvatarFallback>
             </Avatar>
             <div>
-              <h3 className="text-xl font-bold text-[#2C4A6E]">Jessica Lena</h3>
-              <p className="text-sm font-medium text-muted-foreground mb-1">USA, Texas</p>
+              <h3 className="text-xl font-bold text-primary">Jessica Lena</h3>
+              <p className="text-sm font-medium text-muted-foreground mb-1">
+                USA, Texas
+              </p>
               <div className="flex gap-0.5 text-yellow-500">
                 {[1, 2, 3, 4, 5].map((i) => (
                   <Star key={i} className="h-4 w-4 fill-yellow-500" />
@@ -53,8 +55,8 @@ export const TestimonialsSection = () => {
             stress—just a simple, reliable experience."
           </blockquote>
 
-          <div className="self-end mt-4 text-[#2C4A6E]">
-             <Quote className="h-10 w-10 fill-[#2C4A6E]" />
+          <div className="self-end mt-4 text-primary">
+            <Quote className="h-10 w-10 fill-primary" />
           </div>
         </div>
       </div>

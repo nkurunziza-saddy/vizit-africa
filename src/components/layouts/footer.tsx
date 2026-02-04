@@ -1,28 +1,25 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Link } from "@tanstack/react-router";
-import { Facebook, Instagram, Mail, MapPin, Phone, Send, Twitter } from "lucide-react";
+import {
+  Facebook,
+  Instagram,
+  Mail,
+  MapPin,
+  Phone,
+  Send,
+  Twitter,
+} from "lucide-react";
+import { Logo } from "@/components/logo";
 
 export function Footer() {
   return (
-    <footer className="bg-[#2C4A6E] pt-20 pb-10 text-white border-t border-white/10 mt-auto">
+    <footer className="bg-primary pt-20 pb-10 text-white border-t border-white/10 mt-auto">
       <div className="container mx-auto px-4 max-w-7xl">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
-          {/* Brand Column */}
           <div className="flex flex-col gap-6">
-            <Link to="/" className="flex items-center gap-2">
-              <div className="h-10 w-10 relative">
-                {/* Logo Placeholder - Circle stroke with dot */}
-                 <svg viewBox="0 0 100 100" className="w-full h-full stroke-white fill-none stroke-2">
-                    <title>Logo</title>
-                    <circle cx="40" cy="50" r="30" />
-                    <path d="M 70 20 Q 80 50 70 80" className="opacity-50" />
-                 </svg>
-              </div>
-              <div className="flex flex-col">
-                <span className="text-xl font-bold tracking-tight">VIZIT AFRICA</span>
-                <span className="text-[10px] tracking-[0.2em] opacity-70">AND GO PLACES!</span>
-              </div>
+            <Link to="/" className="">
+              <Logo className="h-12" />
             </Link>
             <p className="text-sm text-white/70 leading-relaxed max-w-xs">
               Your Trusted Partner for making your trips ten time more fun and
@@ -36,13 +33,13 @@ export function Footer() {
                 <span>Keely@vizit.africa</span>
               </div>
               <div className="flex items-center gap-3">
-                 <div className="h-8 w-8 rounded-full bg-white/10 flex items-center justify-center">
+                <div className="h-8 w-8 rounded-full bg-white/10 flex items-center justify-center">
                   <Phone className="h-4 w-4" />
                 </div>
                 <span>0780486847</span>
               </div>
               <div className="flex items-center gap-3">
-                 <div className="h-8 w-8 rounded-full bg-white/10 flex items-center justify-center">
+                <div className="h-8 w-8 rounded-full bg-white/10 flex items-center justify-center">
                   <MapPin className="h-4 w-4" />
                 </div>
                 <span>Keely@vizit.africa</span>
@@ -52,25 +49,42 @@ export function Footer() {
 
           {/* Services Column */}
           <div className="lg:pl-8">
-            <h3 className="text-lg font-semibold mb-6 text-[#7EB6FF]">Services</h3>
+            <h3 className="text-lg font-semibold mb-6 text-[#7EB6FF]">
+              Services
+            </h3>
             <ul className="flex flex-col gap-4 text-sm text-white/80">
               <li>
-                <Link to="/listings" search={{ category: "flight" }} className="hover:text-white transition-colors">
+                <Link
+                  to="/listings"
+                  search={{ category: "flight" }}
+                  className="hover:text-white transition-colors"
+                >
                   Flights
                 </Link>
               </li>
               <li>
-                <Link to="/listings" search={{ category: "hotel" }} className="hover:text-white transition-colors">
+                <Link
+                  to="/listings"
+                  search={{ category: "hotel" }}
+                  className="hover:text-white transition-colors"
+                >
                   Stays
                 </Link>
               </li>
               <li>
-                <Link to="/listings" search={{ category: "car" }} className="hover:text-white transition-colors">
+                <Link
+                  to="/listings"
+                  search={{ category: "car" }}
+                  className="hover:text-white transition-colors"
+                >
                   Cars
                 </Link>
               </li>
               <li>
-                <Link to="/listings" className="hover:text-white transition-colors">
+                <Link
+                  to="/listings"
+                  className="hover:text-white transition-colors"
+                >
                   Book All
                 </Link>
               </li>
@@ -78,11 +92,16 @@ export function Footer() {
           </div>
 
           {/* Gallery Column */}
-           <div>
-            <h3 className="text-lg font-semibold mb-6 text-[#7EB6FF]">Gallery</h3>
+          <div>
+            <h3 className="text-lg font-semibold mb-6 text-[#7EB6FF]">
+              Gallery
+            </h3>
             <div className="grid grid-cols-3 gap-2">
               {[1, 2, 3, 4, 5, 6].map((i) => (
-                <div key={i} className="aspect-square rounded-md overflow-hidden bg-white/10">
+                <div
+                  key={i}
+                  className="aspect-square rounded-md overflow-hidden bg-white/10"
+                >
                   <img
                     src={`https://images.unsplash.com/photo-${
                       1500000000000 + i * 100000
@@ -97,29 +116,43 @@ export function Footer() {
 
           {/* Stay Connected Column */}
           <div>
-            <h3 className="text-lg font-semibold mb-6 text-[#7EB6FF]">Stay Connected</h3>
-             <div className="flex gap-2 mb-6">
+            <h3 className="text-lg font-semibold mb-6 text-[#7EB6FF]">
+              Stay Connected
+            </h3>
+            <div className="flex gap-2 mb-6">
               <div className="relative flex-1">
-                <Input 
-                   placeholder="Your Email" 
-                   className="bg-white text-black placeholder:text-muted-foreground border-none h-10 rounded-md pr-10" 
+                <Input
+                  placeholder="Your Email"
+                  className="bg-white text-black placeholder:text-muted-foreground border-none h-10 rounded-md pr-10"
                 />
-                 <Button size="icon" className="absolute right-1 top-1 h-8 w-8 bg-[#2C4A6E] hover:bg-[#1a2c42] rounded-sm">
-                   <Send className="h-4 w-4" />
-                 </Button>
+                <Button
+                  size="icon"
+                  className="absolute right-1 top-1 h-8 w-8 bg-primary hover:bg-[#1a2c42] rounded-sm"
+                >
+                  <Send className="h-4 w-4" />
+                </Button>
               </div>
             </div>
-            
+
             <div className="flex flex-col gap-4">
               <span className="text-xs text-white/60">Follow US</span>
               <div className="flex gap-4">
-                <Link to="/" className="h-10 w-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-white/20 transition-colors">
+                <Link
+                  to="/"
+                  className="h-10 w-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-white/20 transition-colors"
+                >
                   <Instagram className="h-5 w-5" />
                 </Link>
-                 <Link to="/" className="h-10 w-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-white/20 transition-colors">
+                <Link
+                  to="/"
+                  className="h-10 w-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-white/20 transition-colors"
+                >
                   <Facebook className="h-5 w-5" />
                 </Link>
-                 <Link to="/" className="h-10 w-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-white/20 transition-colors">
+                <Link
+                  to="/"
+                  className="h-10 w-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-white/20 transition-colors"
+                >
                   <Twitter className="h-5 w-5" />
                 </Link>
               </div>
@@ -130,10 +163,18 @@ export function Footer() {
         <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-white/50">
           <p>2026@Copyright by VIZITAFRICA</p>
           <div className="flex gap-8">
-            <Link to="/" className="hover:text-white transition-colors">Help Center</Link>
-            <Link to="/" className="hover:text-white transition-colors">FAQs</Link>
-            <Link to="/" className="hover:text-white transition-colors">Privacy policy</Link>
-            <Link to="/" className="hover:text-white transition-colors">Cookies Policy</Link>
+            <Link to="/" className="hover:text-white transition-colors">
+              Help Center
+            </Link>
+            <Link to="/" className="hover:text-white transition-colors">
+              FAQs
+            </Link>
+            <Link to="/" className="hover:text-white transition-colors">
+              Privacy policy
+            </Link>
+            <Link to="/" className="hover:text-white transition-colors">
+              Cookies Policy
+            </Link>
           </div>
         </div>
       </div>

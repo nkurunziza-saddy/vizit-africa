@@ -1,5 +1,14 @@
 import { createFileRoute, Link, useParams } from "@tanstack/react-router";
-import { Star, MapPin, ArrowLeft } from "lucide-react";
+import {
+  Star,
+  MapPin,
+  ExternalLink,
+  Bed,
+  Utensils,
+  Wifi,
+  Car,
+  Waves,
+} from "lucide-react";
 import { format } from "date-fns";
 import {
   Popover,
@@ -8,7 +17,7 @@ import {
 } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { PageWrapper } from "@/components/layouts/page-wrapper";
@@ -19,6 +28,7 @@ import { useState } from "react";
 import { useCart } from "@/context/cart-context";
 import { AddonSelector } from "@/components/booking/addon-selector";
 import type { DateRange } from "react-day-picker";
+import { Label } from "@/components/ui/label";
 
 export const Route = createFileRoute("/_app/listings/$id")({
   component: ListingDetail,
@@ -39,72 +49,13 @@ function ListingDetail() {
   >([]);
 
   if (isListingLoading || !data) {
-    return (
-      <div className="min-h-screen bg-background flex flex-col">
-        <PageWrapper className="flex-1 py-8">
-          <Skeleton className="h-4 w-32 mb-8" />
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-            <div className="lg:col-span-8 space-y-8">
-              <div className="space-y-4">
-                <Skeleton className="h-4 w-24" />
-                <Skeleton className="h-8 w-3/4" />
-              </div>
-              <Skeleton className="h-px w-full" />
-              <div className="space-y-4">
-                <Skeleton className="h-6 w-32" />
-                <Skeleton className="h-4 w-full" />
-                <Skeleton className="h-4 w-5/6" />
-                <Skeleton className="h-4 w-4/6" />
-              </div>
-              <Skeleton className="h-px w-full" />
-              <div className="space-y-4">
-                <Skeleton className="h-6 w-32" />
-                <div className="flex flex-wrap gap-2">
-                  <Skeleton className="h-8 w-20" />
-                  <Skeleton className="h-8 w-24" />
-                  <Skeleton className="h-8 w-16" />
-                  <Skeleton className="h-8 w-28" />
-                </div>
-              </div>
-            </div>
-            <div className="lg:col-span-4">
-              <Skeleton className="h-96 w-full rounded-lg" />
-            </div>
-          </div>
-        </PageWrapper>
-      </div>
-    );
+    return <ListingSkeleton />;
   }
 
   const { listing } = data;
 
   const nights =
     date?.from && date?.to ? differenceInDays(date.to, date.from) : 0;
-
-  const estimatedTotal = (() => {
-    if (nights < 1) return 0;
-    const baseTotal = listing.basePrice * nights;
-    const addonsTotal = selectedAddons.reduce((acc, curr) => {
-      const multiplier = curr.addon.price_type === "per_night" ? nights : 1;
-      return acc + curr.addon.price * curr.quantity * multiplier;
-    }, 0);
-    return baseTotal + addonsTotal;
-  })();
-
-  const handleAddonSelect = (addon: any, quantity: number) => {
-    setSelectedAddons((prev) => {
-      const existing = prev.findIndex((p) => p.addon.id === addon.id);
-      if (quantity <= 0) {
-        return prev.filter((p) => p.addon.id !== addon.id);
-      }
-      if (existing > -1) {
-        const newArr = [...prev];
-        newArr[existing].quantity = quantity;
-        return newArr;
-      }
-      return [...prev, { addon, quantity }];
-    });
-  };
 
   const handleBookClick = () => {
     if (!date?.from || !date?.to) {
@@ -113,85 +64,122 @@ function ListingDetail() {
     }
     addToCart({
       listing,
-      image:
-        listing.imageUrl ||
-        "https://placehold.co/600x400/f1f5f9/cbd5e1?text=Image+Unavailable",
+      image: listing.imageUrl || "https://placehold.co/600x400",
       dateRange: date,
       guests: 1,
       selectedAddons: selectedAddons,
     });
   };
 
-  return (
-    <div className="min-h-screen bg-background flex flex-col">
-      <PageWrapper className="flex-1">
-        <Link
-          to="/listings"
-          className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-8 transition-colors"
-        >
-          <ArrowLeft className="h-4 w-4" />
-          Back to listings
-        </Link>
+  const amenities = [
+    { icon: Waves, label: "Swimming Pool" },
+    { icon: Utensils, label: "Morning Breakfast" },
+    { icon: Wifi, label: "Free Wifi" },
+    { icon: Bed, label: "Indoor Gym" },
+    { icon: Car, label: "Balcony" },
+  ];
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+  return (
+    <div className="min-h-screen bg-background flex flex-col pb-20">
+      <PageWrapper className="flex-1 py-8">
+        {/* Header Section */}
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
+          <div>
+            <h1 className="text-2xl md:text-3xl font-bold text-primary mb-2">
+              {listing.title}
+            </h1>
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <MapPin className="h-4 w-4 text-primary" />
+              <span>
+                {listing.locationId}, {listing.city || "Rwanda"}
+              </span>
+              <span className="text-primary font-medium cursor-pointer hover:underline ml-2">
+                See The location on Map
+              </span>
+            </div>
+          </div>
+          <Button className="bg-primary hover:bg-primary/90 gap-2">
+            Book Stay <ExternalLink className="h-4 w-4" />
+          </Button>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           <div className="lg:col-span-8 space-y-8">
-            <div className="space-y-4">
-              <div className="flex flex-col gap-2">
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <span className="flex items-center gap-1.5">
-                    <MapPin className="h-3 w-3" /> {listing.locationId}
-                  </span>
-                  <span>•</span>
-                  <div className="flex items-center gap-1">
-                    <Star className="h-3 w-3 fill-foreground text-foreground" />
-                    <span className="font-semibold text-foreground">4.8</span>
-                    <span>(12)</span>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 h-[400px] md:h-[500px]">
+              <div className="md:col-span-1 h-full relative group overflow-hidden rounded-xl">
+                <img
+                  src={
+                    listing.imageUrl ||
+                    "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=80"
+                  }
+                  alt={listing.title}
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+              </div>
+              <div className="grid grid-rows-2 gap-4 h-full">
+                <div className="relative group overflow-hidden rounded-xl">
+                  <img
+                    src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=800&q=80"
+                    alt="Room view"
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                </div>
+                <div className="relative group overflow-hidden rounded-xl">
+                  <img
+                    src="https://images.unsplash.com/photo-1584132967334-10e028bd69f7?auto=format&fit=crop&w=800&q=80"
+                    alt="Amenities"
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors flex items-center justify-center">
+                    <Button
+                      variant="outline"
+                      className="bg-white/90 border-none hover:bg-white text-black font-medium"
+                    >
+                      21+ Photos
+                    </Button>
                   </div>
                 </div>
-                <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-foreground">
-                  {listing.title}
-                </h1>
               </div>
             </div>
 
-            <div className="w-full h-px bg-border/50" />
-
-            <div className="prose prose-gray prose-sm max-w-none">
-              <h3 className="text-lg font-semibold float-none mb-2 tracking-tight text-foreground">
-                About
-              </h3>
-              <p className="text-muted-foreground leading-bg">
-                {listing.description}
-              </p>
+            <div className="flex flex-wrap gap-3">
+              {amenities.map((item, idx) => (
+                <div
+                  key={idx}
+                  className="flex items-center gap-2 px-4 py-2 border rounded-lg bg-background hover:bg-accent/50 transition-colors"
+                >
+                  <item.icon className="h-4 w-4 text-primary" />
+                  <span className="text-sm font-medium">{item.label}</span>
+                </div>
+              ))}
             </div>
 
-            <div className="w-full h-px bg-border/50" />
-
-            <div>
-              <h3 className="text-lg font-semibold mb-4 tracking-tight text-foreground">
-                Amenities
-              </h3>
-              <div className="flex flex-wrap gap-2">
-                {["Wifi", "Parking", "Pool", "Kitchen", "Air conditioning"].map(
-                  (item) => (
-                    <Badge
-                      key={item}
-                      variant="outline"
-                      className="px-2.5 py-1 text-xs font-normal border-border/50 text-muted-foreground"
-                    >
-                      {item}
-                    </Badge>
-                  ),
-                )}
+            <div className="space-y-4">
+              <h2 className="text-xl font-semibold text-primary">
+                About this property
+              </h2>
+              <div className="prose prose-gray max-w-none text-muted-foreground">
+                <p className="leading-relaxed">
+                  <strong className="text-foreground">
+                    Spacious Accommodation:
+                  </strong>{" "}
+                  {listing.description ||
+                    "Experience comfort and luxury in our spacious rooms designed for your relaxation."}
+                </p>
+                <p className="leading-relaxed">
+                  <strong className="text-foreground">
+                    Exceptional Facilities:
+                  </strong>{" "}
+                  Guests enjoy access to premium amenities including fine
+                  dining, wellness centers, and tailored services to make your
+                  stay memorable.
+                </p>
               </div>
             </div>
 
-            <div className="w-full h-px bg-border/50" />
-
-            {/* Addons Section */}
             {listing.addons && listing.addons.length > 0 && (
-              <div>
-                <h3 className="text-lg font-semibold mb-4 tracking-tight text-foreground">
+              <div className="pt-6 border-t">
+                <h3 className="text-lg font-semibold mb-4 text-primary">
                   Enhance your trip
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -199,7 +187,21 @@ function ListingDetail() {
                     <AddonSelector
                       key={addon.id}
                       addon={addon}
-                      onSelect={(qty) => handleAddonSelect(addon, qty)}
+                      onSelect={(qty) => {
+                        setSelectedAddons((prev) => {
+                          const existing = prev.findIndex(
+                            (p) => p.addon.id === addon.id,
+                          );
+                          if (qty <= 0)
+                            return prev.filter((p) => p.addon.id !== addon.id);
+                          if (existing > -1) {
+                            const newArr = [...prev];
+                            newArr[existing].quantity = qty;
+                            return newArr;
+                          }
+                          return [...prev, { addon, quantity: qty }];
+                        });
+                      }}
                     />
                   ))}
                 </div>
@@ -207,121 +209,153 @@ function ListingDetail() {
             )}
           </div>
 
-          <div className="lg:col-span-4">
-            <div className="sticky top-24">
-              <Card className="shadow-none border border-border/50 bg-transparent">
-                <CardHeader className="pb-4 pt-6 px-6">
-                  <CardTitle className="flex justify-between items-baseline">
-                    <span className="text-xl font-bold">
-                      ${listing.basePrice}{" "}
-                      <span className="text-sm font-normal text-muted-foreground">
-                        / night
-                      </span>
-                    </span>
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4 px-6 pb-6">
-                  <div className="grid grid-cols-2 gap-2">
-                    <Popover>
-                      <PopoverTrigger>
-                        <div className="border border-border/50 rounded p-2 hover:border-border transition-colors cursor-pointer flex-1 cursor-pointer">
-                          <div className="text-[10px] uppercase font-medium text-muted-foreground mb-1">
-                            Check-in
-                          </div>
-                          <div className="text-sm">
-                            {date?.from
-                              ? format(date.from, "PPP")
-                              : "Select date"}
-                          </div>
-                        </div>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0" align="start">
-                        <Calendar
-                          initialFocus
-                          mode="range"
-                          defaultMonth={date?.from}
-                          selected={date}
-                          onSelect={setDate}
-                          numberOfMonths={2}
-                        />
-                      </PopoverContent>
-                    </Popover>
-                    <Popover>
-                      <PopoverTrigger>
-                        <div className="border border-border/50 rounded p-2 hover:border-border transition-colors cursor-pointer flex-1 cursor-pointer">
-                          <div className="text-[10px] uppercase font-medium text-muted-foreground mb-1">
-                            Check-out
-                          </div>
-                          <div className="text-sm">
-                            {date?.to ? format(date.to, "PPP") : "Select date"}
-                          </div>
-                        </div>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0" align="start">
-                        <Calendar
-                          initialFocus
-                          mode="range"
-                          defaultMonth={date?.to}
-                          selected={date}
-                          onSelect={setDate}
-                          numberOfMonths={2}
-                        />
-                      </PopoverContent>
-                    </Popover>
+          <div className="lg:col-span-4 space-y-6">
+            <Card className="shadow-lg border-0 overflow-hidden">
+              <div className="p-6">
+                <div className="flex justify-between items-start mb-4">
+                  <div>
+                    <h3 className="font-bold text-lg text-primary">
+                      {listing.title}
+                    </h3>
+                    <p className="text-xs text-muted-foreground">
+                      Northern Province, Musanze
+                    </p>
                   </div>
-
-                  {nights > 0 && (
-                    <div className="space-y-3 py-2">
-                      <div className="flex justify-between text-sm">
-                        <span className="text-muted-foreground underline decoration-dashed">
-                          ${listing.basePrice} x {nights} nights
-                        </span>
-                        <span>${listing.basePrice * nights}</span>
-                      </div>
-                      {selectedAddons.length > 0 && (
-                        <div className="flex justify-between text-sm">
-                          <span className="text-muted-foreground underline decoration-dashed">
-                            Add-ons
-                          </span>
-                          <span>
-                            +$
-                            {selectedAddons.reduce((acc, curr) => {
-                              const multiplier =
-                                curr.addon.price_type === "per_night"
-                                  ? nights
-                                  : 1;
-                              return (
-                                acc +
-                                curr.addon.price * curr.quantity * multiplier
-                              );
-                            }, 0)}
-                          </span>
-                        </div>
-                      )}
-                      <div className="w-full h-px bg-border/50" />
-                      <div className="flex justify-between font-semibold text-base">
-                        <span>Total</span>
-                        <span>${estimatedTotal}</span>
-                      </div>
+                  <div className="flex flex-col items-end">
+                    <span className="text-2xl font-bold text-primary">
+                      ${listing.basePrice}
+                    </span>
+                    <div className="flex gap-1 text-yellow-400 text-xs">
+                      <Star className="h-3 w-3 fill-current" />
+                      <Star className="h-3 w-3 fill-current" />
+                      <Star className="h-3 w-3 fill-current" />
+                      <Star className="h-3 w-3 fill-current" />
                     </div>
-                  )}
+                  </div>
+                </div>
 
+                <div className="flex items-center gap-2 mb-4">
+                  <Badge className="bg-primary hover:bg-primary/90">8.5</Badge>
+                  <span className="text-xs text-muted-foreground">
+                    500 Reviews
+                  </span>
+                </div>
+
+                <p className="text-xs text-muted-foreground italic mb-4 border-l-2 pl-3 border-primary">
+                  "This is one of the best hotels I've been in since I landed in
+                  Rwanda"
+                </p>
+
+                <div className="flex items-center gap-2 mt-4">
+                  <div className="h-8 w-8 rounded-full bg-gray-200 overflow-hidden">
+                    <img
+                      src="https://api.dicebear.com/7.x/avataaars/svg?seed=Mark"
+                      alt="User"
+                    />
+                  </div>
+                  <span className="text-xs font-semibold text-primary">
+                    Mark Stanley
+                  </span>
+                </div>
+
+                <div className="mt-6 pt-4 border-t space-y-3">
+                  <div className="grid grid-cols-2 gap-2">
+                    <div className="space-y-1">
+                      <Label className="text-[10px] font-semibold text-muted-foreground uppercase">
+                        Check-in
+                      </Label>
+                      <Popover>
+                        <PopoverTrigger
+                          render={
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="w-full justify-start text-xs h-9"
+                            />
+                          }
+                        >
+                          {date?.from ? format(date.from, "MMM dd") : "Select"}
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0">
+                          <Calendar
+                            mode="range"
+                            selected={date}
+                            onSelect={setDate}
+                            initialFocus
+                          />
+                        </PopoverContent>
+                      </Popover>
+                    </div>
+                    <div className="space-y-1">
+                      <Label className="text-[10px] font-semibold text-muted-foreground uppercase">
+                        Check-out
+                      </Label>
+                      <Popover>
+                        <PopoverTrigger
+                          render={
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="w-full justify-start text-xs h-9"
+                            />
+                          }
+                        >
+                          {date?.to ? format(date.to, "MMM dd") : "Select"}
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0">
+                          <Calendar
+                            mode="range"
+                            selected={date}
+                            onSelect={setDate}
+                            initialFocus
+                          />
+                        </PopoverContent>
+                      </Popover>
+                    </div>
+                  </div>
                   <Button
-                    className="w-full"
-                    size="lg"
+                    className="w-full bg-primary hover:bg-primary/90"
                     onClick={handleBookClick}
                   >
-                    {nights > 0 ? "Reserve" : "Check Availability"}
+                    Reserve Now
                   </Button>
-                  <div className="flex items-center justify-center gap-2 text-xs text-muted-foreground">
-                    <span>You won't be charged yet</span>
-                  </div>
-                </CardContent>
-              </Card>
+                </div>
+              </div>
+            </Card>
+
+            {/* Map Placeholder */}
+            <div className="rounded-xl overflow-hidden h-48 relative border shadow-sm group cursor-pointer">
+              <img
+                src="https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&fit=crop&w=600&q=80"
+                alt="Map"
+                className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity"
+              />
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="bg-white/90 rounded-full p-2 shadow-lg animate-bounce">
+                  <MapPin className="h-6 w-6 text-red-500 fill-red-500" />
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </PageWrapper>
     </div>
+  );
+}
+
+function ListingSkeleton() {
+  return (
+    <PageWrapper className="py-8">
+      <div className="space-y-6">
+        <Skeleton className="h-8 w-1/3" />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 h-[400px]">
+          <Skeleton className="h-full rounded-xl" />
+          <div className="grid grid-rows-2 gap-4">
+            <Skeleton className="h-full rounded-xl" />
+            <Skeleton className="h-full rounded-xl" />
+          </div>
+        </div>
+      </div>
+    </PageWrapper>
   );
 }

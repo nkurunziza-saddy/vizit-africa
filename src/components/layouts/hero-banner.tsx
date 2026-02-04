@@ -39,7 +39,10 @@ export default function HeroBanner() {
           experiences.
         </p>
         <div>
-          <Button size="lg" className="rounded-full px-8 h-12 gap-2 text-base bg-[#2C4A6E] hover:bg-[#1a2c42] text-white border-none">
+          <Button
+            size="lg"
+            className="rounded-full px-8 h-12 gap-2 text-base bg-primary hover:bg-[#1a2c42] text-white border-none"
+          >
             Start Booking
             <svg
               width="18"
@@ -61,7 +64,6 @@ export default function HeroBanner() {
 
       <div className="relative z-20 max-w-5xl mx-auto w-full px-4 -mt-24 mb-12">
         <div className="bg-white dark:bg-card border border-border/50 rounded-xl shadow-xl p-2 md:p-3 flex flex-col md:flex-row gap-0 md:gap-2 divide-y md:divide-y-0 md:divide-x divide-border">
-          
           <div className="flex-1 px-4 py-3 min-h-[72px] flex flex-col justify-center hover:bg-muted/20 transition-colors rounded-none group">
             <div className="flex items-center gap-3">
               <MapPin className="h-5 w-5 text-muted-foreground shrink-0" />
@@ -96,18 +98,28 @@ export default function HeroBanner() {
 
           <div className="flex-1 min-h-[72px] flex flex-col justify-center">
             <Popover>
-              <PopoverTrigger render={<button type="button" className="w-full px-4 py-3 h-full flex items-center gap-3 hover:bg-muted/20 transition-colors rounded-none text-left"/>}>
-                
-                  <CalendarIcon className="h-5 w-5 text-muted-foreground shrink-0" />
-                  <div className="flex flex-col w-full overflow-hidden">
-                    <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-0.5">
-                      Depart
-                    </span>
-                    <span className={cn("text-sm font-semibold truncate", !date?.from && "text-muted-foreground/50")}>
-                      {date?.from ? format(date.from, "dd/MM/yy") : "dd/mm/yy"}
-                    </span>
-                  </div>
-          
+              <PopoverTrigger
+                render={
+                  <button
+                    type="button"
+                    className="w-full px-4 py-3 h-full flex items-center gap-3 hover:bg-muted/20 transition-colors rounded-none text-left"
+                  />
+                }
+              >
+                <CalendarIcon className="h-5 w-5 text-muted-foreground shrink-0" />
+                <div className="flex flex-col w-full overflow-hidden">
+                  <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-0.5">
+                    Depart
+                  </span>
+                  <span
+                    className={cn(
+                      "text-sm font-semibold truncate",
+                      !date?.from && "text-muted-foreground/50",
+                    )}
+                  >
+                    {date?.from ? format(date.from, "dd/MM/yy") : "dd/mm/yy"}
+                  </span>
+                </div>
               </PopoverTrigger>
               <PopoverContent className="w-auto p-0" align="start">
                 <Calendar
@@ -123,17 +135,29 @@ export default function HeroBanner() {
           </div>
 
           <div className="flex-1 min-h-[72px] flex flex-col justify-center">
-             <Popover>
-              <PopoverTrigger render={<button type="button" className="w-full px-4 py-3 h-full flex items-center gap-3 hover:bg-muted/20 transition-colors rounded-none text-left"/>}>
-                  <CalendarIcon className="h-5 w-5 text-muted-foreground shrink-0" />
-                  <div className="flex flex-col w-full overflow-hidden">
-                    <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-0.5">
-                      Return
-                    </span>
-                    <span className={cn("text-sm font-semibold truncate", !date?.to && "text-muted-foreground/50")}>
-                      {date?.to ? format(date.to, "dd/MM/yy") : "dd/mm/yy"}
-                    </span>
-                  </div>
+            <Popover>
+              <PopoverTrigger
+                render={
+                  <button
+                    type="button"
+                    className="w-full px-4 py-3 h-full flex items-center gap-3 hover:bg-muted/20 transition-colors rounded-none text-left"
+                  />
+                }
+              >
+                <CalendarIcon className="h-5 w-5 text-muted-foreground shrink-0" />
+                <div className="flex flex-col w-full overflow-hidden">
+                  <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-0.5">
+                    Return
+                  </span>
+                  <span
+                    className={cn(
+                      "text-sm font-semibold truncate",
+                      !date?.to && "text-muted-foreground/50",
+                    )}
+                  >
+                    {date?.to ? format(date.to, "dd/MM/yy") : "dd/mm/yy"}
+                  </span>
+                </div>
               </PopoverTrigger>
               <PopoverContent className="w-auto p-0" align="start">
                 <Calendar
@@ -149,7 +173,10 @@ export default function HeroBanner() {
           </div>
 
           <div className="p-2 flex items-center justify-center">
-            <Button size="lg" className="w-full h-full min-h-[56px] gap-2 text-sm font-semibold shadow-none bg-[#2C4A6E] hover:bg-[#1a2c42]">
+            <Button
+              size="lg"
+              className="w-full h-full min-h-[56px] gap-2 text-sm font-semibold shadow-none bg-primary hover:bg-[#1a2c42]"
+            >
               Book Flight
               <svg
                 width="16"
